@@ -86,21 +86,7 @@ div {
 .inventory-container {
     height: 100%;
     width: 100%;
-}
-
-.inventory-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
     background-color: rgba(0, 0, 0, 0.5); /* Transparent black */
-    z-index: 5; /* Below inventory-container but above game */
-}
-
-.inventory-container {
-    position: relative;
-    z-index: 10; /* Ensure inventory stays above overlay */
 }
 
 .inventory-section {
@@ -111,6 +97,13 @@ div {
     transform: translateY(-50%);
     display: flex;
     flex-direction: column;
+
+    background-color: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    padding: 10px;
+
+    border-radius: 1rem;
 }
 
 .player-inventory-section {
@@ -135,9 +128,6 @@ div {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    background-color: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     padding: 0px 10px 10px;
     margin-bottom: 8px;
 }
@@ -173,14 +163,15 @@ div {
     justify-content: center;
     width: calc(20% - 2px);
     height: 10vh;
-    background-color: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     box-sizing: border-box;
+    border: 1px solid transparent;
+    
     transition:
+    border 0.2s ease-in-out,
     box-shadow 0.2s ease-in-out,
     background 0.3s ease-in-out,
     border-color 0.3s ease-in-out;
+    border-radius: 1rem;
 }
 
 .item-slot-img {
@@ -199,17 +190,17 @@ div {
 
 .item-slot-key {
     font-weight: var(--font-weight-bold);
-    color: var(--on-primary-container);
+    color: #ffffff;
     position: absolute;
     top: 5px;
-    left: 5px;
     width: 20px;
     height: 20px;
-    background-color: var(--primary-container);
+    background-color: transparent;
     display: flex;
     align-items: center;
     justify-content: center;
     box-shadow: var(--elevation-1);
+    z-index: 10;
 }
 
 .item-slot-amount {
@@ -227,15 +218,13 @@ div {
 }
 
 .item-slot:hover {
+    border: solid 1px rgba(255, 255, 255, 0.4);
     background: rgba(255, 255, 255, 0.1);
     border-color: rgba(255, 255, 255, 0.4);
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
 }
 
 .item-slot:empty {
-    background-color: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .item-price {
@@ -243,7 +232,6 @@ div {
     color: #ffffff;
     position: absolute;
     top: 5px;
-    left: 5px;
     width: 20px;
     height: 20px;
     display: flex;
@@ -267,9 +255,16 @@ div {
 .item-slot-durability {
     position: absolute;
     bottom: 0vh;
-    width: 99%;
-    height: 6px;
+    width: 80%;
+    height: 3px;
     background-color: var(--surface-container-high);
+    opacity: 0; /* Hidden by default */
+    transition: opacity 0.2s ease-in-out; /* Smooth transition */
+    margin: 10%;
+}
+
+.item-slot:hover .item-slot-durability {
+    opacity: 1; /* Visible on hover */
 }
 
 .item-slot-durability-fill {

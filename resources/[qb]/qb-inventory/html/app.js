@@ -869,8 +869,9 @@ const InventoryContainer = Vue.createApp({
                 return "";
             }
             let content = `<div class="custom-tooltip"><div class="tooltip-header">${item.label}</div><hr class="tooltip-divider">`;
+            content += `<div class="tooltip-info"><span class="tooltip-info-key">Stock:</span> x${item.amount}</div>`;
             const description = item.info && item.info.description ? item.info.description.replace(/\n/g, "<br>") : item.description ? item.description.replace(/\n/g, "<br>") : "No description available.";
-
+        
             if (item.info && Object.keys(item.info).length > 0) {
                 for (const [key, value] of Object.entries(item.info)) {
                     if (key !== "description") {
@@ -882,10 +883,10 @@ const InventoryContainer = Vue.createApp({
                     }
                 }
             }
-
+        
             content += `<div class="tooltip-description">${description}</div>`;
             content += `<div class="tooltip-weight"><i class="fas fa-weight-hanging"></i> ${item.weight !== undefined && item.weight !== null ? (item.weight / 1000).toFixed(1) : "N/A"}kg</div>`;
-
+        
             content += `</div>`;
             return content;
         },
