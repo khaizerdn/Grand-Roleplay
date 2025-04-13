@@ -8,7 +8,7 @@
     --md-dark-primary: #36489E;
     --md-dark-on-primary: #ffffff;
     --md-dark-surface: #232162;
-    --md-dark-on-surface: #e6e1e5;
+    --md-dark-on-surface: #ffffff;
     --md-dark-surface-container: #36489E;
     --md-dark-success: #9bd880;
     --md-dark-success-hover: #8bc570;
@@ -220,21 +220,40 @@
 /*------------------------------------*\
   #CHARACTER DELETE DIALOG
 \*------------------------------------*/
+.character-delete-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5); /* Black transparent background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: var(--z-modal);
+}
+
 .character-delete {
     position: absolute;
     width: 300px;
     padding: 20px;
-    background-color: var(--md-dark-surface-container);
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    box-shadow: var(--md-elevation-2);
     z-index: var(--z-modal);
+
+    /* Glassmorphism */
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: var(--md-radius-medium);
+    box-shadow: var(--md-elevation-2);
 }
 
 .character-delete p {
     color: var(--md-dark-on-surface);
     font-family: var(--font-primary);
+    font-weight: var(--font-weight-regular);
+    font-size: 16px;
     text-align: center;
     margin-bottom: 20px;
 }
@@ -242,50 +261,72 @@
 .character-delete-btns {
     display: flex;
     justify-content: space-around;
+    gap: 10px;
 }
 
 .character-delete-btn {
-    padding: 10px 20px;
-    color: var(--md-dark-on-primary);
+    flex: 1;
+    padding: 10px;
+    border-radius: var(--md-radius-small);
     font-family: var(--font-primary);
     font-weight: var(--font-weight-medium);
+    font-size: 14px;
+    text-transform: uppercase;
     cursor: pointer;
     transition: all var(--transition-fast);
 }
 
 .confirm-btn {
-    background-color: var(--md-dark-success) !important;
-    color: var(--md-dark-on-primary) !important;
+    background: var(--md-dark-success);
+    color: var(--md-dark-on-primary);
 }
 
 .confirm-btn:hover {
-    background-color: var(--md-dark-success-hover) !important;
-    box-shadow: var(--md-elevation-3) !important;
+    background: var(--md-dark-success-hover);
+    box-shadow: var(--md-elevation-3);
 }
 
 .cancel-btn {
-    background-color: var(--md-dark-error) !important;
-    color: var(--md-dark-on-primary) !important;
+    background: var(--md-dark-error);
+    color: var(--md-dark-on-primary);
 }
 
 .cancel-btn:hover {
-    background-color: #c53b32 !important;
-    box-shadow: var(--md-elevation-3) !important;
+    background: #c53b32;
+    box-shadow: var(--md-elevation-3);
 }
 
 /*------------------------------------*\
   #CHARACTER REGISTER FORM
 \*------------------------------------*/
+.character-register-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5); /* Black transparent background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: var(--z-modal);
+}
+
 .character-register {
     position: absolute;
     width: 400px;
+    max-width: 90%;
     padding: 30px;
-    background-color: var(--md-dark-surface-container);
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    box-shadow: var(--md-elevation-2);
     z-index: var(--z-modal);
+
+    /* Glassmorphism */
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: var(--md-radius-medium);
+    box-shadow: var(--md-elevation-2);
 }
 
 .characters-register-block-header {
@@ -293,8 +334,8 @@
     font-family: var(--font-primary);
     font-weight: var(--font-weight-bold);
     font-size: 18px;
-    margin-bottom: 20px;
     text-transform: uppercase;
+    margin-bottom: 20px;
 }
 
 .char-register-inputs {
@@ -304,19 +345,40 @@
     margin-bottom: 20px;
 }
 
+.char-register-inputs .v-text-field,
+.char-register-inputs .v-select {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: var(--md-radius-small);
+    color: var(--md-dark-on-surface);
+    font-family: var(--font-primary);
+}
+
+.char-register-inputs .v-text-field__slot input,
+.char-register-inputs .v-select__slot {
+    color: var(--md-dark-on-surface);
+}
+
+.char-register-inputs .v-label {
+    color: var(--md-dark-on-surface);
+    opacity: 0.7;
+}
+
 .character-reg-btn {
     width: 100%;
-    color: var(--md-dark-on-success) !important;
-    background-color: var(--md-dark-success) !important;
-    font-family: var(--font-primary) !important;
-    font-weight: var(--font-weight-medium) !important;
-    letter-spacing: 1px !important;
-    text-transform: uppercase !important;
+    padding: 12px;
+    background: var(--md-dark-success);
+    color: var(--md-dark-on-primary);
+    font-family: var(--font-primary);
+    font-weight: var(--font-weight-medium);
+    font-size: 14px;
+    text-transform: uppercase;
+    border-radius: var(--md-radius-small);
+    transition: all var(--transition-fast);
 }
 
 .character-reg-btn:hover {
-    background-color: var(--md-dark-success-hover) !important;
-    box-shadow: var(--md-elevation-3) !important;
+    background: var(--md-dark-success-hover);
+    box-shadow: var(--md-elevation-3);
 }
 
 #close-reg {
@@ -330,7 +392,7 @@
 }
 
 #close-reg:hover {
-    color: var(--md-dark-primary);
+    color: var(--md-dark-on-surface);
     transform: scale(1.1);
 }
 

@@ -64,12 +64,46 @@ document.addEventListener("DOMContentLoaded", () => {
             delete_character: function () {
                 if (this.show.delete) {
                     this.show.delete = false;
+                    this.show.characters = false; // Explicitly hide character selection
                     axios.post("https://qb-multicharacter/removeCharacter", {
                         citizenid: this.characters[this.selectedCharacter].citizenid,
+                    }).then(() => {
+                        // Reset characters and show loading screen
+                        this.characters = [];
+                        this.selectedCharacter = -1;
+                        this.show.loading = true;
+                        this.loadingText = this.translate("retrieving_playerdata");
+                        // Mimic initial load process
+                        let loadingProgress = 0;
+                        let loadingDots = 0;
+                        const DotsInterval = setInterval(() => {
+                            loadingDots++;
+                            loadingProgress++;
+                            if (loadingProgress == 3) {
+                                this.loadingText = this.translate("validating_playerdata");
+                            }
+                            if (loadingProgress == 4) {
+                                this.loadingText = this.translate("retrieving_characters");
+                            }
+                            if (loadingProgress == 6) {
+                                this.loadingText = this.translate("validating_characters");
+                            }
+                            if (loadingDots == 4) {
+                                loadingDots = 0;
+                            }
+                        }, 500);
+            
+                        setTimeout(() => {
+                            axios.post("https://qb-multicharacter/setupCharacters").then(() => {
+                                setTimeout(() => {
+                                    clearInterval(DotsInterval);
+                                    this.show.loading = false;
+                                    this.show.characters = true; // Show only after validation
+                                    axios.post("https://qb-multicharacter/removeBlur");
+                                }, 2000);
+                            });
+                        }, 2000);
                     });
-                    setTimeout(() => {
-                        this.show.characters = true;
-                    }, 500);
                 }
             },
             play_character: function () {
@@ -94,7 +128,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 this.show.characters = false;
                 this.show.register = true;
                 this.registerData = {
-                    date: new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().substr(0, 10),
+                    date: undefined,
                     firstname: undefined,
                     lastname: undefined,
                     nationality: undefined,
@@ -163,7 +197,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         this.show.characters = false;
                         this.allowDelete = event.data.enableDeleteButton;
                         EnableDeleteButton = data.enableDeleteButton;
-
+        
                         if (data.toggle) {
                             this.show.loading = true;
                             this.loadingText = this.translate("retrieving_playerdata");
@@ -183,7 +217,7 @@ document.addEventListener("DOMContentLoaded", () => {
                                     loadingDots = 0;
                                 }
                             }, 500);
-
+        
                             setTimeout(() => {
                                 axios.post("https://qb-multicharacter/setupCharacters");
                                 setTimeout(() => {

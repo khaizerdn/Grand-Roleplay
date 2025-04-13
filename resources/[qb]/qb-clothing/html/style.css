@@ -9,14 +9,17 @@
 
 .clothing-menu-container {
     display: none;
-    margin-top: .5vh;
-    margin-right: 5vh;
+    margin-top: 0.5vh;
+    margin-right: 0; /* Remove margin-right to eliminate extra space */
     position: absolute;
     height: 99vh;
     width: 38vh;
-    background-color: rgb(23 23 23 / 80%);
-    right: -25vw;
-    border-radius: 1.3vh;
+    right: 2vh; /* Adjust to a positive value for proper alignment */
+    /* Simulated glass look */
+    background-color: rgba(255, 255, 255, 0.06); /* semi-transparent white */
+    border: 1px solid rgba(255, 255, 255, 0.3); /* light white border */
+    border-radius: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .clothing-menu-header {
@@ -31,19 +34,19 @@
     height: 80%;
     top: 3.5vh;
     float: left;
-    color: #ededed;
+    color: #ffffff;
     text-align: center;
     line-height: 3.5vh;
-    transition: all 1s linear;
+    transition: all 0.3s linear;
 }
 
 .clothing-menu-header-btn:hover {
-    color: #444444;
+    color: #d3d3d3;
     cursor: pointer;
 }
 
 .selected {
-    color: #dc143c;
+    color: #ffffff;
 }
 
 .clothing-menu-header-btn>p {
@@ -67,18 +70,18 @@
     top: 3.2vh;
     width: 24%;
     float: left;
-    color: #ededed;
+    color: #ffffff;
     text-align: center;
     line-height: 3.7vh;
-    transition: all 1s linear;
+    transition: all 0.3s linear;
 }
 
 .selected-cam {
-    color: #dc143c;
+    color: #ffffff;
 }
 
 .clothing-menu-header-camera-btn:hover {
-    color: #444444;
+    color: #d3d3d3;
     cursor: pointer;
 }
 
@@ -118,18 +121,18 @@
     height: 40%;
     margin: 0 auto;
     top: 2.3vh;
-    background-color: #dc143c;
-    border-radius: 0.75vh;
-    transition: all 1s linear;
+    background-color: #ffffff;
+    border-radius: 100px;
+    transition: all 0.3s linear;
 }
 
 .clothing-menu-outfit-option-button:hover {
-    background-color: #444444;
+    background-color: #d3d3d3;
     cursor: pointer;
 }
 
 .clothing-menu-outfit-option-button>p {
-    color: #ededed;
+    color: #000000;
     text-transform: uppercase;
     font-family: 'Poppins', sans-serif;
     letter-spacing: 0.1vh;
@@ -144,18 +147,18 @@
     height: 40%;
     left: 2vh;
     top: 5.1vh;
-    background-color: #dc143c;
+    background-color: #ffffff;
     border-radius: 0.4vh;
-    transition: all 1s linear;
+    transition: all 0.3s linear;
 }
 
 .clothing-menu-myOutfit-option-button:hover {
-    background-color: #444444;
+    background-color: #d3d3d3;
     cursor: pointer;
 }
 
 .clothing-menu-myOutfit-option-button>p {
-    color: #ededed;
+    color: #000000;
     font-weight: bold;
     text-transform: uppercase;
     font-family: 'Poppins', sans-serif;
@@ -171,17 +174,17 @@
     height: 40%;
     right: 2vh;
     top: 5.1vh;
-    background-color: #dc143c;
+    background-color: #ffffff;
     border-radius: 0.4vh;
-    transition: all 1s linear;
+    transition: all 0.3s linear;
 }
 
 .clothing-menu-myOutfit-option-button-remove:hover {
-    background-color: #444444;
+    background-color: #d3d3d3;
 }
 
 .clothing-menu-myOutfit-option-button-remove>p {
-    color: #ededed;
+    color: #000000;
     font-weight: bold;
     text-transform: uppercase;
     font-family: 'Poppins', sans-serif;
@@ -248,7 +251,7 @@
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: #dc143c;
+    background-color: #ffffff;
 }
 
 .clothing-menu-option {
@@ -258,7 +261,7 @@
 }
 
 .clothing-menu-option-header {
-    color: #ededed;
+    color: #ffffff;
     padding: 0.8vh;
     width: 100%;
     margin-top: -0.5em;
@@ -288,16 +291,16 @@
     left: 0;
     height: 50%;
     width: 33%;
-    background-color: #dc143c;
-    color: #e9e9e9;
+    background-color: #ffffff;
+    color: #000000;
     text-align: center;
     line-height: 3.6vh;
     border-radius: .3vh;
-    transition: all 1s linear;
+    transition: all 0.3s linear;
 }
 
 .clothing-menu-option-item-left:hover {
-    background-color: #444444;
+    background-color: #d3d3d3;
     cursor: pointer;
 }
 
@@ -307,16 +310,16 @@
     right: 0;
     height: 50%;
     width: 33%;
-    background-color: #dc143c;
-    color: #e9e9e9;
+    background-color: #ffffff;
+    color: #000000;
     text-align: center;
     line-height: 3.6vh;
     border-radius: .3vh;
-    transition: all 1s linear;
+    transition: all 0.3s linear;
 }
 
 .clothing-menu-option-item-right:hover {
-    background-color: #444444;
+    background-color: #d3d3d3;
     cursor: pointer;
 }
 
@@ -336,7 +339,7 @@
     letter-spacing: 0.1vh;
     color: white;
     outline: none;
-    transition: all 0.1s linear;
+    transition: all 0.3s linear;
 }
 
 .clothing-menu-option-item-header {
@@ -345,7 +348,7 @@
     font-weight: bold;
     font-size: 1vh;
     letter-spacing: 0.1vh;
-    color: #ededed;
+    color: #ffffff;
 }
 
 .clothing-menu-option-item-header>p {
@@ -365,12 +368,12 @@
     float: right;
     height: 100%;
     width: 33.33%;
-    background-color: #dc143c;
-    transition: all 1s linear;
+    background-color: #ffffff;
+    transition: all 0.3s linear;
 }
 
 .clothing-menu-option-button:hover {
-    background-color: #444444;
+    background-color: #d3d3d3;
     cursor: pointer;
 }
 
@@ -380,7 +383,7 @@
     font-family: 'Poppins', sans-serif;
     letter-spacing: 0.1vh;
     text-transform: uppercase;
-    color: #ededed;
+    color: #000000;
     text-align: center;
 }
 
@@ -389,10 +392,12 @@
     position: relative;
     width: 30vh;
     height: 18vh;
-    background-color: rgb(23 23 23 / 80%);
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: var(--md-radius-medium);
+    box-shadow: var(--md-elevation-2);
     margin: 0 auto;
     top: 40%;
-    border-radius: 0.7vh;
 }
 
 .clothing-menu-save-outfit-name-buttons {
@@ -407,17 +412,17 @@
 
 .clothing-menu-save-outfit-name-button {
     position: relative;
-    background: #dc143c;
+    background: #ffffff;
     width: 50%;
     height: 100%;
     float: left;
     text-align: center;
     line-height: 3vh;
-    transition: all 1s linear;
+    transition: all 0.3s linear;
 }
 
 .clothing-menu-save-outfit-name-button:hover {
-    background: #444444;
+    background: #d3d3d3;
     cursor: pointer;
 }
 
@@ -443,7 +448,7 @@
     font-size: 1.7vh;
     letter-spacing: 0.1vh;
     text-transform: uppercase;
-    color: #ededed;
+    color: #000000;
     font-weight: bold;
 }
 
@@ -459,13 +464,13 @@
     width: 60%;
     height: 27%;
     text-align: center;
-    background: #444444;
-    transition: all 1s linear;
+    background: #d3d3d3;
+    transition: all 0.3s linear;
     border-radius: .7vh;
 }
 
 #outfit-name {
-    color: #ededed;
+    color: #000000;
     font-family: sans-serif;
     font-size: 1.75vh;
     letter-spacing: 0.1vh;
@@ -497,19 +502,22 @@
     height: 80%;
     width: 50%;
     float: left;
-    background-color: rgb(23 23 23 / 80%);
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: var(--md-radius-medium);
+    box-shadow: var(--md-elevation-2);
     text-align: center;
-    transition: 0.08s;
+    transition: 0.3s;
 }
 
 .change-camera-button:hover {
-    background: #dc143c;
+    background: #ffffff;
     cursor: pointer;
 }
 
 .change-camera-button>i {
     font-size: 3vh;
-    color: #ededed;
+    color: #000000;
     line-height: 5.5vh;
 }
 
@@ -519,7 +527,7 @@
     text-align: center;
     width: 100%;
     height: 20%;
-    background: #dc143c;
+    background: #ffffff;
     line-height: 1.5vh;
     border-bottom-left-radius: .8vh;
     border-bottom-right-radius: .8vh;
@@ -530,7 +538,7 @@
     font-weight: bold;
     font-size: 0.8vh;
     text-transform: uppercase;
-    color: #ededed;
+    color: #000000;
     letter-spacing: 0.1vh;
 }
 
@@ -545,7 +553,7 @@
     background: #d3d3d3;
     outline: none;
     opacity: 0.7;
-    transition: opacity .2s;
+    transition: opacity 0.3s;
 }
 
 .slider {
@@ -563,7 +571,7 @@
     appearance: none;
     width: 25px;
     height: 25px;
-    background: #dc143c;
+    background: #ffffff;
     cursor: pointer;
 }
 
@@ -576,7 +584,7 @@
     position: absolute;
     text-transform: uppercase;
     letter-spacing: 0.1vh;
-    color: #ededed;
+    color: #000000;
     bottom: 0px;
     left: 0px;
 }
@@ -586,7 +594,7 @@
     position: absolute;
     text-transform: uppercase;
     letter-spacing: 0.1vh;
-    color: #ededed;
+    color: #000000;
     bottom: 0px;
     right: 0px;
 }

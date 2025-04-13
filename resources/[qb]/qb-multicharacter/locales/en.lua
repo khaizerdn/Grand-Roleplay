@@ -52,7 +52,7 @@ local Translations = {
 
         -- Delete character
         deletechar_header = "Delete Character",
-        deletechar_description = "Are You Sure You Want To Delete Your Character?",
+        deletechar_description = "Are you sure you want to delete your character?",
 
         -- Buttons
         cancel = "Cancel",
