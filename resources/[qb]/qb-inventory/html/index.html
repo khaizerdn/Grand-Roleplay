@@ -130,9 +130,9 @@
                         <div class="item-slot-img" v-if="getHotbarItemInSlot(slot)">
                             <img :src="'images/' + getHotbarItemInSlot(slot).image" alt="" />
                         </div>
-                        <div class="item-slot-amount" v-if="getHotbarItemInSlot(slot)">
+                        <!-- <div class="item-slot-amount" v-if="getHotbarItemInSlot(slot)">
                             <p>x{{ getHotbarItemInSlot(slot).amount }}</p>
-                        </div>
+                        </div> -->
                         <div class="item-slot-durability" v-if="getHotbarItemInSlot(slot)">
                             <div
                                 class="item-slot-durability-fill"
@@ -146,9 +146,9 @@
                             ></div>
                             <div class="item-slot-durability-fill" v-else style="width: 0%"></div>
                         </div>
-                        <div class="item-slot-label" v-if="getHotbarItemInSlot(slot)">
+                        <!-- <div class="item-slot-label" v-if="getHotbarItemInSlot(slot)">
                             <p>{{ getHotbarItemInSlot(slot).label }}</p>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>

@@ -301,7 +301,7 @@ RegisterCommand('openInv', function()
 end, false)
 
 RegisterCommand('toggleHotbar', function()
-    ExecuteCommand('hotbar')
+    -- ExecuteCommand('hotbar')
 end, false)
 
 for i = 1, 5 do
@@ -319,4 +319,4 @@ for i = 1, 5 do
 end
 
 RegisterKeyMapping('openInv', Lang:t('inf_mapping.opn_inv'), 'keyboard', Config.Keybinds.Open)
-RegisterKeyMapping('toggleHotbar', Lang:t('inf_mapping.tog_slots'), 'keyboard', Config.Keybinds.Hotbar)
+-- RegisterKeyMapping('toggleHotbar', Lang:t('inf_mapping.tog_slots'), 'keyboard', Config.Keybinds.Hotbar)
