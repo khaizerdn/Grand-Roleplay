@@ -6,7 +6,7 @@
         <title>QB Inventory</title>
         <link rel="stylesheet" href="main.css" />
         <link rel="stylesheet" href="https://unpkg.com/floating-vue@5.2.2/dist/style.css" />
-        <script src="https://kit.fontawesome.com/d37231be1f.js" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.prod.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@floating-ui/core@1.6.0"></script>
         <script src="https://cdn.jsdelivr.net/npm/@floating-ui/dom@1.6.1"></script>
@@ -16,6 +16,7 @@
     </head>
     <body>
         <div id="app">
+            <div class="inventory-overlay" v-if="isInventoryOpen"></div>
             <div class="inventory-container" v-if="isInventoryOpen" @mousemove="drag" @mouseup="endDrag" @mousedown="containerMouseDownAction">
                 <div class="inventory-section player-inventory-section" :class="{ 'centered-inventory-section': shouldCenterInventory }">
                     <div class="inventory-header">
@@ -163,9 +164,9 @@
                     <div class="item-slot-amount">
                         <p>x{{ notificationAmount }}</p>
                     </div>
-                    <div class="item-slot-label">
+                    <!-- <div class="item-slot-label">
                         <p>{{ notificationText }}</p>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <div class="required-item-container" v-if="showRequiredItems">
@@ -219,6 +220,7 @@
                 <li v-if="contextMenuItem.name.includes('weapon_')" @click="copySerial(contextMenuItem)">Copy Serial</li>
                 <li v-if="contextMenuItem.name.includes('weapon_')" @click="openWeaponAttachments(contextMenuItem)">Attachments</li>
             </ul>
+        </div>
         </div>
     </body>
 </html>

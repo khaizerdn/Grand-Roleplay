@@ -610,14 +610,18 @@ $(document).ready(function () {
     });
 });
 
-Open = function (data) {
+function Open(data) {
     $("#openmenu").fadeIn(150);
-};
-$(".closeMenu").click(() => {
-    closeMenu();
-});
+    $("#menu-overlay").fadeIn(150); // Show overlay with same duration
+}
 
-// MONEY HUD
+function closeMenu() {
+    $("#openmenu").fadeOut(550);
+    $("#menu-overlay").fadeOut(550); // Hide overlay with same duration
+    $.post("https://qb-hud/closeMenu");
+}
+
+// MONEY HUD 
 
 const moneyHud = Vue.createApp({
     data() {

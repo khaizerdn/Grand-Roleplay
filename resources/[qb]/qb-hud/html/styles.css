@@ -12,7 +12,23 @@ div#openmenu {
     top: 45%;
     left: 50%;
     transform: translate(-50%, -50%);
+    background-color: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 1rem;
+    z-index: 10;
 }
+
+.menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5); /* Transparent black */
+    z-index: 5; /* Below menu but above other elements */
+    display: none; /* Hidden by default */
+}
+
 .brand-logo {
     width: 25%;
 } /* when using an svg all you need to change is the width and it will resize it */
@@ -22,10 +38,10 @@ div#openmenu {
     color: rgb(255, 255, 255) !important;
 }
 .bg-active-tab {
-    background: rgb(23 23 23) !important;
+    background: rgba(255, 255, 255, 0.06) !important;
 }
 .bg-panel {
-    background: rgb(30 30 30) !important;
+    background: rgba(255, 255, 255, 0.06) !important;
 }
 .q-tab-panels {
     border-top-right-radius: 12px !important;
@@ -53,13 +69,13 @@ div#openmenu {
     color: rgb(0, 0, 0) !important;
 }
 .bg-bgbutton {
-    background: rgb(220 20 60) !important;
+    background: #ffffff !important;
 }
 .q-checkbox__inner {
     color: rgb(255 255 255 / 70%) !important;
 }
 .text-checkbox {
-    color: rgb(220 20 60) !important;
+    color: #ffffff !important;
 }
 .q-checkbox__svg {
     color: rgb(0, 0, 0) !important;

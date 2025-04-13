@@ -1,26 +1,26 @@
-@import url("https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap");
 
 :root {
     /* Dark Theme Colors from Style Guide */
-    --primary: #f44336;
+    --primary: #36489E;
     --on-primary: #ffffff;
-    --primary-container: #ffdad6;
-    --on-primary-container: #410002;
-    --secondary: #d32f2f;
+    --primary-container: #36489E;
+    --on-primary-container: #ffffff;
+    --secondary: #36489E;
     --on-secondary: #ffffff;
     --secondary-container: #ffdad5;
-    --on-secondary-container: #410001;
+    --on-secondary-container: #36489E;
     --tertiary: #ff8a65;
     --on-tertiary: #ffffff;
     --tertiary-container: #ffdacc;
-    --on-tertiary-container: #410002;
-    --surface: #1c1b1f;
-    --on-surface: #e6e1e5;
-    --surface-container-lowest: #0f0d13;
-    --surface-container-low: #1d1b20;
-    --surface-container: #211f26;
-    --surface-container-high: #2b2930;
-    --surface-container-highest: #36343b;
+    --on-tertiary-container: #36489E;
+    --surface: #ffffff;
+    --on-surface: #000000;
+    --surface-container-lowest: #ffffff;
+    --surface-container-low: #ffffff;
+    --surface-container: #ffffff;
+    --surface-container-high: #ffffff;
+    --surface-container-highest: #ffffff;
     --error: #b3261e;
     --on-error: #ffffff;
     --error-container: #93000a;
@@ -48,7 +48,7 @@
     --radius-large: 16px;
 
     /* Typography */
-    --font-primary: "Exo 2", sans-serif;
+    --font-primary: "Roboto", sans-serif;
     --font-weight-regular: 400;
     --font-weight-medium: 500;
     --font-weight-bold: 700;
@@ -88,6 +88,21 @@ div {
     width: 100%;
 }
 
+.inventory-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5); /* Transparent black */
+    z-index: 5; /* Below inventory-container but above game */
+}
+
+.inventory-container {
+    position: relative;
+    z-index: 10; /* Ensure inventory stays above overlay */
+}
+
 .inventory-section {
     position: absolute;
     top: 50vh;
@@ -116,13 +131,13 @@ div {
     width: 100%;
     height: fit-content;
     font-weight: var(--font-weight-bold);
-    color: var(--on-surface);
+    color: #ffffff;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    background-color: rgba(30, 30, 30, 0.6);
-    border: 1px solid rgba(80, 80, 80, 0.5);
-    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
+    background-color: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     padding: 0px 10px 10px;
     margin-bottom: 8px;
 }
@@ -145,7 +160,7 @@ div {
 .item-grid {
     display: flex;
     flex-wrap: wrap;
-    gap: 2px;
+    gap: 2.5px;
     align-content: flex-start;
     width: 100%;
     box-sizing: border-box;
@@ -158,10 +173,14 @@ div {
     justify-content: center;
     width: calc(20% - 2px);
     height: 10vh;
-    background-color: rgba(30, 30, 30, 0.6);
-    border: 1px solid rgba(80, 80, 80, 0.5);
-    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
+    background-color: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     box-sizing: border-box;
+    transition:
+    box-shadow 0.2s ease-in-out,
+    background 0.3s ease-in-out,
+    border-color 0.3s ease-in-out;
 }
 
 .item-slot-img {
@@ -194,8 +213,8 @@ div {
 }
 
 .item-slot-amount {
-    font-size: 0.7vh;
-    color: var(--on-surface);
+    font-size: 1.5vh;
+    color: #ffffff;
     position: absolute;
     top: 5px;
     right: 5px;
@@ -208,18 +227,20 @@ div {
 }
 
 .item-slot:hover {
-    border-color: rgba(100, 100, 100, 0.8);
-    background-color: rgba(40, 40, 40, 0.7);
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
 }
 
 .item-slot:empty {
-    background-color: rgba(30, 30, 30, 0.3);
-    border: 1px solid rgba(80, 80, 80, 0.3);
+    background-color: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .item-price {
-    font-size: 0.7vh;
-    color: var(--on-surface);
+    font-size: 1.5vh;
+    color: #ffffff;
     position: absolute;
     top: 5px;
     left: 5px;
@@ -234,7 +255,7 @@ div {
     position: absolute;
     white-space: nowrap;
     bottom: 0;
-    height: 1vh;
+    height: 0.7vh;
     width: 100%;
     background-color: var(--primary-container);
     display: flex;
@@ -272,7 +293,7 @@ div {
     text-transform: uppercase;
     font-weight: var(--font-weight-bold);
     color: var(--on-primary-container);
-    font-size: 0.7vh;
+    font-size: 1.5vh;
     text-align: center;
 }
 
@@ -341,13 +362,13 @@ div {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: rgba(30, 30, 30, 0.6);
-    border: 1px solid rgba(80, 80, 80, 0.5);
-    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
+    background-color: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 1rem;
 }
 
 .notification-title {
-    color: var(--on-surface);
+    color: #ffffff;
     align-self: flex-start;
     margin-top: 5px;
     margin-left: 5px;
@@ -356,7 +377,7 @@ div {
 .notification-title p {
     margin: 0;
     padding: 0;
-    font-size: 0.7vh;
+    font-size: 1.5vh;
 }
 
 .required-item-container {
@@ -437,46 +458,65 @@ div {
 
 .input-container {
     position: absolute;
-    width: 4%;
+    width: 10%;
     top: calc(26% + ((47.16% - 3vh) / 2));
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: var(--surface-container-high);
+    background-color: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 1rem;
     padding: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     box-shadow: var(--elevation-2);
+    height: 5%;
 }
 
 .input-wrapper {
     display: flex;
     align-items: center;
+    width: 100%;
+    height: 100%;
 }
 
 .input-container input {
     border: none;
     background-color: transparent;
-    color: var(--on-surface);
-    font-size: 1vh;
+    color: #ffffff;
+    font-size: 1.5vh;
     font-family: var(--font-primary);
     width: 85%;
+    height: 85%;
     outline: none;
     text-align: center;
     flex: 1;
 }
 
-.clear-button {
-    margin-left: 5px;
-    background-color: transparent;
-    border: none;
-    color: var(--on-surface);
-    cursor: pointer;
+.input-container input::placeholder {
+    color: #d3d3d3;
 }
 
-.clear-button .fas {
-    color: var(--on-surface);
+.clear-button {
+    background-color: rgba(255, 255, 255, 0.2); /* Clearer background */
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%; /* Optional: rounded for better appearance */
+}
+
+.clear-button .fas.fa-times {
+    color: #ffffff;
+    font-size: 1.2rem; /* Larger icon */
+    width: 16px; /* Consistent size */
+    height: 16px;
+    line-height: 24px; /* Center vertically */
 }
 
 .v-popper--theme-tooltip .v-popper__inner {
