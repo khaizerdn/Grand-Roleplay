@@ -13,7 +13,7 @@
 }
 
 .text-togglecolor {
-    color: rgb(220 20 60) !important;
+    color: #36489E !important;
 }
 
 .loadingbar {
@@ -35,7 +35,7 @@
 .thingy {
     width: auto;
     height: 1.5vh;
-    background: rgb(220 20 60);
+    background: #36489E;
     z-index: 9999;
 }
 
