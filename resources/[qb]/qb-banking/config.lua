@@ -7,7 +7,7 @@ Config = {
     blipInfo = {
         name = 'Bank',
         sprite = 108,
-        color = 2,
+        color = 0,
         scale = 0.55
     },
     locations = {

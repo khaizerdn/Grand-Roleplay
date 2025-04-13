@@ -93,7 +93,7 @@ local function setDivingLocation(divingLocation)
     for _, blip in pairs(CurrentDivingLocation.blip) do if blip then RemoveBlip(blip) end end
     local radiusBlip = AddBlipForRadius(Config.CoralLocations[CurrentDivingLocation.area].coords.Area, 100.0)
     SetBlipRotation(radiusBlip, 0)
-    SetBlipColour(radiusBlip, 47)
+    SetBlipColour(radiusBlip, 0)
     CurrentDivingLocation.blip.radius = radiusBlip
     local labelBlip = AddBlipForCoord(Config.CoralLocations[CurrentDivingLocation.area].coords.Area)
     SetBlipSprite(labelBlip, 597)

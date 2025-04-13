@@ -66,7 +66,7 @@ end
 local function SetLocationBlip()
     local RecycleBlip = AddBlipForCoord(Config.OutsideLocation.x, Config.OutsideLocation.y, Config.OutsideLocation.z)
     SetBlipSprite(RecycleBlip, 365)
-    SetBlipColour(RecycleBlip, 2)
+    SetBlipColour(RecycleBlip, 0)
     SetBlipScale(RecycleBlip, 0.8)
     SetBlipAsShortRange(RecycleBlip, true)
     BeginTextCommandSetBlipName('STRING')
