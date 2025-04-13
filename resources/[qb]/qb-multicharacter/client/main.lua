@@ -157,34 +157,54 @@ RegisterNetEvent('qb-multicharacter:client:chooseChar', function()
 end)
 
 RegisterNetEvent('qb-multicharacter:client:spawnLastLocation', function(coords, cData)
+    -- Validate coords
+    if not coords or not coords.x or not coords.y or not coords.z then
+        print("Invalid coords, using default spawn")
+        coords = Config.DefaultSpawn -- Fallback to default spawn
+    end
+
+    -- Cleanup
+    SetNuiFocus(false, false)
+    SendNUIMessage({ action = 'showUi', status = false })
+    ShutdownLoadingScreenNui()
+    RenderScriptCams(false, true, 500, true, true)
+    if DoesCamExist(cam) then
+        DestroyCam(cam, true)
+    end
+
+    local ped = PlayerPedId()
+    SetEntityCoords(ped, coords.x, coords.y, coords.z)
+    SetEntityHeading(ped, coords.w or 0.0)
+    SetEntityVisible(ped, true)
+    FreezeEntityPosition(ped, false)
+    DoScreenFadeOut(500)
+    Wait(1000)
+
+    -- Attempt apartment check with fallback
     QBCore.Functions.TriggerCallback('apartments:GetOwnedApartment', function(result)
+        local PlayerData = QBCore.Functions.GetPlayerData()
+        local insideMeta = PlayerData.metadata['inside'] or {}
+
         if result then
             TriggerEvent('apartments:client:SetHomeBlip', result.type)
-            local ped = PlayerPedId()
-            SetEntityCoords(ped, coords.x, coords.y, coords.z)
-            SetEntityHeading(ped, coords.w)
-            FreezeEntityPosition(ped, false)
-            SetEntityVisible(ped, true)
-            local PlayerData = QBCore.Functions.GetPlayerData()
-            local insideMeta = PlayerData.metadata['inside']
-            DoScreenFadeOut(500)
-
-            if insideMeta.house then
-                TriggerEvent('qb-houses:client:LastLocationHouse', insideMeta.house)
-            elseif insideMeta.apartment.apartmentType and insideMeta.apartment.apartmentId then
-                TriggerEvent('qb-apartments:client:LastLocationHouse', insideMeta.apartment.apartmentType, insideMeta.apartment.apartmentId)
-            else
-                SetEntityCoords(ped, coords.x, coords.y, coords.z)
-                SetEntityHeading(ped, coords.w)
-                FreezeEntityPosition(ped, false)
-                SetEntityVisible(ped, true)
-            end
-
-            TriggerServerEvent('QBCore:Server:OnPlayerLoaded')
-            TriggerEvent('QBCore:Client:OnPlayerLoaded')
-            Wait(2000)
-            DoScreenFadeIn(250)
         end
+
+        -- Handle house/apartment logic
+        if insideMeta.house then
+            TriggerEvent('qb-houses:client:LastLocationHouse', insideMeta.house)
+        elseif insideMeta.apartment and insideMeta.apartment.apartmentType and insideMeta.apartment.apartmentId then
+            TriggerEvent('qb-apartments:client:LastLocationHouse', insideMeta.apartment.apartmentType, insideMeta.apartment.apartmentId)
+        else
+            SetEntityCoords(ped, coords.x, coords.y, coords.z)
+            SetEntityHeading(ped, coords.w or 0.0)
+        end
+
+        -- Finalize spawn
+        TriggerServerEvent('QBCore:Server:OnPlayerLoaded')
+        TriggerEvent('QBCore:Client:OnPlayerLoaded')
+        Wait(500)
+        DoScreenFadeIn(250)
+        TriggerEvent('qb-weathersync:client:EnableSync')
     end, cData.citizenid)
 end)
 

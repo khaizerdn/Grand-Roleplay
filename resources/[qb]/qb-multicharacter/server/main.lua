@@ -95,8 +95,13 @@ RegisterNetEvent('qb-multicharacter:server:loadUserData', function(cData)
         print('^2[qb-core]^7 ' .. GetPlayerName(src) .. ' (Citizen ID: ' .. cData.citizenid .. ') has successfully loaded!')
         QBCore.Commands.Refresh(src)
         loadHouseData(src)
+        -- Validate position
+        local coords = cData.position and json.decode(cData.position) or nil
+        if not coords or not coords.x or not coords.y or not coords.z then
+            print("Invalid position for citizenid: " .. cData.citizenid .. ", using default spawn")
+            coords = Config.DefaultSpawn -- Fallback to default
+        end
         if Config.SkipSelection then
-            local coords = json.decode(cData.position)
             TriggerClientEvent('qb-multicharacter:client:spawnLastLocation', src, coords, cData)
         else
             if GetResourceState('qb-apartments') == 'started' then
