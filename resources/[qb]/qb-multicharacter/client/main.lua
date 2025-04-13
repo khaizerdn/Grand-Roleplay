@@ -51,17 +51,36 @@ end
 local function skyCam(bool)
     TriggerEvent('qb-weathersync:client:DisableSync')
     if bool then
+        -- Fade in and set visual effects
         DoScreenFadeIn(1000)
         SetTimecycleModifier('hud_def_blur')
         SetTimecycleModifierStrength(1.0)
         FreezeEntityPosition(PlayerPedId(), false)
-        cam = CreateCamWithParams('DEFAULT_SCRIPTED_CAMERA', Config.CamCoords.x, Config.CamCoords.y, Config.CamCoords.z, 0.0, 0.0, Config.CamCoords.w, 60.00, false, 0)
+
+        -- Create camera with configured position, rotation, and FOV
+        cam = CreateCamWithParams(
+            'DEFAULT_SCRIPTED_CAMERA',
+            Config.CamCoords.x,
+            Config.CamCoords.y,
+            Config.CamCoords.z,
+            Config.CamRotation.x, -- Pitch
+            Config.CamRotation.y, -- Roll
+            Config.CamRotation.z, -- Yaw
+            Config.CamFOV,        -- Field of view
+            false,
+            0
+        )
         SetCamActive(cam, true)
         RenderScriptCams(true, false, 1, true, true)
     else
+        -- Reset visual effects and destroy camera
         SetTimecycleModifier('default')
-        SetCamActive(cam, false)
-        DestroyCam(cam, true)
+        SetTimecycleModifierStrength(0.0)
+        if cam then
+            SetCamActive(cam, false)
+            DestroyCam(cam, true)
+            cam = nil -- Clear handle
+        end
         RenderScriptCams(false, false, 1, true, true)
         FreezeEntityPosition(PlayerPedId(), false)
     end

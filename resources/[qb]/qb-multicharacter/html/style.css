@@ -1,20 +1,20 @@
-@import url("https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700&family=Poppins:wght@100;400;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap");
 
 /*------------------------------------*\
   #VARIABLES
 \*------------------------------------*/
 :root {
     /* Color Palette */
-    --md-dark-primary: #f44336;
+    --md-dark-primary: #36489E;
     --md-dark-on-primary: #ffffff;
-    --md-dark-surface: #1c1b1f;
+    --md-dark-surface: #232162;
     --md-dark-on-surface: #e6e1e5;
-    --md-dark-surface-container: #211f26;
+    --md-dark-surface-container: #36489E;
     --md-dark-success: #9bd880;
     --md-dark-success-hover: #8bc570;
     --md-dark-error: #b3261e;
     --md-dark-shadow: rgba(0, 0, 0, 0.15);
-    --md-dark-outline: #79747e;
+    --md-dark-outline: #d3d3d3;
 
     /* Border Radius */
     --md-radius-small: 8px;
@@ -25,7 +25,7 @@
     --md-elevation-3: 0px 3px 8px rgba(0, 0, 0, 0.3);
 
     /* Typography */
-    --font-primary: "Exo 2", sans-serif;
+    --font-primary: "Roboto", sans-serif;
     --font-weight-regular: 400;
     --font-weight-medium: 500;
     --font-weight-bold: 700;
@@ -70,29 +70,42 @@
     width: 18vw;
     max-width: 200px;
     min-width: 150px;
-    aspect-ratio: 1/1;
-    background-color: var(--md-dark-surface);
-    cursor: pointer;
-    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
-    overflow: hidden;
+    aspect-ratio: 1 / 1;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
+    cursor: pointer;
+
+    /* Simulated glass look */
+    background: rgba(255, 255, 255, 0.06); /* semi-transparent white */
+    border: 1px solid rgba(255, 255, 255, 0.3); /* light white border */
+    border-radius: 1rem;
+
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+
+    transition:
+        box-shadow 0.2s ease-in-out,
+        background 0.3s ease-in-out,
+        border-color 0.3s ease-in-out;
 }
 
 .character-square:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
 }
 
 .character-selected {
-    background-color: var(--md-dark-surface-container);
-    transform: translateY(-5px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    background: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+    border-color: rgba(255, 255, 255, 0.6);
 }
 
 .character-selected .character-actions {
     opacity: 1;
+    transition: opacity 0.3s ease-in-out;
 }
+
 
 /* Character Actions */
 .character-actions {
