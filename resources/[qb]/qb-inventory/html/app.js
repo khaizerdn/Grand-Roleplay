@@ -120,7 +120,7 @@ const InventoryContainer = Vue.createApp({
             if (data.inventory) {
                 if (Array.isArray(data.inventory)) {
                     data.inventory.forEach((item) => {
-                        if (item && item.slot) {
+                        if (item && item.slot && item.amount > 0) { // Filter out items with 0 quantity
                             this.playerInventory[item.slot] = item;
                         }
                     });
@@ -168,18 +168,18 @@ const InventoryContainer = Vue.createApp({
         },
         updateInventory(data) {
             this.playerInventory = {};
-
+        
             if (data.inventory) {
                 if (Array.isArray(data.inventory)) {
                     data.inventory.forEach((item) => {
-                        if (item && item.slot) {
+                        if (item && item.slot && item.amount > 0) { // Filter out items with 0 quantity
                             this.playerInventory[item.slot] = item;
                         }
                     });
                 } else if (typeof data.inventory === "object") {
                     for (const key in data.inventory) {
                         const item = data.inventory[key];
-                        if (item && item.slot) {
+                        if (item && item.slot && item.amount > 0) { // Filter out items with 0 quantity
                             this.playerInventory[item.slot] = item;
                         }
                     }
@@ -244,27 +244,27 @@ const InventoryContainer = Vue.createApp({
             const maxTargetWeight = sourceInventoryType === "player" ? this.otherInventoryMaxWeight : this.maxWeight;
             const amountToTransfer = this.transferAmount !== null ? this.transferAmount : 1;
             let targetSlot = null;
-
+        
             const sourceItem = sourceInventory[item.slot];
             if (!sourceItem || sourceItem.amount < amountToTransfer) {
                 this.inventoryError(item.slot);
                 return;
             }
-
+        
             const totalWeightAfterTransfer = targetWeight + sourceItem.weight * amountToTransfer;
-
+        
             if (totalWeightAfterTransfer > maxTargetWeight) {
                 this.inventoryError(item.slot);
                 return;
             }
-
+        
             if (item.unique) {
                 targetSlot = this.findNextAvailableSlot(targetInventory);
                 if (targetSlot === null) {
                     this.inventoryError(item.slot);
                     return;
                 }
-
+        
                 const newItem = {
                     ...item,
                     inventory: sourceInventoryType === "player" ? "other" : "player",
@@ -275,20 +275,20 @@ const InventoryContainer = Vue.createApp({
             } else {
                 const targetItemKey = Object.keys(targetInventory).find((key) => targetInventory[key] && targetInventory[key].name === item.name);
                 const targetItem = targetInventory[targetItemKey];
-
+        
                 if (!targetItem) {
                     const newItem = {
                         ...item,
                         inventory: sourceInventoryType === "player" ? "other" : "player",
                         amount: amountToTransfer,
                     };
-
+        
                     targetSlot = this.findNextAvailableSlot(targetInventory);
                     if (targetSlot === null) {
                         this.inventoryError(item.slot);
                         return;
                     }
-
+        
                     targetInventory[targetSlot] = newItem;
                     newItem.slot = targetSlot;
                 } else {
@@ -296,13 +296,13 @@ const InventoryContainer = Vue.createApp({
                     targetSlot = targetItem.slot;
                 }
             }
-
+        
             sourceItem.amount -= amountToTransfer;
-
+        
             if (sourceItem.amount <= 0) {
-                delete sourceInventory[item.slot];
+                delete sourceInventory[item.slot]; // Ensure deletion
             }
-
+        
             this.postInventoryData(sourceInventoryType, sourceInventoryType === "player" ? "other" : "player", item.slot, targetSlot, sourceItem.amount, amountToTransfer);
         },
         startDrag(event, slot, inventoryType) {
@@ -440,25 +440,25 @@ const InventoryContainer = Vue.createApp({
                 if (this.dragStartInventoryType === "other" && targetInventoryType === "other" && isShop !== -1) {
                     return;
                 }
-
+        
                 const targetSlotNumber = parseInt(targetSlot, 10);
                 if (isNaN(targetSlotNumber)) {
                     throw new Error("Invalid target slot number");
                 }
-
+        
                 const sourceInventory = this.getInventoryByType(this.dragStartInventoryType);
                 const targetInventory = this.getInventoryByType(targetInventoryType);
-
+        
                 const sourceItem = sourceInventory[this.currentlyDraggingSlot];
                 if (!sourceItem) {
                     throw new Error("No item in the source slot to transfer");
                 }
-
+        
                 const amountToTransfer = this.transferAmount !== null ? this.transferAmount : sourceItem.amount;
                 if (sourceItem.amount < amountToTransfer) {
                     throw new Error("Insufficient amount of item in source inventory");
                 }
-
+        
                 if (targetInventoryType !== this.dragStartInventoryType) {
                     if (targetInventoryType == "other") {
                         const totalWeightAfterTransfer = this.otherInventoryWeight + sourceItem.weight * amountToTransfer;
@@ -472,9 +472,9 @@ const InventoryContainer = Vue.createApp({
                         }
                     }
                 }
-
+        
                 const targetItem = targetInventory[targetSlotNumber];
-
+        
                 if (targetItem) {
                     if (sourceItem.name === targetItem.name && targetItem.unique) {
                         this.inventoryError(this.currentlyDraggingSlot);
@@ -484,7 +484,7 @@ const InventoryContainer = Vue.createApp({
                         targetItem.amount += amountToTransfer;
                         sourceItem.amount -= amountToTransfer;
                         if (sourceItem.amount <= 0) {
-                            delete sourceInventory[this.currentlyDraggingSlot];
+                            delete sourceInventory[this.currentlyDraggingSlot]; // Ensure deletion
                         }
                         this.postInventoryData(this.dragStartInventoryType, targetInventoryType, this.currentlyDraggingSlot, targetSlotNumber, sourceItem.amount, amountToTransfer);
                     } else {
@@ -497,7 +497,7 @@ const InventoryContainer = Vue.createApp({
                 } else {
                     sourceItem.amount -= amountToTransfer;
                     if (sourceItem.amount <= 0) {
-                        delete sourceInventory[this.currentlyDraggingSlot];
+                        delete sourceInventory[this.currentlyDraggingSlot]; // Ensure deletion
                     }
                     targetInventory[targetSlotNumber] = { ...sourceItem, amount: amountToTransfer, slot: targetSlotNumber };
                     this.postInventoryData(this.dragStartInventoryType, targetInventoryType, this.currentlyDraggingSlot, targetSlotNumber, sourceItem.amount, amountToTransfer);

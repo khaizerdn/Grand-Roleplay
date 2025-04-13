@@ -142,7 +142,12 @@ end)
 RegisterNetEvent('qb-inventory:client:updateInventory', function()
     local items = {}
     if PlayerData and type(PlayerData.items) == "table" then
-        items = PlayerData.items
+        -- Filter out items with 0 quantity
+        for slot, item in pairs(PlayerData.items) do
+            if item and item.amount > 0 then
+                items[slot] = item
+            end
+        end
     end
 
     SendNUIMessage({
