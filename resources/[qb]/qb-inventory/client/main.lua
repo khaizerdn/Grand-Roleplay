@@ -173,6 +173,8 @@ RegisterNetEvent('qb-inventory:server:RobPlayer', function(TargetId)
 end)
 
 RegisterNetEvent('qb-inventory:client:openInventory', function(items, other)
+    PlaySoundFrontend(-1, "FocusIn", "HintCamSounds", true) -- Play pause menu sound
+    AnimpostfxPlay("PauseMenuIn", 0, true) -- Persistent blur and darkening
     SetNuiFocus(true, true)
     SendNUIMessage({
         action = 'open',
@@ -203,6 +205,9 @@ RegisterNUICallback('AttemptPurchase', function(data, cb)
 end)
 
 RegisterNUICallback('CloseInventory', function(data, cb)
+    PlaySoundFrontend(-1, "FocusOut", "HintCamSounds", true) -- Play pause menu sound
+    AnimpostfxStop("PauseMenuIn") -- Stop persistent effect
+    AnimpostfxPlay("PauseMenuOut", 500, false) -- Smooth exit transition
     SetNuiFocus(false, false)
     if data.name then
         if data.name:find('trunk-') then

@@ -27,9 +27,9 @@
                                 <p>{{ (playerWeight / 1000).toFixed(1) }} / {{ (maxWeight / 1000).toFixed(1) }}</p>
                             </div>
                         </div>
-                        <div class="weight-bar">
+                        <!-- <div class="weight-bar">
                             <div class="weight-bar-fill" :style="{ width: Math.min((playerWeight / maxWeight) * 100, 100) + '%' }" :class="weightBarClass"></div>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="inventory-grid">
                         <div class="item-grid">
@@ -84,9 +84,9 @@
                                 <p>{{ (otherInventoryWeight / 1000).toFixed(1) }} / {{(otherInventoryMaxWeight / 1000).toFixed(1) }}</p>
                             </div>
                         </div>
-                        <div class="weight-bar">
+                        <!-- <div class="weight-bar">
                             <div class="weight-bar-fill" :style="{ width: Math.min((otherInventoryWeight / otherInventoryMaxWeight) * 100, 100) + '%' }" :class="otherWeightBarClass"></div>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="inventory-grid">
                         <div class="item-grid">
