@@ -15,6 +15,7 @@ local showMarker = false
 local markerLocation
 local zoneCombo = nil
 local returningToStation = false
+local showPrompt = false
 
 -- Functions
 
@@ -129,7 +130,7 @@ local function CreateBlip()
     SetBlipDisplay(TruckerBlip, 4)
     SetBlipScale(TruckerBlip, 0.6)
     SetBlipAsShortRange(TruckerBlip, true)
-    SetBlipColour(TruckerBlip, 6)
+    SetBlipColour(TruckerBlip, 0)
     BeginTextCommandSetBlipName('STRING')
     AddTextComponentSubstringPlayerName(Config.DeliveryLocations['main'].label)
     EndTextCommandSetBlipName(TruckerBlip)
@@ -277,7 +278,8 @@ local function GetInTrunk()
     if not BackDoorsOpen(vehicle) then
         return QBCore.Functions.Notify(Lang:t('error.backdoors_not_open'), 'error')
     end
-    local trunkpos = GetOffsetFromEntityInWorldCoords(vehicle, 0, -2.5, 0)
+    local min, max = GetModelDimensions(GetEntityModel(vehicle))
+    local trunkpos = GetOffsetFromEntityInWorldCoords(vehicle, 0.0, min.y - 0.5, 0.0)
     if #(pos - vector3(trunkpos.x, trunkpos.y, trunkpos.z)) > Config.Vehicles[tv].trunkpos then
         return QBCore.Functions.Notify(Lang:t('error.too_far_from_trunk'), 'error')
     end
@@ -296,8 +298,10 @@ local function GetInTrunk()
         isWorking = false
         carryBox()
         hasBox = true
+        showPrompt = false
     end, function()
         isWorking = false
+        showPrompt = false
     end)
 end
 
@@ -447,6 +451,28 @@ CreateThread(function()
             DrawMarker(2, markerLocation.x, markerLocation.y, markerLocation.z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.3, 0.2, 0.15, 200, 0, 0, 222, false, false, false, true, false, false, false)
             sleep = 0
         end
+        
+        -- Check for trunk interaction
+        local ped = PlayerPedId()
+        local pos = GetEntityCoords(ped, true)
+        local vehicle = GetClosestVehicle(pos.x, pos.y, pos.z, 5.0, 0, 71)
+        if vehicle ~= 0 and isTruckerVehicle(vehicle) and BackDoorsOpen(vehicle) and CurrentPlate == QBCore.Functions.GetPlate(vehicle) then
+            local tv = getTruckerVehicle(vehicle)
+            local min, max = GetModelDimensions(GetEntityModel(vehicle))
+            local trunkpos = GetOffsetFromEntityInWorldCoords(vehicle, 0.0, min.y - 0.5, 0.0)
+            if #(pos - vector3(trunkpos.x, trunkpos.y, trunkpos.z)) <= Config.Vehicles[tv].trunkpos and not hasBox then
+                showPrompt = true
+                -- Draw GTA-style glowing circle
+                DrawMarker(1, trunkpos.x, trunkpos.y, trunkpos.z - 0.95, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 
+                    1.0, 1.0, 0.5, 255, 255, 0, 100, false, false, 2, false, nil, nil, false)
+                sleep = 0
+            else
+                showPrompt = false
+            end
+        else
+            showPrompt = false
+        end
+        
         if Delivering then
             if IsControlJustReleased(0, 38) then
                 if not hasBox then
@@ -462,5 +488,14 @@ CreateThread(function()
             sleep = 0
         end
         Wait(sleep)
+    end
+end)
+
+CreateThread(function()
+    while true do
+        if showPrompt then
+            QBCore.Functions.DrawText2D(0.05, 0.1, '~y~Press ~INPUT_CONTEXT~ to carry a box')
+        end
+        Wait(0)
     end
 end)
