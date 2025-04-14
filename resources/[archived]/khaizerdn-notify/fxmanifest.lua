@@ -16,3 +16,9 @@ server_scripts {
 dependencies {
     'qb-core'
 }
+
+exports {
+    'ShowNotification',
+    'ShowAdvancedNotification',
+    'ShowHelpNotification'
+}

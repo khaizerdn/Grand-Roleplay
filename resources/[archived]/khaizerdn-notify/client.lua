@@ -41,3 +41,16 @@ AddEventHandler('khaizerdn-notify:ShowNotification', function(message, duration)
     Citizen.Wait(timer)
     ThefeedRemoveItem()
 end)
+
+-- Client-side exports
+exports('ShowNotification', function(message, duration)
+    TriggerEvent('khaizerdn-notify:ShowNotification', message, duration)
+end)
+
+exports('ShowAdvancedNotification', function(title, subtitle, message, icon, iconType, duration)
+    TriggerEvent('khaizerdn-notify:ShowAdvancedNotification', title, subtitle, message, icon, iconType, duration)
+end)
+
+exports('ShowHelpNotification', function(message, duration)
+    TriggerEvent('khaizerdn-notify:ShowHelpNotification', message, duration)
+end)
