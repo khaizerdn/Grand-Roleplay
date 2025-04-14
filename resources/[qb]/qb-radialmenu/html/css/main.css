@@ -3,11 +3,11 @@
 
 :root {
     /* Colors */
-    --md-primary: #f44336;
+    --md-primary: #36489E;
     --md-on-primary: #ffffff;
     --md-primary-container: #ffdad6;
-    --md-on-primary-container: #410002;
-    --md-secondary: #d32f2f;
+    --md-on-primary-container: #232162;
+    --md-secondary: #36489E;
     --md-on-secondary: #ffffff;
     --md-surface: #fffbff;
     --md-on-surface: #1c1b1f;
@@ -111,8 +111,11 @@ svg.menu.outer {
 }
 
 svg.menu > g > path {
-    fill: rgb(23 23 23 / 80%);
-    box-shadow: var(--md-elevation-1);
+    fill: rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.3); /* light white border */
+    border-radius: 1rem;
+
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 svg.menu > g.sector > path {
