@@ -89,13 +89,14 @@
     background-color: rgba(255, 255, 255, 0.06) !important;
     border: 1px solid rgba(255, 255, 255, 0.3); /* light white border */
     border-radius: 1rem;
-
+    padding: 15px 0px;
+    padding-right: 2%;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .chat-input .prefix {
     margin: 0;
-    margin-left: 0.7%;
+    margin-left: 2%;
     margin-top: -0.1%;
     line-height: 2.8vh;
 }
@@ -114,7 +115,7 @@
 
 .chat-input > div + div {
     position: absolute;
-    bottom: 4vh;
+    bottom: 6.5vh;
     width: 100%;
 
     text-align: left;

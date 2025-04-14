@@ -204,7 +204,7 @@ if not Config.useTarget then
         combo:onPlayerInOut(function(isPointInside)
             isPlayerInsideBankZone = isPointInside
             if isPlayerInsideBankZone then
-                exports['qb-core']:DrawText('Open Bank')
+                exports['khaizerdn-notifyV2']:ShowHelpNotification("Press E to open bank.", 0)
                 CreateThread(function()
                     while isPlayerInsideBankZone do
                         Wait(0)
@@ -214,7 +214,7 @@ if not Config.useTarget then
                     end
                 end)
             else
-                exports['qb-core']:HideText()
+                exports['khaizerdn-notifyV2']:ClearHelpNotification()
             end
         end)
     end)

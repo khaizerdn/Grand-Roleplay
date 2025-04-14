@@ -70,7 +70,7 @@ body {
 
 [id^="target-option-"] {
     margin-bottom: 0.2vh;
-    padding: 1rem;
+    padding: 15px 25px;
     color: #ffffff;
 
     background: rgba(255, 255, 255, 0.06); /* semi-transparent white */
