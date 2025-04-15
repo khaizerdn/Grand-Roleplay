@@ -30,7 +30,7 @@ return {
             },
             AccountNumber = {
                 valueFunction = function()
-                    return 'US0' .. math.random(1, 9) .. 'QBX' .. math.random(1111, 9999) .. math.random(1111, 9999) .. math.random(11, 99)
+                    return 'US0' .. math.random(1, 9) .. 'GRP' .. math.random(1111, 9999) .. math.random(1111, 9999) .. math.random(11, 99)
                 end,
             },
             PhoneNumber = {
@@ -45,7 +45,7 @@ return {
             },
             WalletId = {
                 valueFunction = function()
-                    return 'QB-' .. math.random(11111111, 99999999)
+                    return 'GRP-' .. math.random(11111111, 99999999)
                 end,
             },
             SerialNumber = {
@@ -85,7 +85,7 @@ return {
         closedReason = 'Server Closed', -- Reason message to display when people can't join the server
         whitelist = false, -- Enable or disable whitelist on the server
         whitelistPermission = 'admin', -- Permission that's able to enter the server when the whitelist is on
-        discord = '', -- Discord invite link
+        discord = 'https://discord.gg/nj9PsRhjyk', -- Discord invite link
         checkDuplicateLicense = true, -- Check for duplicate rockstar license on join
         ---@deprecated use cfg ACE system instead
         permissions = { 'god', 'admin', 'mod' }, -- Add as many groups as you want here after creating them in your server.cfg
@@ -96,17 +96,17 @@ return {
             ['license2:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'] = 5,
         },
 
-        defaultNumberOfCharacters = 3, -- Define maximum amount of default characters (maximum 3 characters defined by default)
+        defaultNumberOfCharacters = 1, -- Define maximum amount of default characters (maximum 3 characters defined by default)
     },
 
     -- this configuration is for core events only. putting other webhooks here will have no effect
     logging = {
         webhook = {
-            ['default'] = nil, -- default
-            ['joinleave'] = nil, -- default
-            ['ooc'] = nil, -- default
-            ['anticheat'] = nil, -- default
-            ['playermoney'] = nil, -- default
+            ['default'] = 'https://discord.com/api/webhooks/1361691196837068961/zAJ14ufDPGGx_FOh7Li2I8s2Vl7ewvWhvBtE0Puo43aCLV3PXXTMqt1DXAkI1EV8AHQD', -- default
+            ['joinleave'] = 'https://discord.com/api/webhooks/1361691339745661100/Ya1Jj0AEJheFnPe9oGjN6DoMMbAkz1uh_vJDd_xOz5XCwLye6bUzJcU1PCuQe_JUE5gy', -- default
+            ['ooc'] = 'https://discord.com/api/webhooks/1361692247447310438/2RoUZiNVtqJzWjJnEmnYnWanYLccttl5UoqpTRaxsW5sZt_FeD1HlqmGBenyOOIgwqTm', -- default
+            ['anticheat'] = 'https://discord.com/api/webhooks/1361692324890939603/-W86waGBrrqYopyLhcyE0ditWTS1VLi8eZsRf_bQQiTn5W1w4hv2gfdWNCJ-VNdKZ4Hm', -- default
+            ['playermoney'] = 'https://discord.com/api/webhooks/1361692430373490876/hcRpoNXdqpqd1uZ63NREw1DCsb4r1HgTVPmisAIV_tViPBveW93g649xOBVXJcOZTI0O', -- default
         },
         role = {} -- Role to tag for high priority logs. Roles use <@%roleid> and users/channels are <@userid/channelid>
     },
