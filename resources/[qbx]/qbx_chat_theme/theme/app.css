@@ -16,9 +16,10 @@
 }
 
 .chat-window {
-    background: inherit !important;
+    /* background: inherit !important;
     height: 25% !important;
-    left: 0% !important;
+    left: 0% !important; */
+    display: none !important;
 }
 
 .chat-input {
@@ -32,12 +33,15 @@
     border-radius: calc(0.25rem* 1);
 }
 
-
 .suggestions {
     background-color: var(--main-color) !important;
     border: calc(.0625rem* 1) solid var(--border-color);
     border-radius: calc(0.25rem* 1);
     padding: 0.8vh;
+    position: absolute;
+    bottom: 100%;
+    width: 100%;
+    text-align: left;
 }
 
 .suggestion {
@@ -50,11 +54,12 @@ textarea {
     font-weight: 600 !important;
     color: #c9c9c9;
     line-height: 1.83vh;
-    padding-left: 4.5vh;
+    padding-left: 1vh;
 }
 
 .prefix {
-    height: 100%;
+    display: none !important;
+    /* height: 100%;
     vertical-align: middle;
     background: #42424238;
     padding-left: 4vh;
@@ -62,7 +67,7 @@ textarea {
     background-repeat: no-repeat;
     background-position: center;
     background-size: 20px;
-    position: absolute;
+    position: absolute; */
 }
 
 .help {
@@ -91,7 +96,6 @@ textarea {
     text-indent: 0.3rem;
     white-space: pre-line;
 }
-
 
 .alert {
     background: #141414cc;

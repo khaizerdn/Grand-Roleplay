@@ -1,7 +1,7 @@
 (function () {
     const chatConfig = {
         logo: 'https://files.fivemerr.com/images/794545e0-522f-4069-acf7-2645c5635d40.png',
-        position: 'left', // left,right,top,bottom
+        position: 'bottom', // left,right,top,bottom
     }
 
     // Prefix Logo Side //
@@ -30,8 +30,8 @@
             chat.style.left = '40%';
             break;
         case 'bottom':
-            chat.style.bottom = '5%';
-            chat.style.left = '40%';
+            chat.style.bottom = '0.8%';
+            chat.style.right = '0.8%';
             break;
         default:
             console.log('Invalid position');
