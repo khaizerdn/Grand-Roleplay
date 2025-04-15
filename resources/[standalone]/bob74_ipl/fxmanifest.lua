@@ -3,7 +3,7 @@ game 'gta5'
 
 author 'Bob_74'
 description 'Load and customize your map'
-version '2.3.2'
+version '2.4.1'
 
 lua54 "yes"
 
@@ -151,7 +151,14 @@ client_scripts {
     , "dlc_chopshop/salvage.lua"
 
     -- DLC Bottom Dollar Bounties (Requires forced build 3258 or higher)
-    , "dlc_summer/base.lua"
-    , "dlc_summer/carrier.lua"
-    , "dlc_summer/office.lua"
+    , "dlc_bounties/base.lua"
+    , "dlc_bounties/carrier.lua"
+    , "dlc_bounties/office.lua"
+
+    -- DLC Agents of Sabotage (Requires forced build 3407 or higher)
+    , "dlc_agents/base.lua"
+    , "dlc_agents/factory.lua"
+    , "dlc_agents/office.lua"
+    , "dlc_agents/airstrip.lua"
+    , "dlc_agents/hangar_door.lua"
 }
