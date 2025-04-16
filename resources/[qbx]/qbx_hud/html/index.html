@@ -57,6 +57,7 @@
                     <template v-slot:before>
                         <q-tabs v-model="tab" active-bg-color="active-tab" inline-label indicator-color="transparent" vertical class="text-tabcolor bg-panel">
                             <q-tab name="hud" icon="view_list" label="HUD" style="height: 5.5vh; padding-left: 1vh; justify-content: end;"></q-tab>
+                            <q-tab name="tutorial" icon="info" label="TUTORIAL" style="height: 5.5vh; padding-left: 1vh; justify-content: end;"></q-tab>
                         </q-tabs>
                     </template>
                     <template v-slot:after>
@@ -182,6 +183,34 @@
                                 </div>
                                 <br>
                             </q-tab-panel>
+                            <q-tab-panel name="tutorial">
+                                <div class="q-mb-md">
+                                    <div class="text-h6 q-mb-md">Tutorial for Beginners</div>
+                                    <div class="text-h7">
+                                        <p>Welcome to the server! This guide covers the key features available to enhance your gameplay experience.</p>
+                                        <h3>I. Robbing</h3>
+                                        <ul>
+                                            <li><strong>qbx_bankrobbery</strong>: Plan and execute bank heists for high-stakes rewards.</li>
+                                            <li><strong>qbx_houserobbery</strong>: Break into houses to steal valuable items.</li>
+                                            <li><strong>qbx_jewelry</strong>: Rob jewelry stores for precious gems and cash.</li>
+                                        </ul>
+                                        <h3>II. Entertainment</h3>
+                                        <ul>
+                                            <li><strong>qbx_diving</strong>: Explore underwater locations for hidden treasures.</li>
+                                            <li><strong>qbx_drugs</strong>: Grow weeds in your house for profit.</li>
+                                            <li><strong>qbx_lapraces</strong>: Design and race on custom tracks.</li>
+                                            <li><strong>qbx_pawnshop</strong>: Sell stolen jewelry for cash.</li>
+                                            <li><strong>qbx_scrapyard</strong>: Dismantle vehicles and sell scraps.</li>
+                                            <li><strong>qbx_streetraces</strong>: Compete in street races against other players.</li>
+                                            <li><strong>qbx_vineyard</strong>: Farm grapes and produce wine.</li>
+                                        </ul>
+                                        <h3>III. Other</h3>
+                                        <ul>
+                                            <li><strong>qbx_properties</strong>: Purchase and customize your own property.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </q-tab-panel>
                         </q-tab-panels>
                     </template>
                 </q-splitter>
@@ -191,17 +220,17 @@
             <div id="money-container">
                 <div id="money-cash">
                     <transition name="slide-fade">
-                        <p v-if="showCash"><span id="sign">$&nbsp;</span><span id="money">{{(cash)}}</span></p>
+                        <p v-if="showCash"><span id="sign">$ </span><span id="money">{{(cash)}}</span></p>
                     </transition>
                 </div>
                 <div id="money-bank">
                     <transition name="slide-fade">
-                        <p v-if="showBank"><span id="sign">$&nbsp;</span><span id="bank">{{(bank)}}</span></p>
+                        <p v-if="showBank"><span id="sign">$ </span><span id="bank">{{(bank)}}</span></p>
                     </transition>
                 </div>
                 <div id="money-change" v-if="showUpdate">
-                    <p v-if="plus" id="money"><span id="plus">+&nbsp;</span><span id="money">{{(amount)}}</span></p>
-                    <p v-else-if="minus" id="minus"><span id="minus">-&nbsp;</span><span id="money">{{(amount)}}</span></p>
+                    <p v-if="plus" id="money"><span id="plus">+ </span><span id="money">{{(amount)}}</span></p>
+                    <p v-else-if="minus" id="minus"><span id="minus">- </span><span id="money">{{(amount)}}</span></p>
                 </div>
             </div>
             <div id="ui-container">
