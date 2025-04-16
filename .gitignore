@@ -1,10 +1,12 @@
-/cache/
+!resources/
 
+/archived/
+/cache/
 misc.cfg
+note.txt
 ox.cfg
+permission.cfg
 server.cfg
 server.cfg.bkp
 voice.cfg
-permission.cfg
 *.log
-note.txt
