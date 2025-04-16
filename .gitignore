@@ -6,5 +6,5 @@ server.cfg
 server.cfg.bkp
 voice.cfg
 permission.cfg
-
+*.log
 note.txt
