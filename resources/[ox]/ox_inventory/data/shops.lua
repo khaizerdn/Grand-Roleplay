@@ -19,16 +19,16 @@ return {
 			vec3(2557.94, 382.05, 108.62),
 			vec3(373.55, 325.56, 103.56),
 		}, targets = {
-			{ loc = vec3(25.06, -1347.32, 29.5), length = 0.7, width = 0.5, heading = 0.0, minZ = 29.5, maxZ = 29.9, distance = 1.5 },
-			{ loc = vec3(-3039.18, 585.13, 7.91), length = 0.6, width = 0.5, heading = 15.0, minZ = 7.91, maxZ = 8.31, distance = 1.5 },
-			{ loc = vec3(-3242.2, 1000.58, 12.83), length = 0.6, width = 0.6, heading = 175.0, minZ = 12.83, maxZ = 13.23, distance = 1.5 },
-			{ loc = vec3(1728.39, 6414.95, 35.04), length = 0.6, width = 0.6, heading = 65.0, minZ = 35.04, maxZ = 35.44, distance = 1.5 },
-			{ loc = vec3(1698.37, 4923.43, 42.06), length = 0.5, width = 0.5, heading = 235.0, minZ = 42.06, maxZ = 42.46, distance = 1.5 },
-			{ loc = vec3(1960.54, 3740.28, 32.34), length = 0.6, width = 0.5, heading = 120.0, minZ = 32.34, maxZ = 32.74, distance = 1.5 },
-			{ loc = vec3(548.5, 2671.25, 42.16), length = 0.6, width = 0.5, heading = 10.0, minZ = 42.16, maxZ = 42.56, distance = 1.5 },
-			{ loc = vec3(2678.29, 3279.94, 55.24), length = 0.6, width = 0.5, heading = 330.0, minZ = 55.24, maxZ = 55.64, distance = 1.5 },
-			{ loc = vec3(2557.19, 381.4, 108.62), length = 0.6, width = 0.5, heading = 0.0, minZ = 108.62, maxZ = 109.02, distance = 1.5 },
-			{ loc = vec3(373.13, 326.29, 103.57), length = 0.6, width = 0.5, heading = 345.0, minZ = 103.57, maxZ = 103.97, distance = 1.5 },
+			{ loc = vec3(24.49, -1347.26, 28.5), length = 0.7, width = 0.5, heading = 269.26, minZ = 29.5, maxZ = 29.9, distance = 1.5, ped = `a_m_m_business_01`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' },
+			{ loc = vec3(-3039.0, 584.55, 6.91), length = 0.6, width = 0.5, heading = 16.93, minZ = 7.91, maxZ = 8.31, distance = 1.5, ped = `a_m_m_business_01`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' },
+			{ loc = vec3(-3242.26, 999.95, 11.83), length = 0.6, width = 0.6, heading = 355.51, minZ = 12.83, maxZ = 13.23, distance = 1.5, ped = `a_m_m_business_01`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' },
+			{ loc = vec3(1727.87, 6415.23, 34.04), length = 0.6, width = 0.6, heading = 245.4, minZ = 35.04, maxZ = 35.44, distance = 1.5, ped = `a_m_m_business_01`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' },
+			{ loc = vec3(1698.09, 4922.86, 41.06), length = 0.5, width = 0.5, heading = 322.93, minZ = 42.06, maxZ = 42.46, distance = 1.5, ped = `a_m_m_business_01`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' },
+			{ loc = vec3(1960.07, 3739.98, 31.34), length = 0.6, width = 0.5, heading = 299.48, minZ = 32.34, maxZ = 32.74, distance = 1.5, ped = `a_m_m_business_01`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' },
+			{ loc = vec3(549.03, 2671.32, 41.16), length = 0.6, width = 0.5, heading = 99.11, minZ = 42.16, maxZ = 42.56, distance = 1.5, ped = `a_m_m_business_01`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' },
+			{ loc = vec3(2678.03, 3279.44, 54.24), length = 0.6, width = 0.5, heading = 332.05, minZ = 55.24, maxZ = 55.64, distance = 1.5, ped = `a_m_m_business_01`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' },
+			{ loc = vec3(2557.2, 380.85, 107.62), length = 0.6, width = 0.5, heading = 359.04, minZ = 108.62, maxZ = 109.02, distance = 1.5, ped = `a_m_m_business_01`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' },
+			{ loc = vec3(372.53, 326.38, 102.57), length = 0.6, width = 0.5, heading = 259.84, minZ = 103.57, maxZ = 103.97, distance = 1.5, ped = `a_m_m_business_01`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' },
 		}
 	},
 
@@ -49,12 +49,12 @@ return {
 			vec3(1392.562, 3604.684, 34.980),
 			vec3(-1393.409, -606.624, 30.319)
 		}, targets = {
-			{ loc = vec3(1134.9, -982.34, 46.41), length = 0.5, width = 0.5, heading = 96.0, minZ = 46.4, maxZ = 46.8, distance = 1.5 },
-			{ loc = vec3(-1222.33, -907.82, 12.43), length = 0.6, width = 0.5, heading = 32.7, minZ = 12.3, maxZ = 12.7, distance = 1.5 },
-			{ loc = vec3(-1486.67, -378.46, 40.26), length = 0.6, width = 0.5, heading = 133.77, minZ = 40.1, maxZ = 40.5, distance = 1.5 },
-			{ loc = vec3(-2967.0, 390.9, 15.14), length = 0.7, width = 0.5, heading = 85.23, minZ = 15.0, maxZ = 15.4, distance = 1.5 },
-			{ loc = vec3(1165.95, 2710.20, 38.26), length = 0.6, width = 0.5, heading = 178.84, minZ = 38.1, maxZ = 38.5, distance = 1.5 },
-			{ loc = vec3(1393.0, 3605.95, 35.11), length = 0.6, width = 0.6, heading = 200.0, minZ = 35.0, maxZ = 35.4, distance = 1.5 }
+			{ loc = vec3(1134.14, -982.51, 45.42), length = 0.5, width = 0.5, heading = 276.9, minZ = 46.4, maxZ = 46.8, distance = 1.5, ped = `a_m_m_business_01`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' },
+			{ loc = vec3(-1221.97, -908.28, 11.33), length = 0.6, width = 0.5, heading = 32.6, minZ = 12.3, maxZ = 12.7, distance = 1.5, ped = `a_m_m_business_01`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' },
+			{ loc = vec3(-1486.3, -378.03, 39.16), length = 0.6, width = 0.5, heading = 136.17, minZ = 40.1, maxZ = 40.5, distance = 1.5, ped = `a_m_m_business_01`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' },
+			{ loc = vec3(-2966.45, 390.92, 14.04), length = 0.7, width = 0.5, heading = 82.55, minZ = 15.0, maxZ = 15.4, distance = 1.5, ped = `a_m_m_business_01`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' },
+			{ loc = vec3(1165.87, 2710.77, 37.16), length = 0.6, width = 0.5, heading = 177.88, minZ = 38.1, maxZ = 38.5, distance = 1.5, ped = `a_m_m_business_01`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' },
+			{ loc = vec3(1392.74, 3606.37, 33.98), length = 0.6, width = 0.6, heading = 198.93, minZ = 35.0, maxZ = 35.4, distance = 1.5, ped = `a_m_m_business_01`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' }
 		}
 	},
 
@@ -68,7 +68,7 @@ return {
 			vec3(2748.0, 3473.0, 55.67),
 			vec3(342.99, -1298.26, 32.51)
 		}, targets = {
-			{ loc = vec3(2746.8, 3473.13, 55.67), length = 0.6, width = 3.0, heading = 65.0, minZ = 55.0, maxZ = 56.8, distance = 3.0 }
+			{ loc = vec3(2747.3, 3473.08, 54.67), length = 0.6, width = 3.0, heading = 244.8, minZ = 55.0, maxZ = 56.8, distance = 3.0,  ped = `a_m_m_business_01`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' }
 		}
 	},
 
@@ -92,15 +92,15 @@ return {
 			vec3(-1117.58, 2698.61, 18.55),
 			vec3(842.44, -1033.42, 28.19)
 		}, targets = {
-			{ loc = vec3(-660.92, -934.10, 21.94), length = 0.6, width = 0.5, heading = 180.0, minZ = 21.8, maxZ = 22.2, distance = 2.0 },
-			{ loc = vec3(808.86, -2158.50, 29.73), length = 0.6, width = 0.5, heading = 360.0, minZ = 29.6, maxZ = 30.0, distance = 2.0 },
-			{ loc = vec3(1693.57, 3761.60, 34.82), length = 0.6, width = 0.5, heading = 227.39, minZ = 34.7, maxZ = 35.1, distance = 2.0 },
-			{ loc = vec3(-330.29, 6085.54, 31.57), length = 0.6, width = 0.5, heading = 225.0, minZ = 31.4, maxZ = 31.8, distance = 2.0 },
-			{ loc = vec3(252.85, -51.62, 70.0), length = 0.6, width = 0.5, heading = 70.0, minZ = 69.9, maxZ = 70.3, distance = 2.0 },
-			{ loc = vec3(23.68, -1106.46, 29.91), length = 0.6, width = 0.5, heading = 160.0, minZ = 29.8, maxZ = 30.2, distance = 2.0 },
-			{ loc = vec3(2566.59, 293.13, 108.85), length = 0.6, width = 0.5, heading = 360.0, minZ = 108.7, maxZ = 109.1, distance = 2.0 },
-			{ loc = vec3(-1117.61, 2700.26, 18.67), length = 0.6, width = 0.5, heading = 221.82, minZ = 18.5, maxZ = 18.9, distance = 2.0 },
-			{ loc = vec3(841.05, -1034.76, 28.31), length = 0.6, width = 0.5, heading = 360.0, minZ = 28.2, maxZ = 28.6, distance = 2.0 }
+			{ loc = vec3(-660.91, -933.6, 20.83), length = 0.6, width = 0.5, heading = 156.29, minZ = 21.8, maxZ = 22.2, distance = 2.0, ped = `a_m_m_business_01`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' },
+			{ loc = vec3(808.86, -2159.03, 28.62), length = 0.6, width = 0.5, heading = 340.39, minZ = 29.6, maxZ = 30.0, distance = 2.0, ped = `a_m_m_business_01`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' },
+			{ loc = vec3(1693.18, 3761.97, 33.71), length = 0.6, width = 0.5, heading = 198.64, minZ = 34.7, maxZ = 35.1, distance = 2.0, ped = `a_m_m_business_01`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' },
+			{ loc = vec3(-330.67, 6085.87, 30.45), length = 0.6, width = 0.5, heading = 199.27, minZ = 31.4, maxZ = 31.8, distance = 2.0, ped = `a_m_m_business_01`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' },
+			{ loc = vec3(253.32, -51.8, 68.94), length = 0.6, width = 0.5, heading = 49.69, minZ = 69.9, maxZ = 70.3, distance = 2.0, ped = `a_m_m_business_01`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' },
+			{ loc = vec3(23.91, -1106.0, 28.8), length = 0.6, width = 0.5, heading = 134.55, minZ = 29.8, maxZ = 30.2, distance = 2.0, ped = `a_m_m_business_01`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' },
+			{ loc = vec3(2566.59, 292.63, 107.73), length = 0.6, width = 0.5, heading = 335.75, minZ = 108.7, maxZ = 109.1, distance = 2.0, ped = `a_m_m_business_01`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' },
+			{ loc = vec3(-1117.97, 2700.66, 17.55), length = 0.6, width = 0.5, heading = 201.38, minZ = 18.5, maxZ = 18.9, distance = 2.0, ped = `a_m_m_business_01`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' },
+			{ loc = vec3(841.1, -1035.26, 27.19), length = 0.6, width = 0.5, heading = 340.82, minZ = 28.2, maxZ = 28.6, distance = 2.0, ped = `a_m_m_business_01`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' }
 		}
 	},
 
@@ -120,7 +120,7 @@ return {
 		}, locations = {
 			vec3(451.51, -979.44, 30.68)
 		}, targets = {
-			{ loc = vec3(453.21, -980.03, 30.68), length = 0.5, width = 3.0, heading = 270.0, minZ = 30.5, maxZ = 32.0, distance = 6 }
+			{ loc = vec3(454.05, -980.03, 29.69), length = 0.5, width = 3.0, heading = 92.38, minZ = 30.5, maxZ = 32.0, distance = 6, ped = `mp_m_securoguard_01`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' }
 		}
 	},
 
@@ -150,9 +150,9 @@ return {
 			{ name = 'ammo-rifle', price = 1000, currency = 'black_money' },
 			{ name = 'ammo-rifle2', price = 1000, currency = 'black_money' }
 		}, locations = {
-			vec3(309.09, -913.75, 56.46)
+			vec3(309.42, -913.78, 56.46)
 		}, targets = {
-
+			{ loc = vec3(309.42, -913.78, 55.46), length = 0.5, width = 3.0, heading = 90.23, minZ = 30.5, maxZ = 32.0, distance = 6, ped = `g_m_y_armgoon_02`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' }
 		}
 	},
 
