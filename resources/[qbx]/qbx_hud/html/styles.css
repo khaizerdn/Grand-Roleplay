@@ -14,6 +14,7 @@ div#openmenu { display: none; position: absolute; width: 50%; top: 45%; left: 50
 .q-tabs--vertical.q-tabs--not-scrollable .q-tabs__content { border-top-left-radius: 12px!important; border-bottom-left-radius: 12px!important; } /* change all 12px for a different border radius (rounds edges of the menu) */
 
 /* Menu text styles */
+.page-title { font-size: 2rem; font-weight: 700; color:rgb(255, 255, 255)!important; }
 .text-h6 { color: rgb(255, 255, 255)!important; }
 .text-h7 { color: rgba(255, 255, 255, 0.8)!important; }
 

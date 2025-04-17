@@ -1,372 +1,602 @@
 <html>
-    <head>
-        <meta id="viewport" name="viewport" content ="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-        <link rel="stylesheet" type="text/css" href="styles.css"/>
-        <link rel="stylesheet" type="text/css" href="responsive.css"/>
-        <link href="https://cdn.jsdelivr.net/npm/quasar@2.1.0/dist/quasar.prod.css" rel="stylesheet" type="text/css"/>
-        <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet" type="text/css"/>
-        <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.13.0/css/all.css"/>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.prod.js" defer></script>
-        <script src="https://cdn.jsdelivr.net/npm/quasar@2.1.0/dist/quasar.umd.prod.js" defer></script>
-        <script src="app.js" defer></script>
-    </head>
-    <body>
-        <div id="baseplate-container" v-show="show">
-            <div v-if="showStreets" class="street-container">
-                <div class="street2">{{street2}}</div>
-                <div class="street1">{{street1}}</div>
-            </div>
-            <div class="baseplate" v-show="show">
-                <div v-if="showPointer" class="pointer">˅</div>
-                <div v-if="showDegrees" class="degrees"></div>
-                    <svg class="bezel">
-                        <rect width="3" stroke="black" fill="white" stroke-width="0.5" stroke-opacity="0.6" v-if="showCompass" height="20" x="-90"/>
-                        <rect width="3" stroke="black" fill="white" stroke-width="0.5" stroke-opacity="0.6" v-if="showCompass" height="9" x="-45"/>
-                        <rect width="4.5" stroke="black" fill="white" stroke-width="0.5" stroke-opacity="0.6" v-if="showCompass" height="20" x="0"/>
-                        <rect width="3" stroke="black" fill="white" stroke-width="0.5" stroke-opacity="0.6" v-if="showCompass" height="9" x="45"/>
-                        <rect width="4.5" stroke="black" fill="white" stroke-width="0.5" stroke-opacity="0.6" v-if="showCompass" height="20" x="90"/>
-                        <rect width="3" stroke="black" fill="white" stroke-width="0.5" stroke-opacity="0.6" v-if="showCompass" height="9" x="135"/>
-                        <rect width="4.5" stroke="black" fill="white" stroke-width="0.5" stroke-opacity="0.6" v-if="showCompass" height="20" x="180"/>
-                        <rect width="3" stroke="black" fill="white" stroke-width="0.5" stroke-opacity="0.6" v-if="showCompass" height="9" x="225"/>
-                        <rect width="4.5" stroke="black" fill="white" stroke-width="0.5" stroke-opacity="0.6" v-if="showCompass" height="20" x="270"/>
-                        <rect width="3" stroke="black" fill="white" stroke-width="0.5" stroke-opacity="0.6" v-if="showCompass" height="9" x="315"/>
-                        <rect width="4.5" stroke="black" fill="white" stroke-width="0.5" stroke-opacity="0.6" v-if="showCompass" height="20" x="360"/>
-                        <rect width="3" stroke="black" fill="white" stroke-width="0.5" stroke-opacity="0.6" v-if="showCompass" height="9" x="405"/>
-                        <rect width="3" stroke="black" fill="white" stroke-width="0.5" stroke-opacity="0.6" v-if="showCompass" height="20" x="450"/>
-                    </svg>
-            
-                    <svg class="bearing">
-                        <text v-if="showCompass" x="0" y="1.5" dominant-baseline="middle" text-anchor="middle" fill= "yellow">N</text>
-                        <text v-if="showCompass" x="360" y="1.5" dominant-baseline="middle" text-anchor="middle" fill= "yellow">N</text>
-                        <text style="font-size: 1.4vh!important; font-weight: 800!important;" v-if="showCompass" x="315" y="-11" dominant-baseline="middle" text-anchor="middle" fill="white">NW</text>
-                        <text style="font-size: 1.4vh!important; font-weight: 800!important;" v-if="showCompass" x="-45" y="-11" dominant-baseline="middle" text-anchor="middle" fill="white">NW</text>
-                        <text style="font-size: 1.4vh!important; font-weight: 800!important;" v-if="showCompass" x="45" y="-11" dominant-baseline="middle" text-anchor="middle" fill="white">NE</text>
-                        <text style="font-size: 1.4vh!important; font-weight: 800!important;" v-if="showCompass" x="405" y="-11" dominant-baseline="middle" text-anchor="middle" fill="white">NE</text>
-                        <text v-if="showCompass" x="90" y="1.5" dominant-baseline="middle" text-anchor="middle" fill="white">E</text>
-                        <text style="font-size: 1.4vh!important; font-weight: 800!important;" v-if="showCompass" x="135" y="-11" dominant-baseline="middle" text-anchor="middle" fill="white">SE</text>
-                        <text v-if="showCompass" x="180" y="1.5" dominant-baseline="middle" text-anchor="middle" fill="white">S</text>
-                        <text style="font-size: 1.4vh!important; font-weight: 800!important;" v-if="showCompass" x="225" y="-11" dominant-baseline="middle" text-anchor="middle" fill="white">SW</text>
-                        <text v-if="showCompass" x="270" y="1.5" dominant-baseline="middle" text-anchor="middle" fill="white">W</text>
-                    </svg>
-                </div>
-            </div>
-        <div id="openmenu">
-            <div id="menu">
-                <q-splitter v-model="splitterModel" style="height: 50vh;">
-                    <template v-slot:before>
-                        <q-tabs v-model="tab" active-bg-color="active-tab" inline-label indicator-color="transparent" vertical class="text-tabcolor bg-panel">
-                            <q-tab name="hud" icon="view_list" label="HUD" style="height: 5.5vh; padding-left: 1vh; justify-content: end;"></q-tab>
-                            <q-tab name="tutorial" icon="info" label="TUTORIAL" style="height: 5.5vh; padding-left: 1vh; justify-content: end;"></q-tab>
-                        </q-tabs>
-                    </template>
-                    <template v-slot:after>
-                        <q-tab-panels v-model="tab" animated swipeable vertical transition-prev="jump-up" transition-next="jump-up" class="bg-active-tab">
-                            <q-tab-panel name="hud">
-                                <div class="q-mb-md">
-                                    <div class="text-h6 q-mb-md">Reset Hud <img class="brand-logo" align="right" src="./brand-logo.svg"></img></div>
-                                    <div class="q-pa-md q-gutter-sm">
-                                        <q-btn v-on:click="resetStorage($event)" :loading="progress[0].loading" :percentage="progress[0].percentage" text-color="textbutton" color="bgbutton" @click="startComputing(0)" style="width: 150px"> Reset Settings
-                                        <template v-slot:loading> <q-spinner-gears class="on-left"></q-spinner-gears> Resetting... </template></q-btn>
-                                        <div class="text-h7 q-mb-md">If you want to reset your settings back to default; click this shiny button! <br> (you will have to relog for your menu to reset changes successfully)</div>
-                                        <q-btn v-on:click="restartHud($event)" :loading="progress[1].loading" :percentage="progress[1].percentage" text-color="textbutton" color="bgbutton" @click="startComputing(1)" style="width: 150px"> Reset Hud
-                                        <template v-slot:loading> <q-spinner-gears class="on-left"></q-spinner-gears> Resetting... </template></q-btn>
-                                        <div class="text-h7 q-mb-md">If your hud is acting up, give it a good ol' reset! Or you can do /resethud</div>
-                                    </div>
-                                    <hr>
-                                    <div class="text-h6 q-mb-md">Options</div>
-                                    <div class="text-h7">
-                                        <q-item borderless tag="label" v-ripple>
-                                            <q-item-section avatar>
-                                                <q-checkbox v-model="isOutMapChecked" v-on:click="showOutMap($event)" color="checkbox" val="1"></q-checkbox>
-                                            </q-item-section>
-                                            <q-item-section>
-                                                <q-item-label>Show Minimap Only in Vehicle</q-item-label>
-                                                <q-item-label class="text-h7" caption>Disabling this will always keep your minimap on your screen</q-item-label>
-                                            </q-item-section>
-                                        </q-item>
-                                        <q-item borderless tag="label" v-ripple>
-                                            <q-item-section avatar>
-                                                <q-checkbox v-model="isOutCompassChecked" v-on:click="showOutCompass($event)" color="checkbox" val="2"></q-checkbox>
-                                            </q-item-section>
-                                            <q-item-section>
-                                                <q-item-label>Show Compass Only in Vehicle</q-item-label>
-                                                <q-item-label class="text-h7" caption>Disabling this will always keep your compass on your screen</q-item-label>
-                                            </q-item-section>
-                                        </q-item>
-                                        <q-item borderless tag="label" v-ripple>
-                                            <q-item-section avatar>
-                                                <q-checkbox v-model="isCompassFollowChecked" v-on:click="showFollowCompass($event)" color="checkbox" val="3"></q-checkbox>
-                                            </q-item-section>
-                                            <q-item-section>
-                                                <q-item-label>Show Compass Follow Cam</q-item-label>
-                                                <q-item-label class="text-h7" caption>Disabling this will make it so you can no longer use your mouse to rotate the compass around</q-item-label>
-                                            </q-item-section>
-                                        </q-item>
-                                    </div>
-                                    <hr>
-                                    <div class="text-h6 q-mb-md">Notifications</div>
-                                    <div class="text-h7">
-                                        <q-checkbox v-on:click="showMapNotif($event)" label='Map Notifications Enabled' v-model="isMapNotifChecked" color="checkbox" val="7" style="display: flex;"></q-checkbox>
-                                        <q-checkbox v-on:click="showFuelAlert($event)" label='Low Fuel Alert Enabled' v-model="isLowFuelChecked" color="checkbox" val="8" style="display: flex;"></q-checkbox>
-                                        <q-checkbox v-on:click="showCinematicNotif($event)" label='Cinematic Mode Notifications Enabled' v-model="isCinematicNotifChecked" color="checkbox" val="9" style="display: flex;"></q-checkbox>
-                                    </div>
-                                </div>                        
-                                <hr>
-                                <div class="text-h6 q-mb-md">Status</div>
-                                <div class="text-h7">
-                                    <q-checkbox v-on:click="dynamicHealth($event)" label='Show Health always' v-model="isDynamicHealthChecked" color="checkbox" val="10" style="display: flex;"></q-checkbox>
-                                    <q-checkbox v-on:click="dynamicArmor($event)" label='Show Armor always' v-model="isDynamicArmorChecked" color="checkbox" val="11" style="display: flex;"></q-checkbox>
-                                    <q-checkbox v-on:click="dynamicHunger($event)" label='Show Hunger always' v-model="isDynamicHungerChecked" color="checkbox" val="12" style="display: flex;"></q-checkbox>
-                                    <q-checkbox v-on:click="dynamicThirst($event)" label='Show Thirst always' v-model="isDynamicThirstChecked" color="checkbox" val="13" style="display: flex;"></q-checkbox>
-                                    <q-checkbox v-on:click="dynamicStress($event)" label='Show Stress always' v-model="isDynamicStressChecked" color="checkbox" val="14" style="display: flex;"></q-checkbox>
-                                    <q-checkbox v-on:click="dynamicOxygen($event)" label='Show Oxygen always' v-model="isDynamicOxygenChecked" color="checkbox" val="15" style="display: flex;"></q-checkbox>
-                                </div>
-                                <hr>
-                                <div class="text-h6 q-mb-md">Vehicle</div>
-                                <div class="text-h7">
-                                    <q-toggle v-on:click="changeFPS($event)" size="lg" keep-color icon-color="toggleicons" color="checkbox" :label="`Speedometer FPS ${isChangeFPSChecked}`" unchecked-icon="60fps" false-value="Synced" true-value="Optimized" checked-icon="30fps" v-model="isChangeFPSChecked"></q-toggle>
-                                    <div class="text-h7 q-mb-md-d">Synced FPS option will result in less optimization, but keep your speedometer in real time, however, it will also be more demanding on your machine.</div>
-                                    <q-toggle v-on:click="ToggleMapShape($event)" size="lg" keep-color icon-color="toggleicons" color="checkbox" :label="`Minimap ${isToggleMapShapeChecked}`" unchecked-icon="radio_button_unchecked" false-value="circle" true-value="square" checked-icon="check_box_outline_blank" v-model="isToggleMapShapeChecked"></q-toggle>
-                                    <div class="text-h7 q-mb-md-d">Whether it's square or circle you desire, you have the ability to choose!</div>
-                                    <!-- <q-checkbox v-on:click="HideMap($event)" label='Minimap Enabled' v-model="isHideMapChecked" color="checkbox" val="15" style="display: flex;"></q-checkbox> -->
-                                    <q-checkbox v-on:click="ToggleMapBorders($event)" label='Minimap Borders Enabled' v-model="isToggleMapBordersChecked" color="checkbox" val="16" style="display: flex;"></q-checkbox>
-                                    <q-checkbox v-on:click="dynamicEngine($event)" label='Show Engine always' v-model="isDynamicEngineChecked" color="checkbox" val="17" style="display: flex;"></q-checkbox>
-                                    <q-checkbox v-on:click="dynamicNitro($event)" label='Show Nitro always' v-model="isDynamicNitroChecked" color="checkbox" val="18" style="display: flex;"></q-checkbox>
-                                </div>
-                                <hr>
-                                <div class="text-h6 q-mb-md">Compass</div>
-                                <div class="text-h7">
-                                    <q-toggle v-on:click="changeCompassFPS($event)" size="lg" keep-color icon-color="toggleicons" color="checkbox" :label="`Compass FPS ${isChangeCompassFPSChecked}`" unchecked-icon="60fps" false-value="Synced" true-value="Optimized" checked-icon="30fps" v-model="isChangeCompassFPSChecked"></q-toggle>
-                                    <div class="text-h7 q-mb-md-d">Synced FPS option will result in less optimization, but keep your compass in real time, however, it will also be more demanding on your machine.</div>
-                                    <q-item borderless tag="label" v-ripple>
-                                        <q-item-section avatar>
-                                            <q-checkbox v-on:click="showCompassBase($event)" v-model="isShowCompassChecked" color="checkbox" val="19"></q-checkbox>
-                                        </q-item-section>
-                                        <q-item-section >
-                                            <q-item-label>Compass Enabled</q-item-label>
-                                            <q-item-label class="text-h7" caption>Disabling this will make it so you can't see the compass navigation</q-item-label>
-                                        </q-item-section>
-                                    </q-item>
-                                    <q-item borderless tag="label" v-ripple>
-                                        <q-item-section avatar>
-                                            <q-checkbox v-on:click="showStreetsNames($event)" v-model="isShowStreetsChecked" color="checkbox" val="20"></q-checkbox>
-                                        </q-item-section>
-                                        <q-item-section>
-                                            <q-item-label>Show Street Names Enabled</q-item-label>
-                                            <q-item-label class="text-h7" caption>Disabling this will make it so you can't see street names / locations</q-item-label>
-                                        </q-item-section>
-                                    </q-item>
-                                    <q-item borderless tag="label" v-ripple>
-                                        <q-item-section avatar>
-                                            <q-checkbox v-on:click="showPointerIndex($event)" v-model="isPointerShowChecked" color="checkbox" val="21"></q-checkbox>
-                                        </q-item-section>
-                                        <q-item-section>
-                                            <q-item-label>Show Compass Pointer Enabled</q-item-label>
-                                            <q-item-label class="text-h7" caption>Disabling this will make it so you can't see your pointer index to pinpoint your exact cardinal directions</q-item-label>
-                                        </q-item-section>
-                                    </q-item>
-                                    <q-item borderless tag="label" v-ripple>
-                                        <q-item-section avatar>
-                                            <q-checkbox v-on:click="showDegreesNum($event)" v-model="isDegreesShowChecked" color="checkbox" val="22"></q-checkbox>
-                                        </q-item-section>
-                                        <q-item-section>
-                                            <q-item-label>Show Compass Degrees Enabled</q-item-label>
-                                            <q-item-label class="text-h7" caption>Disabling this will make it so you can't see your exact degrees</q-item-label>
-                                        </q-item-section>
-                                    </q-item>
-                                </div>
-                                <hr>
-                                <div class="text-h6 q-mb-md">Cinematic Mode</div>
-                                <div class="text-h7">
-                                    <q-checkbox v-on:click="cinematicMode($event)" label='Enabled' v-model="isCineamticModeChecked" color="checkbox" val="23" style="display: flex;"></q-checkbox>
-                                </div>
-                                <br>
-                            </q-tab-panel>
-                            <q-tab-panel name="tutorial">
-                                <div class="q-mb-md">
-                                    <div class="text-h6 q-mb-md">Tutorial for Beginners</div>
-                                    <div class="text-h7">
-                                        <p>Welcome to the server! This guide covers the key features available to enhance your gameplay experience.</p>
-                                        <h3>I. Robbing</h3>
-                                        <ul>
-                                            <li><strong>qbx_bankrobbery</strong>: Plan and execute bank heists for high-stakes rewards.</li>
-                                            <li><strong>qbx_houserobbery</strong>: Break into houses to steal valuable items.</li>
-                                            <li><strong>qbx_jewelry</strong>: Rob jewelry stores for precious gems and cash.</li>
-                                        </ul>
-                                        <h3>II. Entertainment</h3>
-                                        <ul>
-                                            <li><strong>qbx_diving</strong>: Explore underwater locations for hidden treasures.</li>
-                                            <li><strong>qbx_drugs</strong>: Grow weeds in your house for profit.</li>
-                                            <li><strong>qbx_lapraces</strong>: Design and race on custom tracks.</li>
-                                            <li><strong>qbx_pawnshop</strong>: Sell stolen jewelry for cash.</li>
-                                            <li><strong>qbx_scrapyard</strong>: Dismantle vehicles and sell scraps.</li>
-                                            <li><strong>qbx_streetraces</strong>: Compete in street races against other players.</li>
-                                            <li><strong>qbx_vineyard</strong>: Farm grapes and produce wine.</li>
-                                        </ul>
-                                        <h3>III. Other</h3>
-                                        <ul>
-                                            <li><strong>qbx_properties</strong>: Purchase and customize your own property.</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </q-tab-panel>
-                        </q-tab-panels>
-                    </template>
-                </q-splitter>
-            </div>
+<head>
+    <meta id="viewport" name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <link rel="stylesheet" type="text/css" href="responsive.css" />
+    <link href="https://cdn.jsdelivr.net/npm/quasar@2.1.0/dist/quasar.prod.css" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.13.0/css/all.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.prod.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/quasar@2.1.0/dist/quasar.umd.prod.js" defer></script>
+    <script src="app.js" defer></script>
+    <style>
+        .location-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+        .location-item img {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+        }
+        .location-item p {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="baseplate-container" v-show="show">
+        <div v-if="showStreets" class="street-container">
+            <div class="street2">{{street2}}</div>
+            <div class="street1">{{street1}}</div>
         </div>
-        <div id="main-container">
-            <!-- <div id="money-container">
-                <div id="money-cash">
-                    <transition name="slide-fade">
-                        <p v-if="showCash"><span id="sign">$ </span><span id="money">{{(cash)}}</span></p>
-                    </transition>
-                </div>
-                <div id="money-bank">
-                    <transition name="slide-fade">
-                        <p v-if="showBank"><span id="sign">$ </span><span id="bank">{{(bank)}}</span></p>
-                    </transition>
-                </div>
-                <div id="money-change" v-if="showUpdate">
-                    <p v-if="plus" id="money"><span id="plus">+ </span><span id="money">{{(amount)}}</span></p>
-                    <p v-else-if="minus" id="minus"><span id="minus">- </span><span id="money">{{(amount)}}</span></p>
-                </div>
-            </div> -->
-            <div id="ui-container">
-                <div id="playerHud" v-show="show">
-                    <transition name="fade">
+        <div class="baseplate" v-show="show">
+            <div v-if="showPointer" class="pointer">˅</div>
+            <div v-if="showDegrees" class="degrees"></div>
+            <svg class="bezel">
+                <rect width="3" stroke="black" fill="white" stroke-width="0.5" stroke-opacity="0.6" v-if="showCompass" height="20" x="-90" />
+                <rect width="3" stroke="black" fill="white" stroke-width="0.5" stroke-opacity="0.6" v-if="showCompass" height="9" x="-45" />
+                <rect width="4.5" stroke="black" fill="white" stroke-width="0.5" stroke-opacity="0.6" v-if="showCompass" height="20" x="0" />
+                <rect width="3" stroke="black" fill="white" stroke-width="0.5" stroke-opacity="0.6" v-if="showCompass" height="9" x="45" />
+                <rect width="4.5" stroke="black" fill="white" stroke-width="0.5" stroke-opacity="0.6" v-if="showCompass" height="20" x="90" />
+                <rect width="3" stroke="black" fill="white" stroke-width="0.5" stroke-opacity="0.6" v-if="showCompass" height="9" x="135" />
+                <rect width="4.5" stroke="black" fill="white" stroke-width="0.5" stroke-opacity="0.6" v-if="showCompass" height="20" x="180" />
+                <rect width="3" stroke="black" fill="white" stroke-width="0.5" stroke-opacity="0.6" v-if="showCompass" height="9" x="225" />
+                <rect width="4.5" stroke="black" fill="white" stroke-width="0.5" stroke-opacity="0.6" v-if="showCompass" height="20" x="270" />
+                <rect width="3" stroke="black" fill="white" stroke-width="0.5" stroke-opacity="0.6" v-if="showCompass" height="9" x="315" />
+                <rect width="4.5" stroke="black" fill="white" stroke-width="0.5" stroke-opacity="0.6" v-if="showCompass" height="20" x="360" />
+                <rect width="3" stroke="black" fill="white" stroke-width="0.5" stroke-opacity="0.6" v-if="showCompass" height="9" x="405" />
+                <rect width="3" stroke="black" fill="white" stroke-width="0.5" stroke-opacity="0.6" v-if="showCompass" height="20" x="450" />
+            </svg>
+            <svg class="bearing">
+                <text v-if="showCompass" x="0" y="1.5" dominant-baseline="middle" text-anchor="middle" fill="yellow">N</text>
+                <text v-if="showCompass" x="360" y="1.5" dominant-baseline="middle" text-anchor="middle" fill="yellow">N</text>
+                <text style="font-size: 1.4vh!important; font-weight: 800!important;" v-if="showCompass" x="315" y="-11" dominant-baseline="middle" text-anchor="middle" fill="white">NW</text>
+                <text style="font-size: 1.4vh!important; font-weight: 800!important;" v-if="showCompass" x="-45" y="-11" dominant-baseline="middle" text-anchor="middle" fill="white">NW</text>
+                <text style="font-size: 1.4vh!important; font-weight: 800!important;" v-if="showCompass" x="45" y="-11" dominant-baseline="middle" text-anchor="middle" fill="white">NE</text>
+                <text style="font-size: 1.4vh!important; font-weight: 800!important;" v-if="showCompass" x="405" y="-11" dominant-baseline="middle" text-anchor="middle" fill="white">NE</text>
+                <text v-if="showCompass" x="90" y="1.5" dominant-baseline="middle" text-anchor="middle" fill="white">E</text>
+                <text style="font-size: 1.4vh!important; font-weight: 800!important;" v-if="showCompass" x="135" y="-11" dominant-baseline="middle" text-anchor="middle" fill="white">SE</text>
+                <text v-if="showCompass" x="180" y="1.5" dominant-baseline="middle" text-anchor="middle" fill="white">S</text>
+                <text style="font-size: 1.4vh!important; font-weight: 800!important;" v-if="showCompass" x="225" y="-11" dominant-baseline="middle" text-anchor="middle" fill="white">SW</text>
+                <text v-if="showCompass" x="270" y="1.5" dominant-baseline="middle" text-anchor="middle" fill="white">W</text>
+            </svg>
+        </div>
+    </div>
+    <div id="openmenu">
+        <div id="menu">
+            <q-splitter v-model="splitterModel" style="height: 50vh;">
+                <template v-slot:before>
+                    <q-tabs v-model="tab" active-bg-color="active-tab" inline-label indicator-color="transparent" vertical class="text-tabcolor bg-panel">
+                        <q-tab name="locations" icon="place" label="Locations" style="height: 5.5vh; padding-left: 1vh; justify-content: end;"></q-tab>
+                        <q-tab name="hud" icon="view_list" label="HUD Settings" style="height: 5.5vh; padding-left: 1vh; justify-content: end;"></q-tab>
+                    </q-tabs>
+                </template>
+                <template v-slot:after>
+                    <q-tab-panels v-model="tab" animated swipeable vertical transition-prev="jump-up" transition-next="jump-up" class="bg-active-tab">
+                        <q-tab-panel name="hud">
+                            <div class="q-mb-md">
+                                <div class="page-title q-mb-md">HUD Settings<img class="brand-logo" align="right" src="./brand-logo.svg"></img></div>
+                                <div class="text-h6 q-mb-md">Reset Hud</div>
+                                <div class="q-pa-md q-gutter-sm">
+                                    <q-btn v-on:click="resetStorage($event)" :loading="progress[0].loading" :percentage="progress[0].percentage" text-color="textbutton" color="bgbutton" @click="startComputing(0)" style="width: 150px"> Reset Settings
+                                        <template v-slot:loading> <q-spinner-gears class="on-left"></q-spinner-gears> Resetting... </template></q-btn>
+                                    <div class="text-h7 q-mb-md">If you want to reset your settings back to default; click this shiny button! <br> (you will have to relog for your menu to reset changes successfully)</div>
+                                    <q-btn v-on:click="restartHud($event)" :loading="progress[1].loading" :percentage="progress[1].percentage" text-color="textbutton" color="bgbutton" @click="startComputing(1)" style="width: 150px"> Reset Hud
+                                        <template v-slot:loading> <q-spinner-gears class="on-left"></q-spinner-gears> Resetting... </template></q-btn>
+                                    <div class="text-h7 q-mb-md">If your hud is acting up, give it a good ol' reset! Or you can do /resethud</div>
+                                </div>
+                                <hr>
+                                <div class="text-h6 q-mb-md">Options</div>
+                                <div class="text-h7">
+                                    <q-item borderless tag="label" v-ripple>
+                                        <q-item-section avatar>
+                                            <q-checkbox v-model="isOutMapChecked" v-on:click="showOutMap($event)" color="checkbox" val="1"></q-checkbox>
+                                        </q-item-section>
+                                        <q-item-section>
+                                            <q-item-label>Show Minimap Only in Vehicle</q-item-label>
+                                            <q-item-label class="text-h7" caption>Disabling this will always keep your minimap on your screen</q-item-label>
+                                        </q-item-section>
+                                    </q-item>
+                                    <q-item borderless tag="label" v-ripple>
+                                        <q-item-section avatar>
+                                            <q-checkbox v-model="isOutCompassChecked" v-on:click="showOutCompass($event)" color="checkbox" val="2"></q-checkbox>
+                                        </q-item-section>
+                                        <q-item-section>
+                                            <q-item-label>Show Compass Only in Vehicle</q-item-label>
+                                            <q-item-label class="text-h7" caption>Disabling this will always keep your compass on your screen</q-item-label>
+                                        </q-item-section>
+                                    </q-item>
+                                    <q-item borderless tag="label" v-ripple>
+                                        <q-item-section avatar>
+                                            <q-checkbox v-model="isCompassFollowChecked" v-on:click="showFollowCompass($event)" color="checkbox" val="3"></q-checkbox>
+                                        </q-item-section>
+                                        <q-item-section>
+                                            <q-item-label>Show Compass Follow Cam</q-item-label>
+                                            <q-item-label class="text-h7" caption>Disabling this will make it so you can no longer use your mouse to rotate the compass around</q-item-label>
+                                        </q-item-section>
+                                    </q-item>
+                                </div>
+                                <hr>
+                                <div class="text-h6 q-mb-md">Notifications</div>
+                                <div class="text-h7">
+                                    <q-checkbox v-on:click="showMapNotif($event)" label='Map Notifications Enabled' v-model="isMapNotifChecked" color="checkbox" val="7" style="display: flex;"></q-checkbox>
+                                    <q-checkbox v-on:click="showFuelAlert($event)" label='Low Fuel Alert Enabled' v-model="isLowFuelChecked" color="checkbox" val="8" style="display: flex;"></q-checkbox>
+                                    <q-checkbox v-on:click="showCinematicNotif($event)" label='Cinematic Mode Notifications Enabled' v-model="isCinematicNotifChecked" color="checkbox" val="9" style="display: flex;"></q-checkbox>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="text-h6 q-mb-md">Status</div>
+                            <div class="text-h7">
+                                <q-checkbox v-on:click="dynamicHealth($event)" label='Show Health always' v-model="isDynamicHealthChecked" color="checkbox" val="10" style="display: flex;"></q-checkbox>
+                                <q-checkbox v-on:click="dynamicArmor($event)" label='Show Armor always' v-model="isDynamicArmorChecked" color="checkbox" val="11" style="display: flex;"></q-checkbox>
+                                <q-checkbox v-on:click="dynamicHunger($event)" label='Show Hunger always' v-model="isDynamicHungerChecked" color="checkbox" val="12" style="display: flex;"></q-checkbox>
+                                <q-checkbox v-on:click="dynamicThirst($event)" label='Show Thirst always' v-model="isDynamicThirstChecked" color="checkbox" val="13" style="display: flex;"></q-checkbox>
+                                <q-checkbox v-on:click="dynamicStress($event)" label='Show Stress always' v-model="isDynamicStressChecked" color="checkbox" val="14" style="display: flex;"></q-checkbox>
+                                <q-checkbox v-on:click="dynamicOxygen($event)" label='Show Oxygen always' v-model="isDynamicOxygenChecked" color="checkbox" val="15" style="display: flex;"></q-checkbox>
+                            </div>
+                            <hr>
+                            <div class="text-h6 q-mb-md">Vehicle</div>
+                            <div class="text-h7">
+                                <q-toggle v-on:click="changeFPS($event)" size="lg" keep-color icon-color="toggleicons" color="checkbox" :label="`Speedometer FPS ${isChangeFPSChecked}`" unchecked-icon="60fps" false-value="Synced" true-value="Optimized" checked-icon="30fps" v-model="isChangeFPSChecked"></q-toggle>
+                                <div class="text-h7 q-mb-md-d">Synced FPS option will result in less optimization, but keep your speedometer in real time, however, it will also be more demanding on your machine.</div>
+                                <q-toggle v-on:click="ToggleMapShape($event)" size="lg" keep-color icon-color="toggleicons" color="checkbox" :label="`Minimap ${isToggleMapShapeChecked}`" unchecked-icon="radio_button_unchecked" false-value="circle" true-value="square" checked-icon="check_box_outline_blank" v-model="isToggleMapShapeChecked"></q-toggle>
+                                <div class="text-h7 q-mb-md-d">Whether it's square or circle you desire, you have the ability to choose!</div>
+                                <q-checkbox v-on:click="ToggleMapBorders($event)" label='Minimap Borders Enabled' v-model="isToggleMapBordersChecked" color="checkbox" val="16" style="display: flex;"></q-checkbox>
+                                <q-checkbox v-on:click="dynamicEngine($event)" label='Show Engine always' v-model="isDynamicEngineChecked" color="checkbox" val="17" style="display: flex;"></q-checkbox>
+                                <q-checkbox v-on:click="dynamicNitro($event)" label='Show Nitro always' v-model="isDynamicNitroChecked" color="checkbox" val="18" style="display: flex;"></q-checkbox>
+                            </div>
+                            <hr>
+                            <div class="text-h6 q-mb-md">Compass</div>
+                            <div class="text-h7">
+                                <q-toggle v-on:click="changeCompassFPS($event)" size="lg" keep-color icon-color="toggleicons" color="checkbox" :label="`Compass FPS ${isChangeCompassFPSChecked}`" unchecked-icon="60fps" false-value="Synced" true-value="Optimized" checked-icon="30fps" v-model="isChangeCompassFPSChecked"></q-toggle>
+                                <div class="text-h7 q-mb-md-d">Synced FPS option will result in less optimization, but keep your compass in real time, however, it will also be more demanding on your machine.</div>
+                                <q-item borderless tag="label" v-ripple>
+                                    <q-item-section avatar>
+                                        <q-checkbox v-on:click="showCompassBase($event)" v-model="isShowCompassChecked" color="checkbox" val="19"></q-checkbox>
+                                    </q-item-section>
+                                    <q-item-section>
+                                        <q-item-label>Compass Enabled</q-item-label>
+                                        <q-item-label class="text-h7" caption>Disabling this will make it so you can't see the compass navigation</q-item-label>
+                                    </q-item-section>
+                                </q-item>
+                                <q-item borderless tag="label" v-ripple>
+                                    <q-item-section avatar>
+                                        <q-checkbox v-on:click="showStreetsNames($event)" v-model="isShowStreetsChecked" color="checkbox" val="20"></q-checkbox>
+                                    </q-item-section>
+                                    <q-item-section>
+                                        <q-item-label>Show Street Names Enabled</q-item-label>
+                                        <q-item-label class="text-h7" caption>Disabling this will make it so you can't see street names / locations</q-item-label>
+                                    </q-item-section>
+                                </q-item>
+                                <q-item borderless tag="label" v-ripple>
+                                    <q-item-section avatar>
+                                        <q-checkbox v-on:click="showPointerIndex($event)" v-model="isPointerShowChecked" color="checkbox" val="21"></q-checkbox>
+                                    </q-item-section>
+                                    <q-item-section>
+                                        <q-item-label>Show Compass Pointer Enabled</q-item-label>
+                                        <q-item-label class="text-h7" caption>Disabling this will make it so you can't see your pointer index to pinpoint your exact cardinal directions</q-item-label>
+                                    </q-item-section>
+                                </q-item>
+                                <q-item borderless tag="label" v-ripple>
+                                    <q-item-section avatar>
+                                        <q-checkbox v-on:click="showDegreesNum($event)" v-model="isDegreesShowChecked" color="checkbox" val="22"></q-checkbox>
+                                    </q-item-section>
+                                    <q-item-section>
+                                        <q-item-label>Show Compass Degrees Enabled</q-item-label>
+                                        <q-item-label class="text-h7" caption>Disabling this will make it so you can't see your exact degrees</q-item-label>
+                                    </q-item-section>
+                                </q-item>
+                            </div>
+                            <hr>
+                            <div class="text-h6 q-mb-md">Cinematic Mode</div>
+                            <div class="text-h7">
+                                <q-checkbox v-on:click="cinematicMode($event)" label='Enabled' v-model="isCineamticModeChecked" color="checkbox" val="23" style="display: flex;"></q-checkbox>
+                            </div>
+                            <br>
+                        </q-tab-panel>
+                        <q-tab-panel name="locations">
+                            <div class="q-mb-md">
+                                <div class="page-title q-mb-md">Locations<img class="brand-logo" align="right" src="./brand-logo.svg"></img></div>
+                                <div class="text-h6 q-mb-md">General</div>
+                                <div class="q-pa-md q-gutter-sm">
+                                    <div class="text-h7">
+                                        <div class="location-item">
+                                            <img src="./blips/city_services.png" alt="City Services Blip">
+                                            <p><strong>City Services</strong>: Job center on the map to start legal jobs like taxi driver or delivery.</p>
+                                        </div>
+                                        <div class="location-item">
+                                            <img src="./blips/bank.png" alt="Bank Blip">
+                                            <p><strong>Bank</strong>: Check and manage your cash and bank account balance.</p>
+                                        </div>
+                                        <div class="location-item">
+                                            <img src="./blips/gas_station.png" alt="Gas Station Blip">
+                                            <p><strong>Gas Station</strong>: Refuel vehicles to keep them operational.</p>
+                                        </div>
+                                        <div class="location-item">
+                                            <img src="./blips/ammu_nation.png" alt="Ammu-Nation Blip">
+                                            <p><strong>Ammu-Nation</strong>: Buy guns and ammunition for protection or missions.</p>
+                                        </div>
+                                        <div class="location-item">
+                                            <img src="./blips/car_wash.png" alt="Car Wash Blip">
+                                            <p><strong>Car Wash</strong>: Clean your vehicle to maintain its appearance.</p>
+                                        </div>
+                                        <div class="location-item">
+                                            <img src="./blips/marina_shop.png" alt="Marina Shop Blip">
+                                            <p><strong>Marina Shop</strong>: Purchase boating supplies and equipment.</p>
+                                        </div>
+                                        <div class="location-item">
+                                            <img src="./blips/boat_impound.png" alt="Boat Impound Lot Blip">
+                                            <p><strong>Boat Impound Lot</strong>: Retrieve impounded boats for a fee.</p>
+                                        </div>
+                                        <div class="location-item">
+                                            <img src="./blips/car_impound.png" alt="Car Impound Lot Blip">
+                                            <p><strong>Car Impound Lot</strong>: Retrieve impounded vehicles for a fee.</p>
+                                        </div>
+                                        <div class="location-item">
+                                            <img src="./blips/aircraft_impound.png" alt="Aircraft Impound Lot Blip">
+                                            <p><strong>Aircraft Impound Lot</strong>: Retrieve impounded aircraft for a fee.</p>
+                                        </div>
+                                        <div class="location-item">
+                                            <img src="./blips/used_car_lot.png" alt="Used Car Lot Blip">
+                                            <p><strong>Used Car Lot</strong>: Buy affordable pre-owned vehicles.</p>
+                                        </div>
+                                        <div class="location-item">
+                                            <img src="./blips/recycle_center.png" alt="Recycle Center Blip">
+                                            <p><strong>Recycle Center</strong>: Drop off recyclable materials for rewards.</p>
+                                        </div>
+                                        <div class="location-item">
+                                            <img src="./blips/ls_customs_airport.png" alt="Los Santos Customs Airport Blip">
+                                            <p><strong>Los Santos Customs - Airport</strong>: Customize and upgrade vehicles with performance parts.</p>
+                                        </div>
+                                        <div class="location-item">
+                                            <img src="./blips/ls_customs_east.png" alt="Los Santos Customs East Blip">
+                                            <p><strong>Los Santos Customs - East</strong>: Customize and upgrade vehicles with performance parts.</p>
+                                        </div>
+                                        <div class="location-item">
+                                            <img src="./blips/ls_customs_paleto.png" alt="Los Santos Customs Paleto Blip">
+                                            <p><strong>Los Santos Customs - Paleto</strong>: Customize and upgrade vehicles with performance parts.</p>
+                                        </div>
+                                        <div class="location-item">
+                                            <img src="./blips/ls_customs_sandy.png" alt="Los Santos Customs Sandy Shores Blip">
+                                            <p><strong>Los Santos Customs - Sandy Shores</strong>: Customize and upgrade vehicles with performance parts.</p>
+                                        </div>
+                                        <div class="location-item">
+                                            <img src="./blips/ls_customs_vinewood.png" alt="Los Santos Customs Vinewood Blip">
+                                            <p><strong>Los Santos Customs - Vinewood</strong>: Customize and upgrade vehicles with performance parts.</p>
+                                        </div>
+                                        <div class="location-item">
+                                            <img src="./blips/bennys_motorworks.png" alt="Bennys Original Motor Works Blip">
+                                            <p><strong>Benny's Original Motor Works</strong>: Customize and upgrade vehicles with performance parts.</p>
+                                        </div>
+                                        <div class="location-item">
+                                            <img src="./blips/police_station.png" alt="Mission Row Police Station Blip">
+                                            <p><strong>Mission Row Police Station</strong>: Report crimes or interact with law enforcement.</p>
+                                        </div>
+                                        <div class="location-item">
+                                            <img src="./blips/police_station_sandy.png" alt="Sandy Shores Police Station Blip">
+                                            <p><strong>Sandy Shores Police Station</strong>: Report crimes or interact with law enforcement.</p>
+                                        </div>
+                                        <div class="location-item">
+                                            <img src="./blips/prison_canteen.png" alt="Prison Canteen Blip">
+                                            <p><strong>Prison Canteen</strong>: Purchase food and supplies while serving time in prison.</p>
+                                        </div>
+                                        <div class="location-item">
+                                            <img src="./blips/prison_infirmary.png" alt="Prison Infirmary Blip">
+                                            <p><strong>Prison Infirmary</strong>: Receive medical treatment while in prison.</p>
+                                        </div>
+                                        <div class="location-item">
+                                            <img src="./blips/hospital.png" alt="Pillbox Hospital Blip">
+                                            <p><strong>Pillbox Hospital</strong>: Heal injuries or revive after critical health loss.</p>
+                                        </div>
+                                        <div class="location-item">
+                                            <img src="./blips/pharmacy.png" alt="Pharmacy Blip">
+                                            <p><strong>Pharmacy</strong>: Purchase medical supplies and prescriptions.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="text-h6 q-mb-md">Stores</div>
+                                <div class="q-pa-md q-gutter-sm">
+                                    <div class="text-h7">
+                                        <div class="location-item">
+                                            <img src="./blips/stores.png" alt="247 Supermarket Blip">
+                                            <p><strong>247 Supermarket</strong>: Buy food, drinks, or basic supplies.</p>
+                                        </div>
+                                        <div class="location-item">
+                                            <img src="./blips/stores.png" alt="LTD Store Blip">
+                                            <p><strong>LTD Store</strong>: Buy food, drinks, or basic supplies.</p>
+                                        </div>
+                                        <div class="location-item">
+                                            <img src="./blips/stores.png" alt="Robs Liquor Blip">
+                                            <p><strong>Robs Liquor</strong>: Purchase alcoholic beverages.</p>
+                                        </div>
+                                        <div class="location-item">
+                                            <img src="./blips/you_tool.png" alt="You Tool Blip">
+                                            <p><strong>You Tool</strong>: Purchase tools and hardware supplies.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="text-h6 q-mb-md">Garages</div>
+                                <div class="q-pa-md q-gutter-sm">
+                                    <div class="text-h7">
+                                        <div class="location-item">
+                                            <img src="./blips/public_parking.png" alt="Public Parking Blip">
+                                            <p><strong>Public Parking</strong>: Park your vehicle in designated areas for safekeeping.</p>
+                                        </div>
+                                        <div class="location-item">
+                                            <img src="./blips/boathouse.png" alt="Boathouse Blip">
+                                            <p><strong>Boathouse</strong>: Store and retrieve boats for safekeeping.</p>
+                                        </div>
+                                        <div class="location-item">
+                                            <img src="./blips/hangar.png" alt="Hangar Blip">
+                                            <p><strong>Hangar</strong>: Store and retrieve aircraft for safekeeping.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="text-h6 q-mb-md">Vehicle Dealership</div>
+                                <div class="q-pa-md q-gutter-sm">
+                                    <div class="text-h7">
+                                        <div class="location-item">
+                                            <img src="./blips/car_dealership.png" alt="Premium Deluxe Motorsport Blip">
+                                            <p><strong>Premium Deluxe Motorsport</strong>: Purchase cars for personal or job use.</p>
+                                        </div>
+                                        <div class="location-item">
+                                            <img src="./blips/car_dealership.png" alt="Luxury Deluxe Motorsport Blip">
+                                            <p><strong>Luxury Deluxe Motorsport</strong>: Purchase high-end cars for personal or job use.</p>
+                                        </div>
+                                        <div class="location-item">
+                                            <img src="./blips/boat_dealership.png" alt="Boat Dealership Blip">
+                                            <p><strong>Boat Dealership</strong>: Purchase boats for water-based activities.</p>
+                                        </div>
+                                        <div class="location-item">
+                                            <img src="./blips/aircraft_dealership.png" alt="Aircraft Dealership Blip">
+                                            <p><strong>Aircraft Dealership</strong>: Buy planes or helicopters for travel or missions.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="text-h6 q-mb-md">Jobs</div>
+                                <div class="q-pa-md q-gutter-sm">
+                                    <div class="text-h7">
+                                        <div class="location-item">
+                                            <img src="./blips/mechanic_job.png" alt="Mechanic Job Blip">
+                                            <p><strong>Mechanic</strong>: Repair and maintain vehicles at mechanic shops.</p>
+                                        </div>
+                                        <div class="location-item">
+                                            <img src="./blips/doctor_job.png" alt="Doctor Job Blip">
+                                            <p><strong>Doctor</strong>: Treat patients and provide medical care at hospitals.</p>
+                                        </div>
+                                        <div class="location-item">
+                                            <img src="./blips/police_job.png" alt="Police Job Blip">
+                                            <p><strong>Police</strong>: Enforce the law and maintain order at police stations.</p>
+                                        </div>
+                                        <div class="location-item">
+                                            <img src="./blips/bus_driver.png" alt="Bus Driver Blip">
+                                            <p><strong>Bus Driver</strong>: Transport passengers across the city.</p>
+                                        </div>
+                                        <div class="location-item">
+                                            <img src="./blips/garbage_collector.png" alt="Garbage Collector Blip">
+                                            <p><strong>Garbage Collector</strong>: Collect and dispose of city waste.</p>
+                                        </div>
+                                        <div class="location-item">
+                                            <img src="./blips/news_reporter.png" alt="News Reporter Blip">
+                                            <p><strong>News Reporter</strong>: Cover events and report news for media outlets.</p>
+                                        </div>
+                                        <div class="location-item">
+                                            <img src="./blips/taxi.png" alt="Taxi Blip">
+                                            <p><strong>Taxi</strong>: Drive passengers to their destinations for fares.</p>
+                                        </div>
+                                        <div class="location-item">
+                                            <img src="./blips/tow_truck.png" alt="Tow Truck Blip">
+                                            <p><strong>Tow Truck</strong>: Tow vehicles to impound lots or repair shops.</p>
+                                        </div>
+                                        <div class="location-item">
+                                            <img src="./blips/trucker.png" alt="Trucker Blip">
+                                            <p><strong>Trucker</strong>: Deliver goods across long distances.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="text-h6 q-mb-md">Properties</div>
+                                <div class="q-pa-md q-gutter-sm">
+                                    <div class="text-h7">
+                                        <div class="location-item">
+                                            <img src="./blips/real_estate.png" alt="4 Integrity Way Apt Blip">
+                                            <p><strong>4 Integrity Way Apt</strong>: Purchase an apartment for personal housing.</p>
+                                        </div>
+                                        <div class="location-item">
+                                            <img src="./blips/real_estate.png" alt="Del Perro Heights Apt Blip">
+                                            <p><strong>Del Perro Heights Apt</strong>: Purchase an apartment for personal housing.</p>
+                                        </div>
+                                        <div class="location-item">
+                                            <img src="./blips/real_estate.png" alt="Richard Majestic Apt Blip">
+                                            <p><strong>Richard Majestic Apt</strong>: Purchase an apartment for personal housing.</p>
+                                        </div>
+                                        <div class="location-item">
+                                            <img src="./blips/real_estate.png" alt="Tinsel Towers Apt Blip">
+                                            <p><strong>Tinsel Towers Apt</strong>: Purchase an apartment for personal housing.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="text-h6 q-mb-md">Entertainment</div>
+                                <div class="q-pa-md q-gutter-sm">
+                                    <div class="text-h7">
+                                        <div class="location-item">
+                                            <img src="./blips/vineyard.png" alt="Vineyard Blip">
+                                            <p><strong>Vineyard</strong>: Farm grapes and produce wine for profit.</p>
+                                        </div>
+                                        <div class="location-item">
+                                            <img src="./blips/vineyard_processing.png" alt="Vineyard Processing Blip">
+                                            <p><strong>Vineyard Processing</strong>: Process harvested grapes into wine for sale.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="text-h6 q-mb-md">Illegal</div>
+                                <div class="q-pa-md q-gutter-sm">
+                                    <div class="text-h7">
+                                        <div class="location-item">
+                                            <img src="./blips/scrap_yard.png" alt="Scrap Yard Blip">
+                                            <p><strong>Scrap Yard</strong>: Collect scrap materials or deliver for income.</p>
+                                        </div>
+                                        <div class="location-item">
+                                            <img src="./blips/scrap_yard_delivery.png" alt="Scrap Yard Delivery Blip">
+                                            <p><strong>Scrap Yard Delivery</strong>: Deliver scrap materials for illegal profits.</p>
+                                        </div>
+                                        <div class="location-item">
+                                            <img src="./blips/diving_area.png" alt="Diving Area Blip">
+                                            <p><strong>Diving Area</strong>: Harvest corals for profit. Be the first to find the hidden seller to maximize illegal earnings.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </q-tab-panel>
+                    </q-tab-panels>
+                </template>
+            </q-splitter>
+        </div>
+    </div>
+    <div id="main-container">
+        <div id="ui-container">
+            <div id="playerHud" v-show="show">
+                <transition name="fade">
                     <div v-if="showVoice">
                         <q-circular-progress class="q-ml-xl" style="opacity: 40%;" :value="static" size="50px" :thickness="0.24" :style="{color: talkingColor}" :min="0" :max="100"></q-circular-progress>
                         <q-circular-progress class="q-ml-xl" style="left: -50%;" show-value :value="voice" size="50px" :thickness="0.24" :style="{color: talkingColor}" :min="0" :max="5" center-color="grey-10">
-                        <q-icon style="top: -0.5px; left: 0px;" :name="voiceIcon" size="19.5px" color="white"/>
+                            <q-icon style="top: -0.5px; left: 0px;" :name="voiceIcon" size="19.5px" color="white" />
                     </div>
-                    </transition>
-                    <transition name="fade">
+                </transition>
+                <transition name="fade">
                     <div v-if="showHealth">
                         <q-circular-progress class="q-ml-xl" style="opacity: 40%;" :value="static" size="50px" :thickness="0.24" :style="{color: healthColor}" :min="0" :max="100"></q-circular-progress>
                         <q-circular-progress class="q-ml-xl" style="left: -50%;" show-value :value="health" size="50px" :thickness="0.24" :style="{color: healthColor}" :min="0" :max="100" center-color="grey-10">
-                        <q-icon style="top: -0.5px; left: -0.4px;" name="fas fa-heart" size="19.5px" color="white"/>
+                            <q-icon style="top: -0.5px; left: -0.4px;" name="fas fa-heart" size="19.5px" color="white" />
                     </div>
-                    </transition>
-                    <transition name="fade">
+                </transition>
+                <transition name="fade">
                     <div v-if="showArmor">
                         <q-circular-progress class="q-ml-xl" style="opacity: 40%;" :value="static" size="50px" :thickness="0.24" :style="{color: armorColor}" :min="0" :max="100"></q-circular-progress>
                         <q-circular-progress class="q-ml-xl" style="left: -50%;" show-value :value="armor" size="50px" :thickness="0.24" :style="{color: armorColor}" :min="0" :max="100" center-color="grey-10">
-                        <q-icon name="fas fa-shield-alt" size="19.5px" color="white"/>
+                            <q-icon name="fas fa-shield-alt" size="19.5px" color="white" />
                     </div>
-                    </transition>
-                    <transition name="fade">
+                </transition>
+                <transition name="fade">
                     <div v-if="showHunger">
                         <q-circular-progress class="q-ml-xl" style="opacity: 40%;" :value="static" size="50px" :thickness="0.24" :style="{color: hungerColor}" :min="0" :max="100"></q-circular-progress>
                         <q-circular-progress class="q-ml-xl" style="left: -50%;" show-value :value="hunger" size="50px" :thickness="0.24" :style="{color: hungerColor}" :min="0" :max="100" center-color="grey-10">
-                        <q-icon style="top: -1px; left: -0.5px;" name="fas fa-hamburger" size="19.5px" color="white"/>
+                            <q-icon style="top: -1px; left: -0.5px;" name="fas fa-hamburger" size="19.5px" color="white" />
                     </div>
-                    </transition>
-                    <transition name="fade">
+                </transition>
+                <transition name="fade">
                     <div v-if="showThirst">
                         <q-circular-progress class="q-ml-xl" style="opacity: 40%;" :value="static" size="50px" :thickness="0.24" :style="{color: thirstColor}" :min="0" :max="100"></q-circular-progress>
                         <q-circular-progress class="q-ml-xl" style="left: -50%;" show-value :value="thirst" size="50px" :thickness="0.24" :style="{color: thirstColor}" :min="0" :max="100" center-color="grey-10">
-                        <q-icon style="top: -0.5px; left: -0.5px;" name="fas fa-tint" size="19.5px" color="white"/>
+                            <q-icon style="top: -0.5px; left: -0.5px;" name="fas fa-tint" size="19.5px" color="white" />
                     </div>
-                    </transition>
-                    <transition name="fade">
+                </transition>
+                <transition name="fade">
                     <div v-if="showStress">
                         <q-circular-progress class="q-ml-xl" style="opacity: 40%;" :value="static" size="50px" :thickness="0.24" color="stress" :min="0" :max="100"></q-circular-progress>
                         <q-circular-progress class="q-ml-xl" style="left: -50%;" show-value :value="stress" size="50px" :thickness="0.24" color="stress" :min="0" :max="100" center-color="grey-10">
-                        <q-icon style="top: -0.5px; left: -0.5px;" name="fas fa-brain" size="19.5px" color="white"/>
+                            <q-icon style="top: -0.5px; left: -0.5px;" name="fas fa-brain" size="19.5px" color="white" />
                     </div>
-                    </transition>
-                    <transition name="fade">
+                </transition>
+                <transition name="fade">
                     <div v-if="showOxygen">
                         <q-circular-progress class="q-ml-xl" style="opacity: 40%;" :value="static" size="50px" :thickness="0.24" color="oxygen" :min="0" :max="100"></q-circular-progress>
                         <q-circular-progress class="q-ml-xl" style="left: -50%;" show-value :value="oxygen" size="50px" :thickness="0.24" color="oxygen" :min="0" :max="100" center-color="grey-10">
-                        <q-icon style="top: -2px; left: -0.1px;" name="fas fa-lungs" size="19.5px" color="white"/>
+                            <q-icon style="top: -2px; left: -0.1px;" name="fas fa-lungs" size="19.5px" color="white" />
                     </div>
-                    </transition>
-                    <transition name="fade">
+                </transition>
+                <transition name="fade">
                     <div v-if="showArmed">
                         <q-circular-progress class="q-ml-xl" style="opacity: 40%;" :value="static" size="50px" :thickness="0.24" color="armed" :min="0" :max="100"></q-circular-progress>
                         <q-circular-progress class="q-ml-xl" style="left: -50%;" show-value :value="static" size="50px" :thickness="0.24" color="armed" :min="0" :max="100" center-color="grey-10">
-                        <q-icon name="fas fa-stream" size="19.5px" color="white"/>
+                            <q-icon name="fas fa-stream" size="19.5px" color="white" />
                     </div>
-                    </transition>
-                    <transition name="fade">
+                </transition>
+                <transition name="fade">
                     <div v-if="showParachute">
                         <q-circular-progress class="q-ml-xl" style="opacity: 40%;" :value="static" size="50px" :thickness="0.24" color="parachute" :min="0" :max="100"></q-circular-progress>
                         <q-circular-progress class="q-ml-xl" style="left: -50%;" show-value :value="parachute" size="50px" :thickness="0.24" color="parachute" :min="0" :max="2" center-color="grey-10">
-                        <q-icon name="fas fa-parachute-box" size="23px" color="white"/>
+                            <q-icon name="fas fa-parachute-box" size="23px" color="white" />
                     </div>
-                    </transition>
-                    <transition name="fade">
+                </transition>
+                <transition name="fade">
                     <div v-if="showEngine">
                         <q-circular-progress class="q-ml-xl" style="opacity: 40%;" :value="static" size="50px" :thickness="0.24" :style="{color: engineColor}" :min="0" :max="100"></q-circular-progress>
                         <q-circular-progress class="q-ml-xl" style="left: -50%;" show-value :value="engine" size="50px" :thickness="0.24" :style="{color: engineColor}" :min="0" :max="100" center-color="grey-10">
-                        <q-icon style="top: -1px;" name="fas fa-oil-can" size="19.5px":style="{color: engineColor}"/>
+                            <q-icon style="top: -1px;" name="fas fa-oil-can" size="19.5px" :style="{color: engineColor}" />
                     </div>
-                    </transition>
-                    <transition name="fade">
+                </transition>
+                <transition name="fade">
                     <div v-if="showHarness">
                         <q-circular-progress class="q-ml-xl" style="opacity: 40%;" :value="static" size="50px" :thickness="0.24" color="harness" :min="0" :max="100"></q-circular-progress>
                         <q-circular-progress class="q-ml-xl" style="left: -50%;" show-value :value="hp" size="50px" :thickness="0.24" color="harness" :min="0" :max="100" center-color="grey-10">
-                        <q-icon name="fas fa-user-slash" size="19.5px" color="white"/>
+                            <q-icon name="fas fa-user-slash" size="19.5px" color="white" />
                     </div>
-                    </transition>
-                    <transition name="fade">
+                </transition>
+                <transition name="fade">
                     <div v-if="showCruise">
                         <q-circular-progress class="q-ml-xl" style="opacity: 40%;" :value="static" size="50px" :thickness="0.24" color="cruise" :min="0" :max="100"></q-circular-progress>
                         <q-circular-progress class="q-ml-xl" style="left: -50%;" show-value :value="speed" size="50px" :thickness="0.24" color="cruise" :min="0" :max="100" center-color="grey-10">
-                        <q-icon style="top: -1.5px;" name="fas fa-tachometer-alt-fast" size="19.5px" color="white"/>
+                            <q-icon style="top: -1.5px;" name="fas fa-tachometer-alt-fast" size="19.5px" color="white" />
                     </div>
-                    </transition>
-                    <transition name="fade">
+                </transition>
+                <transition name="fade">
                     <div v-if="showNos">
                         <q-circular-progress class="q-ml-xl" style="opacity: 40%;" :value="static" size="50px" :thickness="0.24" color="nos" :min="0" :max="100"></q-circular-progress>
                         <q-circular-progress class="q-ml-xl" style="left: -50%;" show-value :value="nos" size="50px" :thickness="0.24" color="nos" :min="0" :max="100" center-color="grey-10">
-                        <q-icon name="fas fa-meteor" size="19.5px" :style="{color: nosColor}"/>
+                            <q-icon name="fas fa-meteor" size="19.5px" :style="{color: nosColor}" />
                     </div>
-                    </transition>
-                    <transition name="fade">
+                </transition>
+                <transition name="fade">
                     <div v-if="showDev">
                         <q-circular-progress class="q-ml-xl" style="opacity: 40%;" :value="static" size="50px" :thickness="0.24" color="dev" :min="0" :max="100"></q-circular-progress>
                         <q-circular-progress class="q-ml-xl" style="left: -50%;" show-value :value="static" size="50px" :thickness="0.24" color="dev" :min="0" :max="100" center-color="grey-10">
-                        <q-icon name="fas fa-terminal" size="19.5px" color="white"/>
+                            <q-icon name="fas fa-terminal" size="19.5px" color="white" />
                     </div>
-                    </transition>
-                </div>
+                </transition>
             </div>
-            <div id="veh-container">
-                <div v-show="show">
-                    <div class="responsive" id="speedometer">
-                        <q-circular-progress class="q-ml-xl" style="transform: rotate(-150deg); opacity: 60%;" :value="speedometer" size="70px" :thickness="0.21" color="gauge" :min="0" :max="100"></q-circular-progress>
-                        <q-circular-progress class="q-ml-xl" style="transform: rotate(-150deg); left: -50%;" show-value :value="speed" size="70px" :thickness="0.21" color="gauge" :min="0" :max="600">
+        </div>
+        <div id="veh-container">
+            <div v-show="show">
+                <div class="responsive" id="speedometer">
+                    <q-circular-progress class="q-ml-xl" style="transform: rotate(-150deg); opacity: 60%;" :value="speedometer" size="70px" :thickness="0.21" color="gauge" :min="0" :max="100"></q-circular-progress>
+                    <q-circular-progress class="q-ml-xl" style="transform: rotate(-150deg); left: -50%;" show-value :value="speed" size="70px" :thickness="0.21" color="gauge" :min="0" :max="600">
                         <speed>{{(speed)}}</speed>
-                    </div>
-                    <div class="responsive" id="fuelgauge">
-                        <q-circular-progress class="q-ml-xl" style="transform: rotate(-125deg); opacity: 60%;" :value="fuelgauge" size="36px" :thickness="0.21" color="gauge" :min="0" :max="100"></q-circular-progress>
-                        <q-circular-progress class="q-ml-xl" style="transform: rotate(-125deg); left: -50%;" show-value :value="fuel" size="36px" :thickness="0.21" :style="{color: fuelColor}">
-                        <q-icon name="fas fa-gas-pump" style="transform: rotate(125deg);" size="14px" color="white"/>
-                    </div>
-                    <div class="responsive" id="altitudegauge" v-if="showAltitude">
-                        <q-circular-progress class="q-ml-xl" style="transform: rotate(-135deg); opacity: 60%;" :value="altitudegauge" size="70px" :thickness="0.21" color="gauge" :min="0" :max="100"></q-circular-progress>
-                        <q-circular-progress class="q-ml-xl" style="transform: rotate(-135deg); left: -50%;" show-value :value="altitude" size="70px" :thickness="0.21" color="gauge" :min="0" :max="750">
+                </div>
+                <div class="responsive" id="fuelgauge">
+                    <q-circular-progress class="q-ml-xl" style="transform: rotate(-125deg); opacity: 60%;" :value="fuelgauge" size="36px" :thickness="0.21" color="gauge" :min="0" :max="100"></q-circular-progress>
+                    <q-circular-progress class="q-ml-xl" style="transform: rotate(-125deg); left: -50%;" show-value :value="fuel" size="36px" :thickness="0.21" :style="{color: fuelColor}">
+                        <q-icon name="fas fa-gas-pump" style="transform: rotate(125deg);" size="14px" color="white" />
+                </div>
+                <div class="responsive" id="altitudegauge" v-if="showAltitude">
+                    <q-circular-progress class="q-ml-xl" style="transform: rotate(-135deg); opacity: 60%;" :value="altitudegauge" size="70px" :thickness="0.21" color="gauge" :min="0" :max="100"></q-circular-progress>
+                    <q-circular-progress class="q-ml-xl" style="transform: rotate(-135deg); left: -50%;" show-value :value="altitude" size="70px" :thickness="0.21" color="gauge" :min="0" :max="750">
                         <altitude>{{(altitude)}}</altitude>
-                    </div>
-                    <transition name="fade">
+                </div>
+                <transition name="fade">
                     <div class="responsive" id="seatbelt" v-if="showSeatbelt">
                         <q-circular-progress class="q-ml-xl" style="transform: rotate(-125deg); opacity: 60%;" size="70px" :thickness="0.21" color="gauge" :min="0" :max="100"></q-circular-progress>
                         <q-circular-progress class="q-ml-xl" style="transform: rotate(-125deg); left: -40%;" show-value size="70px" :thickness="0.21" color="gauge" :min="0" :max="750">
-                        <q-icon name="fas fa-user-slash" style="transform: rotate(125deg);" :value="seatbelt" size="21px" :style="{color: seatbeltColor}"/>
+                            <q-icon name="fas fa-user-slash" style="transform: rotate(125deg);" :value="seatbelt" size="21px" :style="{color: seatbeltColor}" />
                     </div>
-                    </transition>
-                    <div class="border">
-                        <div class="square" v-if="showSquare"></div>
-                    </div>
-                    <div class="border">
-                        <div class="circle" v-if="showCircle"></div>
-                    </div>
+                </transition>
+                <div class="border">
+                    <div class="square" v-if="showSquare"></div>
+                </div>
+                <div class="border">
+                    <div class="circle" v-if="showCircle"></div>
                 </div>
             </div>
         </div>
-    </body>
+    </div>
+</body>
 </html>
