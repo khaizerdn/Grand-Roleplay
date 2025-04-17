@@ -3,8 +3,8 @@
     --clr-primary-light: #393A45;
     --clr-primary-dark: transparant;
 
-    --clr-green: #34b8a8;
-    --clr-orange: #e08c2b;
+    --clr-green: #27ae60;
+    --clr-orange: #2980b9;
     --clr-grey: #505050;
 
     --font-family: "Roboto", sans-serif;
@@ -67,28 +67,22 @@ h3.heading {
 
 .btn-grey {
     background-color: var(--clr-grey);
-    border: 2px solid var(--clr-grey);
 }
 .btn-orange {
     background-color: var(--clr-orange);
-    border: 2px solid var(--clr-orange);
 }
 .btn-green {
     background-color: var(--clr-green);
-    border: 2px solid var(--clr-green);
 }
 
 .btn-grey:is(:hover, :focus, :focus-within) {
-    background-color: #000;
-    color: var(--clr-grey);
+    background-color: rgb(17, 17, 17)050;
 }
 .btn-orange:is(:hover, :focus, :focus-within) {
-    background-color: #000;
-    color: var(--clr-orange);
+    background-color: #2c88c6;
 }
 .btn-green:is(:hover, :focus, :focus-within) {
-    background-color: #000;
-    color: var(--clr-green);
+    background-color: #2abc67;
 }
 
 .scroller {

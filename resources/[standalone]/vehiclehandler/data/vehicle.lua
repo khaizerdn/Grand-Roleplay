@@ -1,5 +1,5 @@
 return {
-    units = 'mph' ,             -- (mph, kmh)
+    units = 'kmh' ,             -- (mph, kmh)
     breaktire = true,           -- Enable/Disable breaking off vehicle wheel on impact
     threshold = {
         health = 50.0,          -- Health difference needed to break off wheel (LastHealth - CurrentHealth)
