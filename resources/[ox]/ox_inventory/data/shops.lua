@@ -1,18 +1,16 @@
 return {
 	General = {
-		name = 'Shop',
+		name = '247 Supermarket',
 		blip = {
 			id = 59, colour = 69, scale = 0.8
 		}, inventory = {
 			{ name = 'burger', price = 10 },
-			{ name = 'water', price = 10 },
-			{ name = 'cola', price = 10 },
+			{ name = 'water', price = 10 }
 		}, locations = {
 			vec3(25.7, -1347.3, 29.49),
 			vec3(-3038.71, 585.9, 7.9),
 			vec3(-3241.47, 1001.14, 12.83),
 			vec3(1728.66, 6414.16, 35.03),
-			vec3(1697.99, 4924.4, 42.06),
 			vec3(1961.48, 3739.96, 32.34),
 			vec3(547.79, 2671.79, 42.15),
 			vec3(2679.25, 3280.12, 55.24),
@@ -23,7 +21,6 @@ return {
 			{ loc = vec3(-3039.0, 584.55, 6.91), length = 0.6, width = 0.5, heading = 16.93, minZ = 7.91, maxZ = 8.31, distance = 1.5, ped = `a_m_m_business_01`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' },
 			{ loc = vec3(-3242.26, 999.95, 11.83), length = 0.6, width = 0.6, heading = 355.51, minZ = 12.83, maxZ = 13.23, distance = 1.5, ped = `a_m_m_business_01`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' },
 			{ loc = vec3(1727.87, 6415.23, 34.04), length = 0.6, width = 0.6, heading = 245.4, minZ = 35.04, maxZ = 35.44, distance = 1.5, ped = `a_m_m_business_01`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' },
-			{ loc = vec3(1698.09, 4922.86, 41.06), length = 0.5, width = 0.5, heading = 322.93, minZ = 42.06, maxZ = 42.46, distance = 1.5, ped = `a_m_m_business_01`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' },
 			{ loc = vec3(1960.07, 3739.98, 31.34), length = 0.6, width = 0.5, heading = 299.48, minZ = 32.34, maxZ = 32.74, distance = 1.5, ped = `a_m_m_business_01`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' },
 			{ loc = vec3(549.03, 2671.32, 41.16), length = 0.6, width = 0.5, heading = 99.11, minZ = 42.16, maxZ = 42.56, distance = 1.5, ped = `a_m_m_business_01`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' },
 			{ loc = vec3(2678.03, 3279.44, 54.24), length = 0.6, width = 0.5, heading = 332.05, minZ = 55.24, maxZ = 55.64, distance = 1.5, ped = `a_m_m_business_01`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' },
@@ -32,13 +29,35 @@ return {
 		}
 	},
 
+	LTD = {
+		name = 'LTD Store',
+		blip = {
+			id = 59, colour = 69, scale = 0.8
+		}, inventory = {
+			{ name = 'burger', price = 10 },
+			{ name = 'water', price = 10 }
+		}, locations = {
+			vec3(-46.66, -1757.88, 29.42),
+			vec3(-706.17, -913.52, 19.22),
+			vec3(1698.17, 4922.89, 42.06),
+			vec3(-1820.22, 794.24, 138.09),
+			vec3(1164.65, -322.64, 69.21),
+			
+		}, targets = {
+			{ loc = vec3(-46.66, -1757.88, 28.42), length = 0.5, width = 0.5, heading = 54.25, minZ = 42.06, maxZ = 42.46, distance = 1.5, ped = `a_m_m_business_01`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' },
+			{ loc = vec3(-706.17, -913.52, 18.22), length = 0.5, width = 0.5, heading = 85.21, minZ = 42.06, maxZ = 42.46, distance = 1.5, ped = `a_m_m_business_01`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' },
+			{ loc = vec3(1698.17, 4922.89, 41.06), length = 0.5, width = 0.5, heading = 322.93, minZ = 42.06, maxZ = 42.46, distance = 1.5, ped = `a_m_m_business_01`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' },
+			{ loc = vec3(-1820.22, 794.24, 137.09), length = 0.5, width = 0.5, heading = 137.33, minZ = 42.06, maxZ = 42.46, distance = 1.5, ped = `a_m_m_business_01`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' },
+			{ loc = vec3(1164.65, -322.64, 68.21), length = 0.5, width = 0.5, heading = 96.99, minZ = 42.06, maxZ = 42.46, distance = 1.5, ped = `a_m_m_business_01`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' },
+		}
+	},
+
 	Liquor = {
-		name = 'Liquor Store',
+		name = 'Robs Liquor',
 		blip = {
 			id = 93, colour = 69, scale = 0.8
 		}, inventory = {
 			{ name = 'water', price = 10 },
-			{ name = 'cola', price = 10 },
 			{ name = 'burger', price = 15 },
 		}, locations = {
 			vec3(1135.808, -982.281, 46.415),
