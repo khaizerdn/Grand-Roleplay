@@ -25,7 +25,7 @@
   width: 92%;
   height: 5vh;
   margin: 1.7vh 1.3vh 0vh 1.7vh;
-  background: rgba(241, 229, 66, 0.651);
+  background: rgba(41, 128, 185, 0.651);
 }
 
 .scoreboard-header > p {
@@ -84,13 +84,13 @@
 }
 
 .fa-times {
-  color: rgba(241, 229, 66, 0.651);
+  color: rgba(41, 128, 185, 0.651);
 }
 
 .fa-check {
-  color: #28a745;
+  color: #27ae60;
 }
 
 .fa-clock {
-  color: #2873a7;
+  color: #2980b9;
 }
