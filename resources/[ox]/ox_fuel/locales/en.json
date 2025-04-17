@@ -9,7 +9,7 @@
 	"leave_vehicle": "Leave the vehicle to be able to start fueling",
 	"start_fueling": "Start fueling",
 	"petrolcan_buy_or_refill": "Buy or refill a fuel can",
-	"fuel_station_blip": "Fuel station",
+	"fuel_station_blip": "Gas Station",
 	"not_enough_money": "Not enough money! Missing $%s",
 	"fuel_success": "Fueled to %s - $%s",
 	"petrolcan_refill": "Paid $%s for refilling your fuel can",
