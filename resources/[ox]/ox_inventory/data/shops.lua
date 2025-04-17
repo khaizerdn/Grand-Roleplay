@@ -144,7 +144,7 @@ return {
 	},
 
 	Medicine = {
-		name = 'Doc Alvin',
+		name = 'Pharmacy',
 		-- groups = {
 		-- 	['ambulance'] = 0
 		-- },
