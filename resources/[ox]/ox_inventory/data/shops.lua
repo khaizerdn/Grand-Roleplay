@@ -118,26 +118,26 @@ return {
 			{ name = 'WEAPON_CARBINERIFLE', price = 1000, metadata = { registered = true, serial = 'POL' }, license = 'weapon', grade = 3 },
 			{ name = 'WEAPON_STUNGUN', price = 500, metadata = { registered = true, serial = 'POL'} }
 		}, locations = {
-			vec3(451.51, -979.44, 30.68)
+			vec3(308.18, -595.46, 43.29)
 		}, targets = {
-			{ loc = vec3(454.05, -980.03, 29.69), length = 0.5, width = 3.0, heading = 92.38, minZ = 30.5, maxZ = 32.0, distance = 6, ped = `mp_m_securoguard_01`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' }
+			{ loc = vec3(454.05, -980.03, 29.69), length = 0.5, width = 3.0, heading = 92.38, minZ = 30.5, maxZ = 32.0, distance = 1.5, ped = `mp_m_securoguard_01`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' }
 		}
 	},
 
 	Medicine = {
-		name = 'Medicine Cabinet',
-		groups = {
-			['ambulance'] = 0
-		},
+		name = 'Doc Alvin',
+		-- groups = {
+		-- 	['ambulance'] = 0
+		-- },
 		blip = {
 			id = 403, colour = 69, scale = 0.8
 		}, inventory = {
-			{ name = 'medikit', price = 26 },
+			-- { name = 'firstaid', price = 26 },
 			{ name = 'bandage', price = 5 }
 		}, locations = {
-			vec3(306.3687, -601.5139, 43.28406)
+			vec3(308.12, -595.47, 43.29)
 		}, targets = {
-
+			{ loc = vec3(308.58, -596.44, 42.29), length = 0.5, width = 3.0, heading = 18.02, minZ = 30.5, maxZ = 32.0, distance = 1.5, ped = `s_m_m_doctor_01`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' }
 		}
 	},
 
