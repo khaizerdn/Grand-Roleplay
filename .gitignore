@@ -10,3 +10,4 @@ server.cfg
 server.cfg.bkp
 voice.cfg
 *.log
+*.sql
