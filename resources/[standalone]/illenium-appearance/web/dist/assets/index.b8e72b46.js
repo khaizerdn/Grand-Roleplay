@@ -100,17 +100,17 @@ Error generating stack: `+o.message+`
   transition: background 0.1s;
 
   &:hover {
-    background: rgba(${e=>e.theme.primaryBackground||"0, 0, 0"}, 0.9);
+    background: rgba(41, 128, 185, 0.9);
     transform: scale(1.05);
     transition: background 0.2s;
     cursor: pointer;
   }
 
   ${({active:e})=>e&&Di`
-      background: rgba(${t=>t.theme.primaryBackground||"0, 0, 0"}, 1);
+      background: rgba(41, 128, 185, 1);
       &:hover {
         ${t=>t.theme.smoothBackgroundTransition?"transition: background 0.2s;":""}
-        background: rgba(${t=>t.theme.primaryBackground||"0, 0, 0"}, 1);
+        background: rgba(41, 128, 185, 1);
       }
     `}
 
@@ -211,7 +211,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
 
       &:hover {
         color: rgba(${e=>e.theme.fontColorHover||"255, 255, 255"}, 1);
-        background: rgba(${e=>e.theme.primaryBackground||"0, 0, 0"}, 0.9);
+        background: rgb(41, 128, 185);
         ${e=>e.theme.smoothBackgroundTransition?"transition: background 0.2s;":""}
         ${e=>e.theme.scaleOnHover?"transform: scale(1.1);":""}
       }
@@ -358,16 +358,16 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
   }
 
   ::-webkit-scrollbar-track {
-    background: rgba(${e=>e.theme.primaryBackground||"0, 0, 0"}, 0.2);
+    background: rgba(41, 128, 185, 0.2);
   }
 
   ::-webkit-scrollbar-thumb {
-    background: rgba(${e=>e.theme.primaryBackground||"0, 0, 0"}, 0.2);
+    background: rgba(41, 128, 185, 0.2);
     border-radius: 3vh;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: rgba(${e=>e.theme.primaryBackground||"0, 0, 0"}, 0.2);
+    background: rgba(41, 128, 185, 0.2);
   }
 `,Be=Ve.div`
   width: 100%;
@@ -414,7 +414,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
 
   &:hover {
     color: rgba(${e=>e.theme.fontColor||"255, 255, 255"}, 1);
-    background: rgba(${e=>e.theme.primaryBackground||"0, 0, 0"}, 0.9);
+    background: rgb(41, 128, 185);
     ${e=>e.theme.smoothBackgroundTransition?"transition: background 0.2s;":""}
     ${e=>e.theme.scaleOnHover?"transform: scale(1.05);":""}
   }
@@ -457,7 +457,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
 
   &:hover {
     color: rgba(${e=>e.theme.fontColorHover||"255, 255, 255"}, 1);
-    background: rgba(${e=>e.theme.primaryBackground||"0, 0, 0"}, 0.9);
+    background: rgb(41, 128, 185);
     ${e=>e.theme.smoothBackgroundTransition?"transition: background 0.2s;":""}
     ${e=>e.theme.scaleOnHover?"transform: scale(1.05);":""}
   }
@@ -566,7 +566,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
       transform: scale(1.1);
       opacity: 1;
       text-shadow: 0px 2px 2px rgba(251, 255, 190, 0.2);
-      background: rgba(${e=>e.theme.primaryBackground||"0, 0, 0"}, 0.9);
+      background: rgb(41, 128, 185);
     }
   }
 `,fd=({title:e,description:t,accept:n,decline:r,handleAccept:i,handleDecline:o})=>R(Zw,{children:[y("p",{children:e}),y("span",{children:t}),R(qw,{children:[y("button",{type:"button",onClick:i,children:n}),y("button",{type:"button",onClick:o,children:r})]})]}),Jw=Ve.span`
