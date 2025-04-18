@@ -394,7 +394,7 @@ local function propertyMenu(propertyList, owned)
         if owned and propertyList[i].owner == QBX.PlayerData.citizenid or lib.table.contains(json.decode(propertyList[i].keyholders), QBX.PlayerData.citizenid) then
             options[#options + 1] = {
                 title = propertyList[i].property_name,
-                icon = 'home',
+                icon = 'Home',
                 arrow = true,
                 onSelect = function()
                     singlePropertyMenu(propertyList[i])
@@ -403,7 +403,7 @@ local function propertyMenu(propertyList, owned)
         elseif not owned then
             options[#options + 1] = {
                 title = propertyList[i].property_name,
-                icon = 'home',
+                icon = 'Home',
                 arrow = true,
                 onSelect = function()
                     singlePropertyMenu(propertyList[i])
@@ -428,25 +428,59 @@ function PreparePropertyMenu(propertyCoords)
     end
 end
 
-CreateThread(function()
+-- Function to create blips for owned/keyholder properties
+local function createPropertyBlips()
+    if not QBX.PlayerData or not QBX.PlayerData.citizenid then
+        print('Error: QBX.PlayerData.citizenid not available for blip creation')
+        return
+    end
+
+    -- Clear existing blips to avoid duplicates
+    for _, blip in pairs(blips) do
+        if DoesBlipExist(blip) then
+            RemoveBlip(blip)
+        end
+    end
+    blips = {}
+
     -- Load properties from server
     properties = lib.callback.await('qbx_properties:callback:loadProperties')
-    
-    -- Create blips only for owned properties or apartments
     local playerCitizenId = QBX.PlayerData.citizenid
-    local propertyData = lib.callback.await('qbx_properties:callback:requestPropertiesForBlips') -- Get detailed property data
+    print('Player CitizenID: ' .. tostring(playerCitizenId))
+
+    -- Create blips only for owned properties or apartments
+    local propertyData = lib.callback.await('qbx_properties:callback:requestPropertiesForBlips')
+    print('Properties fetched: ' .. json.encode(propertyData))
+
     for i = 1, #propertyData do
         local property = propertyData[i]
         local isOwner = property.owner == playerCitizenId
-        local isKeyholder = lib.table.contains(json.decode(property.keyholders), playerCitizenId)
+        local keyholders = json.decode(property.keyholders) or {}
+        local isKeyholder = lib.table.contains(keyholders, playerCitizenId)
+        print(string.format('Property %s: owner=%s, isOwner=%s, isKeyholder=%s', property.property_name, tostring(property.owner), tostring(isOwner), tostring(isKeyholder)))
+
         if isOwner or isKeyholder then
             local coords = json.decode(property.coords)
-            local label = isOwner and "Home" or property.property_name -- "Home" for owner, property_name for keyholders
+            local label = isOwner and locale('Home') or property.property_name -- "Home" for owner, property_name for keyholders
             if not blips[coords] then
                 blips[coords] = createBlip(vec3(coords.x, coords.y, coords.z), label)
+                print(string.format('Created blip for %s at %s with label %s', property.property_name, json.encode(coords), label))
             end
+        else
+            print(string.format('Skipped blip for %s: not owned or keyholder', property.property_name))
         end
     end
+end
+
+-- Wait for player data to be loaded before creating blips
+CreateThread(function()
+    -- Wait until QBX.PlayerData is available
+    while not QBX.PlayerData or not QBX.PlayerData.citizenid do
+        Wait(100)
+    end
+
+    -- Create blips initially
+    createPropertyBlips()
 
     -- Interaction loop for properties
     while true do
@@ -463,6 +497,13 @@ CreateThread(function()
         end
         Wait(sleep)
     end
+end)
+
+-- Refresh blips when property ownership changes
+RegisterNetEvent('qbx_properties:client:refreshBlips')
+AddEventHandler('qbx_properties:client:refreshBlips', function()
+    print('Refreshing property blips')
+    createPropertyBlips()
 end)
 
 RegisterNetEvent('qbx_properties:client:concealPlayers', function(playerIds)

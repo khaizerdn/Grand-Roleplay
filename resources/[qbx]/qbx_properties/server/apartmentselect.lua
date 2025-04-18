@@ -60,6 +60,7 @@ RegisterNetEvent('qbx_properties:server:apartmentSelect', function(apartmentInde
 
     TriggerClientEvent('qbx_properties:client:addProperty', -1, sharedConfig.apartmentOptions[apartmentIndex].enter)
     EnterProperty(playerSource, id, true)
+    TriggerClientEvent('qbx_properties:client:refreshBlips', playerSource) -- Refresh blips after property assignment
     Wait(200)
     TriggerClientEvent('qb-clothes:client:CreateFirstCharacter', playerSource)
 end)

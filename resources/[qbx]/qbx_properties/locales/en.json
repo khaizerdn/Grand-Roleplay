@@ -37,7 +37,8 @@
         "show_owned_properties": "Only show properties you own",
         "interior_preview": "Interior Preview",
         "start_decorating": "Start Decorating",
-        "decorating_categories": "Categories"
+        "decorating_categories": "Categories",
+        "home": "Home"
     },
     "instructButtons": {
         "up": "Up",

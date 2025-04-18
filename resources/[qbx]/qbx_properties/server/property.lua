@@ -293,6 +293,7 @@ RegisterNetEvent('qbx_properties:server:addKeyholder', function(keyholderCid)
     local keyholder = exports.qbx_core:GetPlayerByCitizenId(keyholderCid)
     exports.qbx_core:Notify(playerSource, keyholder.PlayerData.charinfo.firstname.. locale('notify.keyholder'))
     exports.qbx_core:Notify(keyholder.PlayerData.source, locale('notify.added_as_keyholder'))
+    TriggerClientEvent('qbx_properties:client:refreshBlips', keyholder.PlayerData.source) -- Refresh blips for keyholder
 
     logger.log({
         source = playerSource,
@@ -323,6 +324,10 @@ RegisterNetEvent('qbx_properties:server:removeKeyholder', function(keyholderCid)
     MySQL.Sync.execute('UPDATE properties SET keyholders = ? WHERE id = ?', {json.encode(keyholders), propertyId})
     local keyholder = exports.qbx_core:GetOfflinePlayer(keyholderCid)
     exports.qbx_core:Notify(playerSource, keyholder.PlayerData.charinfo.firstname.. locale('notify.removed_as_keyholder'))
+    local keyholderPlayer = exports.qbx_core:GetPlayerByCitizenId(keyholderCid)
+    if keyholderPlayer then
+        TriggerClientEvent('qbx_properties:client:refreshBlips', keyholderPlayer.PlayerData.source) -- Refresh blips for keyholder
+    end
 
     logger.log({
         source = playerSource,
@@ -471,7 +476,8 @@ RegisterNetEvent('qbx_properties:server:rentProperty', function(propertyId)
 
     exports.qbx_core:Notify(playerSource, string.format('Successfully started renting %s', property.property_name), 'success')
     MySQL.update('UPDATE properties SET owner = ? WHERE id = ?', {player.PlayerData.citizenid, propertyId})
-    startRentThread()
+    startRentThread(propertyId) -- Fixed missing argument
+    TriggerClientEvent('qbx_properties:client:refreshBlips', playerSource) -- Refresh blips
 
     logger.log({
         source = playerSource,
@@ -501,6 +507,7 @@ RegisterNetEvent('qbx_properties:server:buyProperty', function(propertyId)
 
     MySQL.update('UPDATE properties SET owner = ? WHERE id = ?', {player.PlayerData.citizenid, propertyId})
     exports.qbx_core:Notify(playerSource, string.format('Successfully purchased %s for $%s', property.property_name, property.price))
+    TriggerClientEvent('qbx_properties:client:refreshBlips', playerSource) -- Refresh blips
 
     logger.log({
         source = playerSource,
@@ -538,6 +545,7 @@ RegisterNetEvent('qbx_properties:server:stopRenting', function()
     for _ = 1, #insideProperty[propertyId] do
         exitProperty(insideProperty[propertyId][1])
     end
+    TriggerClientEvent('qbx_properties:client:refreshBlips', player.PlayerData.source) -- Refresh blips
 
     logger.log({
         source = player.PlayerData.source,
