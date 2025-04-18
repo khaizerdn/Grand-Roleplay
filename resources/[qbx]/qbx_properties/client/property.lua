@@ -11,15 +11,15 @@ local concealWhitelist = {}
 local blips = {}
 
 local function createBlip(apartmentCoords, label)
-	local blip = AddBlipForCoord(apartmentCoords.x, apartmentCoords.y, apartmentCoords.z)
-	SetBlipSprite(blip, 40)
-	SetBlipAsShortRange(blip, true)
-	SetBlipScale(blip, 0.8)
-	SetBlipColour(blip, 2)
-	BeginTextCommandSetBlipName('STRING')
-	AddTextComponentString(label)
-	EndTextCommandSetBlipName(blip)
-	return blip
+    local blip = AddBlipForCoord(apartmentCoords.x, apartmentCoords.y, apartmentCoords.z)
+    SetBlipSprite(blip, 40)
+    SetBlipAsShortRange(blip, true)
+    SetBlipScale(blip, 0.8)
+    SetBlipColour(blip, 2)
+    BeginTextCommandSetBlipName('STRING')
+    AddTextComponentString(label)
+    EndTextCommandSetBlipName(blip)
+    return blip
 end
 
 local function prepareKeyMenu()
@@ -472,6 +472,12 @@ local function createPropertyBlips()
     end
 end
 
+-- Function to refresh properties list
+local function refreshProperties()
+    properties = lib.callback.await('qbx_properties:callback:loadProperties')
+    print('Refreshed properties: ' .. json.encode(properties))
+end
+
 -- Wait for player data to be loaded before creating blips
 CreateThread(function()
     -- Wait until QBX.PlayerData is available
@@ -479,7 +485,7 @@ CreateThread(function()
         Wait(100)
     end
 
-    -- Create blips initially
+    -- Create blips and load properties initially
     createPropertyBlips()
 
     -- Interaction loop for properties
@@ -487,7 +493,7 @@ CreateThread(function()
         local sleep = 800
         local playerCoords = GetEntityCoords(cache.ped)
         for i = 1, #properties do
-            if #(playerCoords - properties[i].xyz) < 1.6 then
+            if properties[i].xyz and #(playerCoords - properties[i].xyz) < 1.6 then
                 sleep = 0
                 qbx.drawText3d({ coords = properties[i].xyz, text = locale('drawtext.view_property') })
                 if IsControlJustPressed(0, 38) then
@@ -531,6 +537,12 @@ RegisterNetEvent('qbx_properties:client:revealPlayers', function()
 end)
 
 RegisterNetEvent('qbx_properties:client:addProperty', function(propertyCoords)
-    if lib.table.contains(properties, propertyCoords) then return end
-    properties[#properties + 1] = propertyCoords
+    -- Ensure propertyCoords is in the correct format
+    local formattedCoords = { xyz = vec3(propertyCoords.x, propertyCoords.y, propertyCoords.z) }
+    if not lib.table.contains(properties, formattedCoords) then
+        properties[#properties + 1] = formattedCoords
+        print('Added property to client: ' .. json.encode(formattedCoords))
+        -- Refresh properties to ensure consistency
+        refreshProperties()
+    end
 end)

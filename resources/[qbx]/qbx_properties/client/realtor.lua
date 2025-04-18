@@ -131,8 +131,15 @@ lib.registerMenu({
 
     if input[4] then
         addGaragePoint()
+        if garageCoords then -- Only pass garage coords if valid
+            TriggerServerEvent('qbx_properties:server:createProperty', args[scrollIndex], input, playerCoords, vec4(garageCoords.x, garageCoords.y, garageCoords.z + 1.0, garageHeading))
+        else
+            lib.notify({type = 'error', title = 'Error', description = 'Garage placement was cancelled or invalid.'})
+            return
+        end
+    else
+        TriggerServerEvent('qbx_properties:server:createProperty', args[scrollIndex], input, playerCoords, nil) -- Pass nil for garage
     end
-    TriggerServerEvent('qbx_properties:server:createProperty', args[scrollIndex], input, playerCoords, vec4(garageCoords.x, garageCoords.y, garageCoords.z + 1.0, garageHeading))
 end)
 
 RegisterNetEvent('qbx_properties:client:createProperty', function()
