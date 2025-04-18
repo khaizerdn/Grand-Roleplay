@@ -91,7 +91,7 @@
                                 <hr>
                                 <div class="text-h6 q-mb-md">Options</div>
                                 <div class="text-h7">
-                                    <q-item borderless tag="label" v-ripple>
+                                    <!-- <q-item borderless tag="label" v-ripple>
                                         <q-item-section avatar>
                                             <q-checkbox v-model="isOutMapChecked" v-on:click="showOutMap($event)" color="checkbox" val="1"></q-checkbox>
                                         </q-item-section>
@@ -99,7 +99,7 @@
                                             <q-item-label>Show Minimap Only in Vehicle</q-item-label>
                                             <q-item-label class="text-h7" caption>Disabling this will always keep your minimap on your screen</q-item-label>
                                         </q-item-section>
-                                    </q-item>
+                                    </q-item> -->
                                     <q-item borderless tag="label" v-ripple>
                                         <q-item-section avatar>
                                             <q-checkbox v-model="isOutCompassChecked" v-on:click="showOutCompass($event)" color="checkbox" val="2"></q-checkbox>
@@ -142,9 +142,9 @@
                             <div class="text-h7">
                                 <q-toggle v-on:click="changeFPS($event)" size="lg" keep-color icon-color="toggleicons" color="checkbox" :label="`Speedometer FPS ${isChangeFPSChecked}`" unchecked-icon="60fps" false-value="Synced" true-value="Optimized" checked-icon="30fps" v-model="isChangeFPSChecked"></q-toggle>
                                 <div class="text-h7 q-mb-md-d">Synced FPS option will result in less optimization, but keep your speedometer in real time, however, it will also be more demanding on your machine.</div>
-                                <q-toggle v-on:click="ToggleMapShape($event)" size="lg" keep-color icon-color="toggleicons" color="checkbox" :label="`Minimap ${isToggleMapShapeChecked}`" unchecked-icon="radio_button_unchecked" false-value="circle" true-value="square" checked-icon="check_box_outline_blank" v-model="isToggleMapShapeChecked"></q-toggle>
-                                <div class="text-h7 q-mb-md-d">Whether it's square or circle you desire, you have the ability to choose!</div>
-                                <q-checkbox v-on:click="ToggleMapBorders($event)" label='Minimap Borders Enabled' v-model="isToggleMapBordersChecked" color="checkbox" val="16" style="display: flex;"></q-checkbox>
+                                <!-- <q-toggle v-on:click="ToggleMapShape($event)" size="lg" keep-color icon-color="toggleicons" color="checkbox" :label="`Minimap ${isToggleMapShapeChecked}`" unchecked-icon="radio_button_unchecked" false-value="circle" true-value="square" checked-icon="check_box_outline_blank" v-model="isToggleMapShapeChecked"></q-toggle>
+                                <div class="text-h7 q-mb-md-d">Whether it's square or circle you desire, you have the ability to choose!</div> -->
+                                <!-- <q-checkbox v-on:click="ToggleMapBorders($event)" label='Minimap Borders Enabled' v-model="isToggleMapBordersChecked" color="checkbox" val="16" style="display: flex;"></q-checkbox> -->
                                 <q-checkbox v-on:click="dynamicEngine($event)" label='Show Engine always' v-model="isDynamicEngineChecked" color="checkbox" val="17" style="display: flex;"></q-checkbox>
                                 <q-checkbox v-on:click="dynamicNitro($event)" label='Show Nitro always' v-model="isDynamicNitroChecked" color="checkbox" val="18" style="display: flex;"></q-checkbox>
                             </div>
