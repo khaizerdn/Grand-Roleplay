@@ -23,8 +23,9 @@
     "menu": {
         "add_keyholder": "Add Keyholder",
         "people_inside": "People Inside",
-        "keyholders": "Keyholders (Max %s)",
         "keyholders_no_limit": "Keyholders",
+        "keyholders_rental": "Keyholders (Max %s, including $%s keyholder fee)",
+        "keyholders_owned": "Keyholders (Max %s)",
         "doorbell_ringers": "Doorbell Ringers",
         "manage_keys": "Manage Keys",
         "doorbell": "Doorbell",

@@ -24,7 +24,17 @@ end
 
 local function prepareKeyMenu()
     local keyholders = lib.callback.await('qbx_properties:callback:requestKeyHolders')
-    local maxKeyholders = lib.callback.await('qbx_properties:callback:getMaxKeyholders') -- Fetch max keyholders
+    local config = lib.callback.await('qbx_properties:callback:getKeyholderConfig') -- Fetch maxKeyholders and keyholderFee
+    local maxKeyholders = config.maxKeyholders
+    local keyholderFee = #keyholders * config.keyholderFee -- Calculate total fee
+    local title
+    if maxKeyholders == -1 then
+        title = locale('menu.keyholders_no_limit') -- No limit case
+    elseif isPropertyRental then
+        title = locale('menu.keyholders_rental', maxKeyholders, keyholderFee) -- Rental with fee
+    else
+        title = locale('menu.keyholders_owned', maxKeyholders) -- Owned, no fee
+    end
     local options = {
         {
             title = locale('menu.add_keyholder'),
@@ -81,7 +91,7 @@ local function prepareKeyMenu()
     end
     lib.registerContext({
         id = 'qbx_properties_keyMenu',
-        title = maxKeyholders == -1 and locale('menu.keyholders_no_limit') or locale('menu.keyholders', maxKeyholders), -- Conditional title
+        title = title,
         menu = 'qbx_properties_manageMenu',
         options = options
     })
@@ -419,15 +429,26 @@ function PreparePropertyMenu(propertyCoords)
 end
 
 CreateThread(function()
-    for i = 1, #sharedConfig.apartmentOptions do
-        local data = sharedConfig.apartmentOptions[i]
-
-        if not blips[data.enter] then
-            blips[data.enter] = createBlip(data.enter, data.label)
+    -- Load properties from server
+    properties = lib.callback.await('qbx_properties:callback:loadProperties')
+    
+    -- Create blips only for owned properties or apartments
+    local playerCitizenId = QBX.PlayerData.citizenid
+    local propertyData = lib.callback.await('qbx_properties:callback:requestPropertiesForBlips') -- Get detailed property data
+    for i = 1, #propertyData do
+        local property = propertyData[i]
+        local isOwner = property.owner == playerCitizenId
+        local isKeyholder = lib.table.contains(json.decode(property.keyholders), playerCitizenId)
+        if isOwner or isKeyholder then
+            local coords = json.decode(property.coords)
+            local label = isOwner and "Home" or property.property_name -- "Home" for owner, property_name for keyholders
+            if not blips[coords] then
+                blips[coords] = createBlip(vec3(coords.x, coords.y, coords.z), label)
+            end
         end
     end
 
-    properties = lib.callback.await('qbx_properties:callback:loadProperties')
+    -- Interaction loop for properties
     while true do
         local sleep = 800
         local playerCoords = GetEntityCoords(cache.ped)

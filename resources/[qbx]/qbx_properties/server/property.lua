@@ -243,8 +243,15 @@ lib.callback.register('qbx_properties:callback:checkAccess', function(source)
     return result.owner == exports.qbx_core:GetPlayer(source).PlayerData.citizenid
 end)
 
-lib.callback.register('qbx_properties:callback:getMaxKeyholders', function()
-    return config.maxKeyholders
+lib.callback.register('qbx_properties:callback:getKeyholderConfig', function()
+    return {
+        maxKeyholders = config.maxKeyholders,
+        keyholderFee = config.keyholderFee
+    }
+end)
+
+lib.callback.register('qbx_properties:callback:requestPropertiesForBlips', function()
+    return MySQL.query.await('SELECT property_name, owner, keyholders, coords FROM properties')
 end)
 
 RegisterNetEvent('qbx_properties:server:letRingerIn', function(visitorCid)
@@ -415,18 +422,22 @@ end
 local function startRentThread(propertyId)
     CreateThread(function()
         while true do
-            local property = MySQL.single.await('SELECT owner, price, rent_interval, property_name FROM properties WHERE id = ?', {propertyId})
+            local property = MySQL.single.await('SELECT owner, price, rent_interval, property_name, keyholders FROM properties WHERE id = ?', {propertyId})
             if not property or not property.owner then break end
+
+            local keyholders = json.decode(property.keyholders) or {}
+            local keyholderFee = #keyholders * config.keyholderFee -- Calculate additional fee
+            local totalRent = property.price + keyholderFee -- Base rent + keyholder fee
 
             local player = exports.qbx_core:GetPlayerByCitizenId(property.owner) or exports.qbx_core:GetOfflinePlayer(property.owner)
             if not player then print(string.format('%s does not exist anymore, consider checking property id %s', property.owner, propertyId)) break end
 
             if player.Offline then
-                player.PlayerData.money.bank = player.PlayerData.money.bank - property.price
+                player.PlayerData.money.bank = player.PlayerData.money.bank - totalRent
                 if player.PlayerData.money.bank < 0 then break end
                 exports.qbx_core:SaveOffline(player.PlayerData)
             else
-                if not player.Functions.RemoveMoney('bank', property.price, string.format('Rent for %s', property.property_name)) then
+                if not player.Functions.RemoveMoney('bank', totalRent, string.format('Rent for %s', property.property_name)) then
                     exports.qbx_core:Notify(player.PlayerData.source, string.format('Not enough money to pay rent for %s', property.property_name), 'error')
                     break
                 end
