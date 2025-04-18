@@ -54,7 +54,7 @@
     "drawtext": {
         "stash": "[E] - Storage",
         "exit": "[E] - Exit | [G] - Manage",
-        "clothing": "[G] - Outfits",
+        "clothing": "[E] - Outfits",
         "logout": "[E] - Logout",
         "view_property": "[E] - View Property"
     },

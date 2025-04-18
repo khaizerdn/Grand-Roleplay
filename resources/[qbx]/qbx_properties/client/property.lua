@@ -204,7 +204,7 @@ local function checkInteractions()
         ['clothing'] = function(coords)
             qbx.drawText3d({ coords = coords, text = locale('drawtext.clothing') })
             -- Uncomment this if you want players to change clothes like buying on clothing shop. They will get the clothes for free.
-            -- if IsControlJustPressed(0, 38) then
+            -- if IsControlJustPressed(0, 47) then
             --     exports['illenium-appearance']:startPlayerCustomization(function(appearance)
             --         if appearance then
             --             TriggerServerEvent("illenium-appearance:server:saveAppearance", appearance)
@@ -215,7 +215,7 @@ local function checkInteractions()
             --         enableExit = true,
             --     })
             -- end
-            if IsControlJustPressed(0, 47) then
+            if IsControlJustPressed(0, 38) then
                 TriggerEvent('illenium-appearance:client:openOutfitMenu')
             end
         end,
