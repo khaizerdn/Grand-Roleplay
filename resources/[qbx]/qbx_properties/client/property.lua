@@ -24,6 +24,7 @@ end
 
 local function prepareKeyMenu()
     local keyholders = lib.callback.await('qbx_properties:callback:requestKeyHolders')
+    local maxKeyholders = lib.callback.await('qbx_properties:callback:getMaxKeyholders') -- Fetch max keyholders
     local options = {
         {
             title = locale('menu.add_keyholder'),
@@ -80,7 +81,7 @@ local function prepareKeyMenu()
     end
     lib.registerContext({
         id = 'qbx_properties_keyMenu',
-        title = locale('menu.keyholders'),
+        title = maxKeyholders == -1 and locale('menu.keyholders_no_limit') or locale('menu.keyholders', maxKeyholders), -- Conditional title
         menu = 'qbx_properties_manageMenu',
         options = options
     })
@@ -192,17 +193,18 @@ local function checkInteractions()
         end,
         ['clothing'] = function(coords)
             qbx.drawText3d({ coords = coords, text = locale('drawtext.clothing') })
-            if IsControlJustPressed(0, 38) then
-                exports['illenium-appearance']:startPlayerCustomization(function(appearance)
-                    if appearance then
-                        TriggerServerEvent("illenium-appearance:server:saveAppearance", appearance)
-                    end
-                end, {
-                    components = true, componentConfig = { masks = true, upperBody = true, lowerBody = true, bags = true, shoes = true, scarfAndChains = true, bodyArmor = true, shirts = true, decals = true, jackets = true },
-                    props = true, propConfig = { hats = true, glasses = true, ear = true, watches = true, bracelets = true },
-                    enableExit = true,
-                })
-            end
+            -- Uncomment this if you want players to change clothes like buying on clothing shop. They will get the clothes for free.
+            -- if IsControlJustPressed(0, 38) then
+            --     exports['illenium-appearance']:startPlayerCustomization(function(appearance)
+            --         if appearance then
+            --             TriggerServerEvent("illenium-appearance:server:saveAppearance", appearance)
+            --         end
+            --     end, {
+            --         components = true, componentConfig = { masks = true, upperBody = true, lowerBody = true, bags = true, shoes = true, scarfAndChains = true, bodyArmor = true, shirts = true, decals = true, jackets = true },
+            --         props = true, propConfig = { hats = true, glasses = true, ear = true, watches = true, bracelets = true },
+            --         enableExit = true,
+            --     })
+            -- end
             if IsControlJustPressed(0, 47) then
                 TriggerEvent('illenium-appearance:client:openOutfitMenu')
             end

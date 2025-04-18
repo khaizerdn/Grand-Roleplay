@@ -243,6 +243,10 @@ lib.callback.register('qbx_properties:callback:checkAccess', function(source)
     return result.owner == exports.qbx_core:GetPlayer(source).PlayerData.citizenid
 end)
 
+lib.callback.register('qbx_properties:callback:getMaxKeyholders', function()
+    return config.maxKeyholders
+end)
+
 RegisterNetEvent('qbx_properties:server:letRingerIn', function(visitorCid)
     local playerSource = source --[[@as number]]
     local player = exports.qbx_core:GetPlayer(playerSource)
@@ -273,6 +277,10 @@ RegisterNetEvent('qbx_properties:server:addKeyholder', function(keyholderCid)
 
     local keyholders = json.decode(result.keyholders)
     if lib.table.contains(keyholders, keyholderCid) then return end
+    if config.maxKeyholders ~= -1 and #keyholders >= config.maxKeyholders then
+        exports.qbx_core:Notify(playerSource, locale('notify.keyholder_limit_reached'), 'error')
+        return
+    end
     keyholders[#keyholders + 1] = keyholderCid
     MySQL.Sync.execute('UPDATE properties SET keyholders = ? WHERE id = ?', {json.encode(keyholders), propertyId})
     local keyholder = exports.qbx_core:GetPlayerByCitizenId(keyholderCid)

@@ -23,7 +23,8 @@
     "menu": {
         "add_keyholder": "Add Keyholder",
         "people_inside": "People Inside",
-        "keyholders": "Keyholders",
+        "keyholders": "Keyholders (Max %s)",
+        "keyholders_no_limit": "Keyholders",
         "doorbell_ringers": "Doorbell Ringers",
         "manage_keys": "Manage Keys",
         "doorbell": "Doorbell",
@@ -49,9 +50,9 @@
         "gizmo_local": "Sets gizmo local to the entity"
     },
     "drawtext": {
-        "stash": "[E] - Stash",
+        "stash": "[E] - Storage",
         "exit": "[E] - Exit | [G] - Manage",
-        "clothing": "[E] - Clothing | [G] - Outfits",
+        "clothing": "[G] - Outfits",
         "logout": "[E] - Logout",
         "view_property": "[E] - View Property"
     },
