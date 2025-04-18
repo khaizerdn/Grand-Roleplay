@@ -310,7 +310,10 @@ end)
 
 local function singlePropertyMenu(property, noBackMenu)
     local options = {}
-    if QBX.PlayerData.citizenid == property.owner or lib.table.contains(json.decode(property.keyholders), QBX.PlayerData.citizenid) then
+    local isOwner = QBX.PlayerData.citizenid == property.owner
+    local isKeyholder = lib.table.contains(json.decode(property.keyholders), QBX.PlayerData.citizenid)
+
+    if (isOwner and not property.is_selling) or isKeyholder then
         options[#options + 1] = {
             title = locale('menu.enter'),
             icon = 'cog',
@@ -322,42 +325,59 @@ local function singlePropertyMenu(property, noBackMenu)
             serverEvent = 'qbx_properties:server:enterProperty',
             args = { id = property.id }
         }
-    elseif property.owner == nil then
-        if property.rent_interval then
+    end
+
+    if isOwner then
+        if property.is_selling then
             options[#options + 1] = {
-                title = 'Rent',
-                icon = 'dollar-sign',
+                title = locale('menu.cancel_sell'),
+                icon = 'ban',
                 arrow = true,
                 onSelect = function()
                     local alert = lib.alertDialog({
-                        header = string.format('Renting - %s', property.property_name),
-                        content = string.format('Are you sure you want to rent %s for $%s which will be billed every %sh(s)?', property.property_name, property.price, property.rent_interval),
+                        header = locale('alert.cancel_sell'),
+                        content = string.format(locale('alert.confirm_cancel_sell'), property.property_name),
                         centered = true,
                         cancel = true
                     })
                     if alert == 'confirm' then
-                        TriggerServerEvent('qbx_properties:server:rentProperty', property.id)
+                        TriggerServerEvent('qbx_properties:server:cancelSellProperty', property.id)
                     end
-                end,
+                end
             }
         else
             options[#options + 1] = {
-                title = 'Buy',
+                title = locale('menu.sell'),
                 icon = 'dollar-sign',
                 arrow = true,
                 onSelect = function()
-                    local alert = lib.alertDialog({
-                        header = string.format('Buying - %s', property.property_name),
-                        content = string.format('Are you sure you want to buy %s for $%s?', property.property_name, property.price),
-                        centered = true,
-                        cancel = true
+                    local input = lib.inputDialog(locale('alert.sell_property'), {
+                        {type = 'number', label = locale('alert.sell_price'), description = locale('alert.sell_price_description'), required = true, min = 1, icon = 'dollar-sign'}
                     })
-                    if alert == 'confirm' then
-                        TriggerServerEvent('qbx_properties:server:buyProperty', property.id)
+                    if input then
+                        TriggerServerEvent('qbx_properties:server:sellProperty', property.id, input[1])
                     end
-                end,
+                end
             }
         end
+    elseif not property.owner or property.is_selling then
+        options[#options + 1] = {
+            title = locale('menu.buy'),
+            icon = 'dollar-sign',
+            arrow = true,
+            onSelect = function()
+                local price = property.is_selling and property.sell_price or property.price
+                local alert = lib.alertDialog({
+                    header = string.format(locale('alert.buying'), property.property_name),
+                    content = string.format(locale('alert.confirm_buy'), property.property_name, price),
+                    centered = true,
+                    cancel = true
+                })
+                if alert == 'confirm' then
+                    TriggerServerEvent('qbx_properties:server:buyProperty', property.id)
+                end
+            end
+        }
     else
         options[#options + 1] = {
             title = locale('menu.ring_doorbell'),
@@ -367,8 +387,8 @@ local function singlePropertyMenu(property, noBackMenu)
             args = { id = property.id }
         }
     end
+
     local menu = 'qbx_properties_propertiesMenu'
-    ---@diagnostic disable-next-line: cast-local-type
     if noBackMenu then menu = nil end
     lib.registerContext({
         id = 'qbx_properties_propertyMenu',
@@ -435,7 +455,6 @@ local function createPropertyBlips()
         return
     end
 
-    -- Clear existing blips to avoid duplicates
     for _, blip in pairs(blips) do
         if DoesBlipExist(blip) then
             RemoveBlip(blip)
@@ -443,12 +462,11 @@ local function createPropertyBlips()
     end
     blips = {}
 
-    -- Load properties from server
     properties = lib.callback.await('qbx_properties:callback:loadProperties')
     local playerCitizenId = QBX.PlayerData.citizenid
-    print('Player CitizenID: ' .. tostring(playerCitizenId))
+    local isRealtor = QBX.PlayerData.job.name == 'realestate'
+    print('Player CitizenID: ' .. tostring(playerCitizenId) .. ', Is Realtor: ' .. tostring(isRealtor))
 
-    -- Create blips only for owned properties or apartments
     local propertyData = lib.callback.await('qbx_properties:callback:requestPropertiesForBlips')
     print('Properties fetched: ' .. json.encode(propertyData))
 
@@ -457,21 +475,34 @@ local function createPropertyBlips()
         local isOwner = property.owner == playerCitizenId
         local keyholders = json.decode(property.keyholders) or {}
         local isKeyholder = lib.table.contains(keyholders, playerCitizenId)
-        print(string.format('Property %s: owner=%s, isOwner=%s, isKeyholder=%s', property.property_name, tostring(property.owner), tostring(isOwner), tostring(isKeyholder)))
 
-        if isOwner or isKeyholder then
+        if isOwner or isKeyholder or property.is_selling then
             local coords = json.decode(property.coords)
-            local label = isOwner and locale('Home') or property.property_name -- "Home" for owner, property_name for keyholders
+            local label
+            local color
+            if isOwner then
+                label = property.is_selling and locale('menu.selling_property') or locale('menu.home')
+                color = property.is_selling and 5 or 2 -- Yellow (5) if selling, green (2) otherwise
+            elseif isKeyholder then
+                label = property.property_name
+                color = 2 -- Green for keyholders
+            elseif isRealtor and property.is_selling then
+                label = locale('menu.selling_property')
+                color = 5 -- Yellow for realtors when property is for sale
+            elseif property.is_selling then
+                label = locale('menu.for_sale')
+                color = 0 -- White for other players when property is for sale
+            end
             if not blips[coords] then
                 blips[coords] = createBlip(vec3(coords.x, coords.y, coords.z), label)
-                print(string.format('Created blip for %s at %s with label %s', property.property_name, json.encode(coords), label))
+                SetBlipColour(blips[coords], color)
+                print(string.format('Created blip for %s at %s with label %s and color %d', property.property_name, json.encode(coords), label, color))
             end
         else
-            print(string.format('Skipped blip for %s: not owned or keyholder', property.property_name))
+            print(string.format('Skipped blip for %s: not owned, keyholder, or for sale', property.property_name))
         end
     end
 end
-
 -- Function to refresh properties list
 local function refreshProperties()
     properties = lib.callback.await('qbx_properties:callback:loadProperties')

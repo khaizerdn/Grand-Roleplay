@@ -41,7 +41,7 @@ RegisterNetEvent('qbx_properties:server:createProperty', function(interior, inpu
         }
     }
 
-    local id = MySQL.insert.await('INSERT INTO `properties` (`coords`, `property_name`, `price`, `rent_interval`, `interior`, `interact_options`, `stash_options`, `garage`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', {
+    local id = MySQL.insert.await('INSERT INTO `properties` (`coords`, `property_name`, `price`, `rent_interval`, `interior`, `interact_options`, `stash_options`, `garage`, `is_selling`, `sell_price`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', {
         json.encode(coords),
         propertyName,
         price,
@@ -49,7 +49,9 @@ RegisterNetEvent('qbx_properties:server:createProperty', function(interior, inpu
         interior,
         json.encode(interactData),
         json.encode(stashData),
-        garage and json.encode(garage) or nil -- Store garage as JSON or nil
+        garage and json.encode(garage) or nil,
+        true, -- Set is_selling to true
+        price -- Set sell_price to the input price
     })
 
     if rentInterval then

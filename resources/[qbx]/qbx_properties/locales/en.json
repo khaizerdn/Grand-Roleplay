@@ -1,10 +1,16 @@
 {
     "notify": {
-        "no_access": "No access.",
+        "no_access": "You do not have access to this property.",
         "someone_at_door": "Someone is at your door!",
-        "keyholder": " has been added as a keyholder.",
+        "keyholder": "%s has been added as a keyholder.",
         "added_as_keyholder": "You have been added as a keyholder.",
-        "removed_as_keyholder": " has been removed as a keyholder."
+        "removed_as_keyholder": "%s has been removed as a keyholder.",
+        "sell_started": "You have listed %s for sale at $%s.",
+        "sell_cancelled": "You have cancelled the sale of %s.",
+        "not_for_sale": "This property is not for sale.",
+        "not_enough_money": "You do not have enough money to purchase this property.",
+        "purchased": "You have purchased %s for $%s!",
+        "property_sold": "You have sold %s for $%s!"
     },
     "alert": {
         "give_keys": "Give keys to this person?",
@@ -18,7 +24,14 @@
         "price_description": "The purchasing price or the price deducted for rent",
         "rent_interval": "Rent interval",
         "rent_interval_description": "The interval in which the rent will be deducted in hours (makes the property rentable instead of purchasable)",
-        "add_garage": "Add Garage"
+        "add_garage": "Add Garage",
+        "sell_property": "Sell Property",
+        "sell_price": "Sell Price",
+        "sell_price_description": "Enter the price to sell the property",
+        "buying": "Buying - %s",
+        "confirm_buy": "Are you sure you want to buy %s for $%s?",
+        "cancel_sell": "Cancel Selling",
+        "confirm_cancel_sell": "Are you sure you want to cancel selling %s?"
     },
     "menu": {
         "add_keyholder": "Add Keyholder",
@@ -38,7 +51,12 @@
         "interior_preview": "Interior Preview",
         "start_decorating": "Start Decorating",
         "decorating_categories": "Categories",
-        "home": "Home"
+        "home": "Home",
+        "sell": "Sell Property",
+        "cancel_sell": "Cancel Sell",
+        "buy": "Buy Property",
+        "for_sale": "House For Sale",
+        "selling_property": "Selling Property"
     },
     "instructButtons": {
         "up": "Up",
@@ -70,6 +88,8 @@
         "buy_property": "Player %s bought property %s.",
         "stop_renting": "Player %s stopped renting property %s.",
         "add_decoration": "Player %s added decoration %s to property %s.",
-        "remove_decoration": "Player %s removed decoration %s from property %s."
+        "remove_decoration": "Player %s removed decoration %s from property %s.",
+        "sell_property": "Player %s started selling property ID %s for $%s.",
+        "cancel_sell_property": "Player %s cancelled selling property ID %s."
     }
 }

@@ -132,7 +132,7 @@ lib.callback.register('qbx_properties:callback:loadProperties', function()
 end)
 
 lib.callback.register('qbx_properties:callback:requestProperties', function(_, propertyCoords)
-    return MySQL.query.await('SELECT property_name, owner, id, price, rent_interval, keyholders FROM properties WHERE coords = ?', {json.encode(propertyCoords)})
+    return MySQL.query.await('SELECT property_name, owner, id, price, rent_interval, keyholders, is_selling, sell_price FROM properties WHERE coords = ?', {json.encode(propertyCoords)})
 end)
 
 local function hasAccess(citizenId, propertyId)
@@ -251,7 +251,7 @@ lib.callback.register('qbx_properties:callback:getKeyholderConfig', function()
 end)
 
 lib.callback.register('qbx_properties:callback:requestPropertiesForBlips', function()
-    return MySQL.query.await('SELECT property_name, owner, keyholders, coords FROM properties')
+    return MySQL.query.await('SELECT property_name, owner, keyholders, coords, is_selling, price FROM properties')
 end)
 
 RegisterNetEvent('qbx_properties:server:letRingerIn', function(visitorCid)
@@ -488,31 +488,47 @@ RegisterNetEvent('qbx_properties:server:rentProperty', function(propertyId)
 end)
 
 RegisterNetEvent('qbx_properties:server:buyProperty', function(propertyId)
-    local playerSource = source --[[@as number]]
+    local playerSource = source
     local player = exports.qbx_core:GetPlayer(playerSource)
     local playerCoords = GetEntityCoords(GetPlayerPed(playerSource))
-    local property = MySQL.single.await('SELECT owner, price, property_name, coords, keyholders, garage FROM properties WHERE id = ?', {propertyId})
+    local property = MySQL.single.await('SELECT owner, price, property_name, coords, keyholders, garage, is_selling, sell_price FROM properties WHERE id = ?', {propertyId})
     local propertyCoords = json.decode(property.coords)
 
-    if #(playerCoords - vec3(propertyCoords.x, propertyCoords.y, propertyCoords.z)) > 8.0 or property.owner then return end
+    if #(playerCoords - vec3(propertyCoords.x, propertyCoords.y, propertyCoords.z)) > 8.0 then return end
 
-    if not player.Functions.RemoveMoney('cash', property.price, string.format('Purchased %s', property.property_name)) and not player.Functions.RemoveMoney('bank', property.price, string.format('Purchased %s', property.property_name)) then
-        exports.qbx_core:Notify(playerSource, 'Not enough money to purchase property.', 'error')
+    if property.owner and not property.is_selling then
+        exports.qbx_core:Notify(playerSource, locale('notify.not_for_sale'), 'error')
         return
+    end
+
+    local purchasePrice = property.is_selling and property.sell_price or property.price
+    if not player.Functions.RemoveMoney('cash', purchasePrice, string.format('Purchased %s', property.property_name)) and not player.Functions.RemoveMoney('bank', purchasePrice, string.format('Purchased %s', property.property_name)) then
+        exports.qbx_core:Notify(playerSource, locale('notify.not_enough_money'), 'error')
+        return
+    end
+
+    if property.is_selling then
+        local previousOwner = exports.qbx_core:GetPlayerByCitizenId(property.owner)
+        if previousOwner then
+            previousOwner.Functions.AddMoney('bank', purchasePrice, string.format('Sold %s', property.property_name))
+            exports.qbx_core:Notify(previousOwner.PlayerData.source, string.format(locale('notify.property_sold'), property.property_name, purchasePrice), 'success')
+        else
+            MySQL.update('UPDATE players SET money = JSON_SET(money, "$.bank", JSON_EXTRACT(money, "$.bank") + ?) WHERE citizenid = ?', {purchasePrice, property.owner})
+        end
     end
 
     if property.garage then
         registerGarage(property.property_name, player.PlayerData.citizenid, json.decode(property.keyholders), json.decode(property.garage))
     end
 
-    MySQL.update('UPDATE properties SET owner = ? WHERE id = ?', {player.PlayerData.citizenid, propertyId})
-    exports.qbx_core:Notify(playerSource, string.format('Successfully purchased %s for $%s', property.property_name, property.price))
-    TriggerClientEvent('qbx_properties:client:refreshBlips', playerSource) -- Refresh blips
+    MySQL.update('UPDATE properties SET owner = ?, price = ?, is_selling = ?, sell_price = ? WHERE id = ?', {player.PlayerData.citizenid, purchasePrice, false, nil, propertyId})
+    exports.qbx_core:Notify(playerSource, string.format(locale('notify.purchased'), property.property_name, purchasePrice), 'success')
+    TriggerClientEvent('qbx_properties:client:refreshBlips', -1)
 
     logger.log({
         source = playerSource,
         event = 'qbx_properties:server:buyProperty',
-        message = locale('logs.buy_property', player.PlayerData.citizenid, propertyId),
+        message = string.format(locale('logs.buy_property'), player.PlayerData.citizenid, propertyId),
         webhook = config.discordWebhook
     })
 end)
@@ -591,6 +607,50 @@ RegisterNetEvent('qbx_properties:server:removeDecoration', function(objectId)
         source = player.PlayerData.source,
         event = 'qbx_properties:server:removeDecoration',
         message = locale('logs.remove_decoration', player.PlayerData.citizenid, objectId, propertyId),
+        webhook = config.discordWebhook
+    })
+end)
+
+RegisterNetEvent('qbx_properties:server:sellProperty', function(propertyId, sellPrice)
+    local playerSource = source
+    local player = exports.qbx_core:GetPlayer(playerSource)
+    local property = MySQL.single.await('SELECT owner, property_name FROM properties WHERE id = ?', {propertyId})
+
+    if player.PlayerData.citizenid ~= property.owner then
+        exports.qbx_core:Notify(playerSource, locale('notify.no_access'), 'error')
+        return
+    end
+
+    MySQL.update('UPDATE properties SET is_selling = ?, sell_price = ? WHERE id = ?', {true, sellPrice, propertyId})
+    exports.qbx_core:Notify(playerSource, string.format(locale('notify.sell_started'), property.property_name, sellPrice), 'success')
+    TriggerClientEvent('qbx_properties:client:refreshBlips', -1)
+
+    logger.log({
+        source = playerSource,
+        event = 'qbx_properties:server:sellProperty',
+        message = string.format(locale('logs.sell_property'), player.PlayerData.citizenid, propertyId, sellPrice),
+        webhook = config.discordWebhook
+    })
+end)
+
+RegisterNetEvent('qbx_properties:server:cancelSellProperty', function(propertyId)
+    local playerSource = source
+    local player = exports.qbx_core:GetPlayer(playerSource)
+    local property = MySQL.single.await('SELECT owner, property_name FROM properties WHERE id = ?', {propertyId})
+
+    if player.PlayerData.citizenid ~= property.owner then
+        exports.qbx_core:Notify(playerSource, locale('notify.no_access'), 'error')
+        return
+    end
+
+    MySQL.update('UPDATE properties SET is_selling = ?, sell_price = ? WHERE id = ?', {false, nil, propertyId})
+    exports.qbx_core:Notify(playerSource, string.format(locale('notify.sell_cancelled'), property.property_name), 'success')
+    TriggerClientEvent('qbx_properties:client:refreshBlips', -1)
+
+    logger.log({
+        source = playerSource,
+        event = 'qbx_properties:server:cancelSellProperty',
+        message = string.format(locale('logs.cancel_sell_property'), player.PlayerData.citizenid, propertyId),
         webhook = config.discordWebhook
     })
 end)
