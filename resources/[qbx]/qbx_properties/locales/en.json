@@ -10,7 +10,8 @@
         "not_for_sale": "This property is not for sale.",
         "not_enough_money": "You do not have enough money to purchase this property.",
         "purchased": "You have purchased %s for $%s!",
-        "property_sold": "You have sold %s for $%s!"
+        "property_sold": "You have sold %s for $%s!",
+        "keyholder_removed_on_sell": "Your keyholder access to %s has been revoked because it is now for sale."
     },
     "alert": {
         "give_keys": "Give keys to this person?",

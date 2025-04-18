@@ -614,14 +614,23 @@ end)
 RegisterNetEvent('qbx_properties:server:sellProperty', function(propertyId, sellPrice)
     local playerSource = source
     local player = exports.qbx_core:GetPlayer(playerSource)
-    local property = MySQL.single.await('SELECT owner, property_name FROM properties WHERE id = ?', {propertyId})
+    local property = MySQL.single.await('SELECT owner, property_name, keyholders FROM properties WHERE id = ?', {propertyId})
 
     if player.PlayerData.citizenid ~= property.owner then
         exports.qbx_core:Notify(playerSource, locale('notify.no_access'), 'error')
         return
     end
 
-    MySQL.update('UPDATE properties SET is_selling = ?, sell_price = ? WHERE id = ?', {true, sellPrice, propertyId})
+    -- Notify and clear keyholders
+    local keyholders = json.decode(property.keyholders) or {}
+    for _, citizenid in ipairs(keyholders) do
+        local keyholder = exports.qbx_core:GetPlayerByCitizenId(citizenid)
+        if keyholder then
+            exports.qbx_core:Notify(keyholder.PlayerData.source, string.format(locale('notify.keyholder_removed_on_sell'), property.property_name), 'error')
+        end
+    end
+
+    MySQL.update('UPDATE properties SET is_selling = ?, sell_price = ?, keyholders = ? WHERE id = ?', {true, sellPrice, json.encode({}), propertyId})
     exports.qbx_core:Notify(playerSource, string.format(locale('notify.sell_started'), property.property_name, sellPrice), 'success')
     TriggerClientEvent('qbx_properties:client:refreshBlips', -1)
 
