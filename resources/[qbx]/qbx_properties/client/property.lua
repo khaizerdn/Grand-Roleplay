@@ -345,20 +345,20 @@ local function singlePropertyMenu(property, noBackMenu)
                     end
                 end
             }
-        else
-            options[#options + 1] = {
-                title = locale('menu.sell'),
-                icon = 'dollar-sign',
-                arrow = true,
-                onSelect = function()
-                    local input = lib.inputDialog(locale('alert.sell_property'), {
-                        {type = 'number', label = locale('alert.sell_price'), description = locale('alert.sell_price_description'), required = true, min = 1, icon = 'dollar-sign'}
-                    })
-                    if input then
-                        TriggerServerEvent('qbx_properties:server:sellProperty', property.id, input[1])
-                    end
-                end
-            }
+        -- else
+        --     options[#options + 1] = {
+        --         title = locale('menu.sell'),
+        --         icon = 'dollar-sign',
+        --         arrow = true,
+        --         onSelect = function()
+        --             local input = lib.inputDialog(locale('alert.sell_property'), {
+        --                 {type = 'number', label = locale('alert.sell_price'), description = locale('alert.sell_price_description'), required = true, min = 1, icon = 'dollar-sign'}
+        --             })
+        --             if input then
+        --                 TriggerServerEvent('qbx_properties:server:sellProperty', property.id, input[1])
+        --             end
+        --         end
+        --     }
         end
     elseif not property.owner or property.is_selling then
         options[#options + 1] = {

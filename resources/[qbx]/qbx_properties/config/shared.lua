@@ -46,81 +46,81 @@ return {
             clothing = vec3(6.03, 9.3, 0.0),
             stash = vec3(6.91, 3.94, 0.0),
             logout = vec3(4.07, 7.89, 0.0),
-            apartmentStash = { slots = 50, maxWeight = 150000 },
+            apartmentStash = { slots = 20, maxWeight = 40000 },
             maxKeyholders = 5,
-            keyholderFee = 100
+            keyholderFee = 400
         },
         ['4IntegrityWayApt28'] = {
             exit = vec4(-30.58, -595.4, 80.03, 246.95),
             clothing = vec3(-38.25, -589.71, 78.83),
             stash = vec3(-12.1, -598.26, 79.43),
             logout = vec3(-37.14, -583.65, 78.83),
-            apartmentStash = { slots = 50, maxWeight = 250000 },
+            apartmentStash = { slots = 50, maxWeight = 100000 },
             maxKeyholders = 5,
-            keyholderFee = 100
+            keyholderFee = 1000
         },
         ['4IntegrityWayApt30'] = {
             exit = vec4(-17.41, -588.17, 90.11, 338.23),
             clothing = vec3(-38.11, -583.48, 83.92),
             stash = vec3(-26.95, -588.61, 90.12),
             logout = vec3(-37.28, -577.89, 83.91),
-            apartmentStash = { slots = 50, maxWeight = 350000 },
+            apartmentStash = { slots = 50, maxWeight = 100000 },
             maxKeyholders = 5,
-            keyholderFee = 100
+            keyholderFee = 1000
         },
         ['DellPerroHeightsApt4'] = {
             exit = vec4(-1453.02, -539.5, 74.04, 35.33),
             clothing = vec3(-1449.88, -549.25, 72.84),
             stash = vec3(-1466.83, -527.03, 73.44),
             logout = vec3(-1454.08, -553.25, 72.84),
-            apartmentStash = { slots = 50, maxWeight = 450000 },
+            apartmentStash = { slots = 50, maxWeight = 100000 },
             maxKeyholders = 5,
-            keyholderFee = 100
+            keyholderFee = 1000
         },
         ['DellPerroHeightsApt7'] = {
             exit = vec3(-1458.5, -520.89, 56.93),
             clothing = vec3(-1467.46, -537.28, 50.73),
             stash = vec3(-1457.44, -531.26, 56.94),
             logout = vec3(-1471.83, -533.47, 50.72),
-            apartmentStash = { slots = 50, maxWeight = 550000 },
+            apartmentStash = { slots = 50, maxWeight = 100000 },
             maxKeyholders = 5,
-            keyholderFee = 100
+            keyholderFee = 1000
         },
         ['RichardMajesticApt2'] = {
             exit = vec4(-913.5, -365.59, 114.27, 115.57),
             clothing = vec3(-903.79, -363.99, 113.07),
             stash = vec3(-928.04, -377.22, 113.67),
             logout = vec3(-900.27, -368.65, 113.07),
-            apartmentStash = { slots = 50, maxWeight = 650000 },
+            apartmentStash = { slots = 50, maxWeight = 100000 },
             maxKeyholders = 5,
-            keyholderFee = 100
+            keyholderFee = 1000
         },
         ['TinselTowersApt42'] = {
             exit = vec4(-604.06, 58.99, 98.2, 91.45),
             clothing = vec3(-594.63, 56.15, 97.0),
             stash = vec3(-622.36, 55.09, 97.6),
             logout = vec3(-593.71, 50.18, 97.0),
-            apartmentStash = { slots = 50, maxWeight = 750000 },
+            apartmentStash = { slots = 50, maxWeight = 100000 },
             maxKeyholders = 5,
-            keyholderFee = 100
+            keyholderFee = 1000
         },
         ['GTAOHouseMid1'] = {
             exit = vec4(346.76, -1011.52, -99.2, 358.57),
             clothing = vec3(350.84, -993.9, -99.2),
             stash = vec3(351.98, -998.8, -99.2),
             logout = vec3(349.24, -995.09, -99.2),
-            apartmentStash = { slots = 50, maxWeight = 850000 },
+            apartmentStash = { slots = 20, maxWeight = 40000 },
             maxKeyholders = 5,
-            keyholderFee = 100
+            keyholderFee = 400
         },
         ['GTAOHouseLow1'] = {
             exit = vec4(266.2, -1007.03, -100.92, 6.02),
             clothing = vec3(260.4, -1003.27, -99.01),
             stash = vec3(265.96, -999.37, -99.01),
             logout = vec3(262.91, -1002.92, -99.01),
-            apartmentStash = { slots = 50, maxWeight = 950000 },
+            apartmentStash = { slots = 10, maxWeight = 20000 },
             maxKeyholders = 5,
-            keyholderFee = 100
+            keyholderFee = 200
         },
     }
 }
