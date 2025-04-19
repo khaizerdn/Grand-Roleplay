@@ -243,10 +243,20 @@ lib.callback.register('qbx_properties:callback:checkAccess', function(source)
     return result.owner == exports.qbx_core:GetPlayer(source).PlayerData.citizenid
 end)
 
-lib.callback.register('qbx_properties:callback:getKeyholderConfig', function()
+lib.callback.register('qbx_properties:callback:getKeyholderConfig', function(source)
+    local propertyId = enteredProperty[source]
+    if not propertyId then return nil end
+
+    local property = MySQL.single.await('SELECT interior FROM properties WHERE id = ?', {propertyId})
+    if not property then return nil end
+
+    local interior = property.interior
+    local interiorConfig = sharedConfig.interiors[interior]
+    if not interiorConfig then return nil end
+
     return {
-        maxKeyholders = config.maxKeyholders,
-        keyholderFee = config.keyholderFee
+        maxKeyholders = interiorConfig.maxKeyholders,
+        keyholderFee = interiorConfig.keyholderFee
     }
 end)
 
@@ -275,19 +285,22 @@ RegisterNetEvent('qbx_properties:server:letRingerIn', function(visitorCid)
 end)
 
 RegisterNetEvent('qbx_properties:server:addKeyholder', function(keyholderCid)
-    local playerSource = source --[[@as number]]
+    local playerSource = source
     local owner = exports.qbx_core:GetPlayer(playerSource)
     local propertyId = enteredProperty[playerSource]
-    local result = MySQL.single.await('SELECT owner, keyholders FROM properties WHERE id = ?', {propertyId})
+    local result = MySQL.single.await('SELECT owner, keyholders, interior FROM properties WHERE id = ?', {propertyId})
 
     if owner.PlayerData.citizenid ~= result.owner then return end
 
     local keyholders = json.decode(result.keyholders)
     if lib.table.contains(keyholders, keyholderCid) then return end
-    if config.maxKeyholders ~= -1 and #keyholders >= config.maxKeyholders then
+
+    local maxKeyholders = sharedConfig.interiors[result.interior].maxKeyholders
+    if maxKeyholders ~= -1 and #keyholders >= maxKeyholders then
         exports.qbx_core:Notify(playerSource, locale('notify.keyholder_limit_reached'), 'error')
         return
     end
+
     keyholders[#keyholders + 1] = keyholderCid
     MySQL.Sync.execute('UPDATE properties SET keyholders = ? WHERE id = ?', {json.encode(keyholders), propertyId})
     local keyholder = exports.qbx_core:GetPlayerByCitizenId(keyholderCid)
@@ -427,12 +440,12 @@ end
 local function startRentThread(propertyId)
     CreateThread(function()
         while true do
-            local property = MySQL.single.await('SELECT owner, price, rent_interval, property_name, keyholders FROM properties WHERE id = ?', {propertyId})
+            local property = MySQL.single.await('SELECT owner, price, rent_interval, property_name, keyholders, interior FROM properties WHERE id = ?', {propertyId})
             if not property or not property.owner then break end
 
             local keyholders = json.decode(property.keyholders) or {}
-            local keyholderFee = #keyholders * config.keyholderFee -- Calculate additional fee
-            local totalRent = property.price + keyholderFee -- Base rent + keyholder fee
+            local keyholderFee = #keyholders * sharedConfig.interiors[property.interior].keyholderFee
+            local totalRent = property.price + keyholderFee
 
             local player = exports.qbx_core:GetPlayerByCitizenId(property.owner) or exports.qbx_core:GetOfflinePlayer(property.owner)
             if not player then print(string.format('%s does not exist anymore, consider checking property id %s', property.owner, propertyId)) break end

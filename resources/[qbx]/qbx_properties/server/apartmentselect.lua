@@ -3,7 +3,7 @@ local sharedConfig = require 'config.shared'
 local logger = require '@qbx_core.modules.logger'
 
 RegisterNetEvent('qbx_properties:server:apartmentSelect', function(apartmentIndex)
-    local playerSource = source --[[@as number]]
+    local playerSource = source
     local player = exports.qbx_core:GetPlayer(playerSource)
     if not sharedConfig.apartmentOptions[apartmentIndex] then return end
 
@@ -12,24 +12,15 @@ RegisterNetEvent('qbx_properties:server:apartmentSelect', function(apartmentInde
 
     local interior = sharedConfig.apartmentOptions[apartmentIndex].interior
     local interactData = {
-        {
-            type = 'logout',
-            coords = sharedConfig.interiors[interior].logout
-        },
-        {
-            type = 'clothing',
-            coords = sharedConfig.interiors[interior].clothing
-        },
-        {
-            type = 'exit',
-            coords = sharedConfig.interiors[interior].exit
-        }
+        { type = 'logout', coords = sharedConfig.interiors[interior].logout },
+        { type = 'clothing', coords = sharedConfig.interiors[interior].clothing },
+        { type = 'exit', coords = sharedConfig.interiors[interior].exit }
     }
     local stashData = {
         {
             coords = sharedConfig.interiors[interior].stash,
-            slots = config.apartmentStash.slots,
-            maxWeight = config.apartmentStash.maxWeight,
+            slots = sharedConfig.interiors[interior].apartmentStash.slots,
+            maxWeight = sharedConfig.interiors[interior].apartmentStash.maxWeight,
         }
     }
 
