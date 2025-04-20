@@ -7,7 +7,7 @@ return {
 			{ name = 'burger', price = 10 },
 			{ name = 'water', price = 10 }
 		}, locations = {
-			vec3(25.7, -1347.3, 29.49),
+			vec3(25.64, -1347.67, 29.5),
 			vec3(-3038.71, 585.9, 7.9),
 			vec3(-3241.47, 1001.14, 12.83),
 			vec3(1728.66, 6414.16, 35.03),
@@ -38,10 +38,10 @@ return {
 			{ name = 'water', price = 10 }
 		}, locations = {
 			vec3(-48.47, -1757.98, 29.42),
-			vec3(-706.17, -913.52, 19.22),
-			vec3(1698.17, 4922.89, 42.06),
-			vec3(-1820.22, 794.24, 138.09),
-			vec3(1164.65, -322.64, 69.21),
+			vec3(-707.32, -914.77, 19.22),
+			vec3(1697.85, 4924.55, 42.06),
+			vec3(-1820.22, 792.53, 138.11),
+			vec3(1163.71, -324.1, 69.21),
 			
 		}, targets = {
 			{ loc = vec3(-46.66, -1757.88, 28.42), length = 0.5, width = 0.5, heading = 54.25, minZ = 42.06, maxZ = 42.46, distance = 1.5, ped = `mp_m_shopkeep_01`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' },
@@ -106,7 +106,7 @@ return {
 			vec3(1693.44, 3760.16, 34.71),
 			vec3(-330.24, 6083.88, 31.45),
 			vec3(252.63, -50.00, 69.94),
-			vec3(22.56, -1109.89, 29.80),
+			vec3(22.31, -1106.75, 29.8),
 			vec3(2567.69, 294.38, 108.73),
 			vec3(-1117.58, 2698.61, 18.55),
 			vec3(842.44, -1033.42, 28.19)
@@ -137,7 +137,7 @@ return {
 			{ name = 'WEAPON_CARBINERIFLE', price = 1000, metadata = { registered = true, serial = 'POL' }, license = 'weapon', grade = 3 },
 			{ name = 'WEAPON_STUNGUN', price = 500, metadata = { registered = true, serial = 'POL'} }
 		}, locations = {
-			vec3(308.18, -595.46, 43.29)
+			vec3(452.41, -980.05, 30.69)
 		}, targets = {
 			{ loc = vec3(454.05, -980.03, 29.69), length = 0.5, width = 3.0, heading = 92.38, minZ = 30.5, maxZ = 32.0, distance = 1.5, ped = `mp_m_securoguard_01`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' }
 		}
