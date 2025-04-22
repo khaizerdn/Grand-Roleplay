@@ -63,7 +63,7 @@ CreateThread(function()
 
                 lib.showTextUI(locale('textUI.tune'), {
                     icon = 'fa-solid fa-car',
-                    position = 'left-center',
+                    position = 'top-left',
                 })
             end,
             onExit = function()
@@ -75,7 +75,7 @@ CreateThread(function()
                     if not lib.isTextUIOpen() then
                         lib.showTextUI(locale('textUI.tune'), {
                             icon = 'fa-solid fa-car',
-                            position = 'left-center',
+                            position = 'top-left',
                         })
                     end
                     if IsControlJustPressed(0, 38) then
