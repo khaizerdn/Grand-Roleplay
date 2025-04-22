@@ -25,7 +25,11 @@ function peds.getClosest(position)
     for i = 1, #peds.created do
         local entity = NetworkGetEntityFromNetworkId(peds.created[i])
         if entity and DoesEntityExist(entity) then
-            local dist = #(GetEntityCoords(entity, false) - position)
+            local entityCoords = GetEntityCoords(entity, false)
+            local dx = entityCoords.x - position.x
+            local dy = entityCoords.y - position.y
+            local dz = entityCoords.z - position.z
+            local dist = math.sqrt(dx * dx + dy * dy + dz * dz)
             if not closestDist or dist < closestDist then
                 closestNet = peds.created[i]
                 closestDist = dist

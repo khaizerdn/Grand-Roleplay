@@ -81,7 +81,9 @@ local function finishRobbery(index)
         if GlobalState[string.format("ff_shoprobbery:store:%s", index)].cooldown ~= -1 then
             updateStore(index, "cooldown", -1)
             peds.create(Config.Locations[index].ped, index) -- Respawn ped
-            local success, netId = lib.callback.await("ff_shoprobbery:createSafe", false, Config.Locations[index].safe)
+            if not src or src <= 0 then return end
+            if not closestStore or not Config.Locations[closestStore] then return end
+            local success, netId = lib.callback.await("ff_shoprobbery:createSafe", src, Config.Locations[closestStore].safe)
             if success then
                 updateStore(index, "safeNet", netId)
             end
