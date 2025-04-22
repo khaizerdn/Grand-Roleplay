@@ -1,8 +1,5 @@
 lib.locale()
 
-GlobalState["ff_shoprobbery:active"] = false
-GlobalState["ff_shoprobbery:cooldown"] = false
-
 local peds = require "server.peds"
 require "server.version"
 
@@ -47,50 +44,33 @@ local function updateStore(storeIndex, key, value)
     GlobalState[string.format("ff_shoprobbery:store:%s", storeIndex)] = storeData
 end
 
---- Resets all the robbery states back to default value
+--- Resets all the robbery states for a specific store back to default value
 ---@param index number
 local function finishRobbery(index)
     if not index or type(index) ~= "number" then return end
-    if not GlobalState[string.format("ff_shoprobbery:store:%s", index)] then return end
+    local storeData = GlobalState[string.format("ff_shoprobbery:store:%s", index)]
+    if not storeData then return end
 
-    local safeNetworkId = GlobalState[string.format("ff_shoprobbery:store:%s", index)].safeNet
-    GlobalState["ff_shoprobbery:active"] = false
-    GlobalState["ff_shoprobbery:cooldown"] = os.time() + Config.GlobalCooldown
-    GlobalState[string.format("ff_shoprobbery:store:%s", index)] = {
-        robbedTill = false,
-        cooldown = Config.UseStoreCooldown and os.time() + Config.StoreCooldown or -1,
-        lastSafe = safeNetworkId,
-        hackedNetwork = false,
-        safeCode = generateSafeCode(),
-        openedSafe = false,
-        safeNet = -1
-    }
+    local safeNetworkId = storeData.safeNet
+    updateStore(index, "active", false)
+    updateStore(index, "robbedTill", false)
+    updateStore(index, "hackedNetwork", false)
+    updateStore(index, "openedSafe", false)
+    updateStore(index, "safeNet", -1)
+    updateStore(index, "cooldown", os.time() + Config.StoreCooldown)
 
     TriggerClientEvent("ff_shoprobbery:client:disableNetwork", -1, index)
 
-    -- Handle resetting global cooldown
-    SetTimeout(Config.GlobalCooldown * 1000, function()
-        -- If the global cooldown is still active (hasn't been reset with commands, reset it)
-        if GlobalState["ff_shoprobbery:cooldown"] then
-            GlobalState["ff_shoprobbery:cooldown"] = false
-            Wait(1000) -- Wait a second for the statebag to sync
-            TriggerClientEvent("ff_shoprobbery:client:reset", -1)
-        end
-    end)
-
     -- Handle resetting store cooldown
-    if not Config.UseStoreCooldown then return end
     SetTimeout(Config.StoreCooldown * 1000, function()
-        -- If the store cooldown is still active (hasn't been reset with commands, reset it)
         if GlobalState[string.format("ff_shoprobbery:store:%s", index)].cooldown ~= -1 then
             updateStore(index, "cooldown", -1)
-            
             local safeNet = GlobalState[string.format("ff_shoprobbery:store:%s", index)].lastSafe
             if safeNet then
                 local entity = NetworkGetEntityFromNetworkId(safeNet)
-                if not entity or not DoesEntityExist(entity) then return end
-
-                DeleteEntity(entity)
+                if entity and DoesEntityExist(entity) then
+                    DeleteEntity(entity)
+                end
                 updateStore(index, "lastSafe", -1)
             end
         end
@@ -111,41 +91,30 @@ RegisterNetEvent("ff_shoprobbery:server:startedRobbery", function(tillCoords, ti
     local player = GetPlayer(src)
     if not player then return end
 
-    -- Prevent robbing the store if it's already being robbed
-    if GlobalState["ff_shoprobbery:active"] then
-        return Notify(src, locale("error.active"), "error")
-    end
-
-    -- Prevent robbing the store if global cooldown is active
-    if GlobalState["ff_shoprobbery:cooldown"] then
-        return Notify(src, locale("error.cooldown"), "error")
-    end
-
-    -- Prevent robbing the store if not found or store cooldown is active
     local closestStore = getClosestStore(tillCoords)
-    if not closestStore or GlobalState[string.format("ff_shoprobbery:store:%s", closestStore)].cooldown ~= -1 then
-        return Notify(src, locale("error.already_robbed"), "error")
+    if not closestStore then
+        return Notify(src, "Store not found", "error")
     end
 
-    -- Prevent robbing the store if not enough police are available
+    local storeData = GlobalState[string.format("ff_shoprobbery:store:%s", closestStore)]
+    if storeData.active then
+        return Notify(src, "This store is already being robbed", "error")
+    end
+
+    if storeData.cooldown ~= -1 then
+        return Notify(src, "This store is on cooldown", "error")
+    end
+
     local activePolice = GetPoliceCount()
     if activePolice < Config.RequiredPolice then
         return Notify(src, string.format(locale("error.not_enough_police"), Config.RequiredPolice), "error")
     end
 
     local netId, distance = peds.getClosest(tillCoords)
-    
-    -- Check if the stores clerk exists
-    if not netId or not distance then
-        return
-    end
+    if not netId or not distance then return end
+    if distance >= 3.0 then return end
 
-    -- Make sure the clerk is close enough
-    if distance >= 3.0 then
-        return
-    end
-
-    GlobalState["ff_shoprobbery:active"] = true
+    updateStore(closestStore, "active", true)
     TriggerClientEvent("ff_shoprobbery:client:robTill", src, netId, tillCoords, tillRotation)
     SendLog(src, GetPlayerName(src), locale("logs.started.title"), string.format(locale("logs.started.description"), closestStore), Colours.FiveForgeBlue)
 end)
@@ -172,19 +141,8 @@ RegisterNetEvent("ff_shoprobbery:server:cashDropped", function(pickupCoords, pic
     local player = GetPlayer(src)
     if not player then return end
 
-    -- Prevent robbing the store if it's already being robbed
-    if not GlobalState["ff_shoprobbery:active"] then
-        return Notify(src, locale("error.active"), "error")
-    end
-
-    -- Prevent robbing the store if global cooldown is active
-    if GlobalState["ff_shoprobbery:cooldown"] then
-        return Notify(src, locale("error.cooldown"), "error")
-    end
-
-    -- Prevent robbing the store if not found or store cooldown is active
     local closestStore = getClosestStore(pickupCoords)
-    if not closestStore or GlobalState[string.format("ff_shoprobbery:store:%s", closestStore)].cooldown ~= -1 then return end
+    if not closestStore or not GlobalState[string.format("ff_shoprobbery:store:%s", closestStore)].active then return end
 
     local success, netId = lib.callback.await("ff_shoprobbery:createSafe", src, Config.Locations[closestStore].safe)
     if not success or (not netId or netId <= 0) then return end
@@ -203,19 +161,8 @@ RegisterNetEvent("ff_shoprobbery:server:cashCollected", function(pickupCoords)
     local player = GetPlayer(src)
     if not player then return end
 
-    -- Prevent robbing the store if it's already being robbed
-    if not GlobalState["ff_shoprobbery:active"] then
-        return Notify(src, locale("error.active"), "error")
-    end
-
-    -- Prevent robbing the store if global cooldown is active
-    if GlobalState["ff_shoprobbery:cooldown"] then
-        return Notify(src, locale("error.cooldown"), "error")
-    end
-    
-    -- Prevent robbing the store if not found or store cooldown is active
     local closestStore = getClosestStore(pickupCoords)
-    if not closestStore or GlobalState[string.format("ff_shoprobbery:store:%s", closestStore)].cooldown ~= -1 then return end
+    if not closestStore or not GlobalState[string.format("ff_shoprobbery:store:%s", closestStore)].active then return end
 
     local ped = GetPlayerPed(src)
     local pedCoords = GetEntityCoords(ped, false)
@@ -238,25 +185,13 @@ lib.callback.register('ff_shoprobbery:getSafeCode', function(source, storeIndex)
     local player = GetPlayer(src)
     if not player then return false end
 
-    -- Prevent robbing the store if it's already being robbed
-    if not GlobalState["ff_shoprobbery:active"] then
-        return Notify(src, locale("error.active"), "error")
-    end
-
-    -- Prevent robbing the store if global cooldown is active
-    if GlobalState["ff_shoprobbery:cooldown"] then
-        return Notify(src, locale("error.cooldown"), "error")
-    end
+    local storeData = GlobalState[string.format("ff_shoprobbery:store:%s", storeIndex)]
+    if not storeData or not storeData.active then return false end
 
     local ped = GetPlayerPed(src)
     local pedCoords = GetEntityCoords(ped, false)
     local storeConfig = Config.Locations[storeIndex]
-    if not storeConfig then return false end
-
-    if #(pedCoords - storeConfig.network.coords) > 2.0 then return false end
-
-    local storeData = GlobalState[string.format("ff_shoprobbery:store:%s", storeIndex)]
-    if not storeData then return false end
+    if not storeConfig or #(pedCoords - storeConfig.network.coords) > 2.0 then return false end
 
     updateStore(storeIndex, "hackedNetwork", true)
     SendLog(src, GetPlayerName(src), locale("logs.hacked_network.title"), string.format(locale("logs.hacked_network.description"), storeIndex), Colours.FiveForgeBlue)
@@ -275,25 +210,13 @@ lib.callback.register('ff_shoprobbery:openSafe', function(source, storeIndex, en
     local player = GetPlayer(src)
     if not player then return false end
 
-    -- Prevent robbing the store if it's already being robbed
-    if not GlobalState["ff_shoprobbery:active"] then
-        return Notify(src, locale("error.active"), "error")
-    end
-
-    -- Prevent robbing the store if global cooldown is active
-    if GlobalState["ff_shoprobbery:cooldown"] then
-        return Notify(src, locale("error.cooldown"), "error")
-    end
+    local storeData = GlobalState[string.format("ff_shoprobbery:store:%s", storeIndex)]
+    if not storeData or not storeData.active then return false end
 
     local ped = GetPlayerPed(src)
     local pedCoords = GetEntityCoords(ped, false)
     local storeConfig = Config.Locations[storeIndex]
-    if not storeConfig then return false end
-
-    if #(pedCoords - vector3(storeConfig.safe.x, storeConfig.safe.y, storeConfig.safe.z)) > 2.0 then return false end
-
-    local storeData = GlobalState[string.format("ff_shoprobbery:store:%s", storeIndex)]
-    if not storeData then return false end
+    if not storeConfig or #(pedCoords - vector3(storeConfig.safe.x, storeConfig.safe.y, storeConfig.safe.z)) > 2.0 then return false end
 
     if storeData.safeCode ~= enteredCode then return false end
     updateStore(storeIndex, "openedSafe", true)
@@ -309,27 +232,15 @@ RegisterNetEvent("ff_shoprobbery:server:lootedSafe", function(storeIndex, safeNe
 
     local src = source
     local player = GetPlayer(src)
-    if not player then return false end
+    if not player then return end
 
-    -- Prevent robbing the store if it's already being robbed
-    if not GlobalState["ff_shoprobbery:active"] then
-        return Notify(src, locale("error.active"), "error")
-    end
-
-    -- Prevent robbing the store if global cooldown is active
-    if GlobalState["ff_shoprobbery:cooldown"] then
-        return Notify(src, locale("error.cooldown"), "error")
-    end
+    local storeData = GlobalState[string.format("ff_shoprobbery:store:%s", storeIndex)]
+    if not storeData or not storeData.active then return end
 
     local ped = GetPlayerPed(src)
     local pedCoords = GetEntityCoords(ped, false)
     local storeConfig = Config.Locations[storeIndex]
-    if not storeConfig then return false end
-
-    if #(pedCoords - vector3(storeConfig.safe.x, storeConfig.safe.y, storeConfig.safe.z)) > 2.0 then return false end
-
-    local storeData = GlobalState[string.format("ff_shoprobbery:store:%s", storeIndex)]
-    if not storeData then return false end
+    if not storeConfig or #(pedCoords - vector3(storeConfig.safe.x, storeConfig.safe.y, storeConfig.safe.z)) > 2.0 then return end
 
     for _, itemData in pairs(Config.SafeItems) do
         if not itemData.chance or math.random(100) >= itemData.chance then
@@ -345,6 +256,7 @@ end)
 CreateThread(function()
     for i = 1, #Config.Locations do
         GlobalState[string.format("ff_shoprobbery:store:%s", i)] = {
+            active = false,
             robbedTill = false,
             cooldown = -1,
             hackedNetwork = false,
@@ -352,12 +264,12 @@ CreateThread(function()
             openedSafe = false,
             safeNet = -1
         }
-        peds.create(Config.Locations[i].ped)
+        peds.create(Config.Locations[i].ped, i)  -- Pass storeIndex
     end
 end)
 
 lib.addCommand('resetstore', {
-    help = 'This will remove a specific store cooldown. (Will not remove global cooldown)',
+    help = 'This will remove a specific store cooldown.',
     params = {
         {
             name = "storeId",
@@ -378,46 +290,38 @@ lib.addCommand('resetstore', {
         local safeNet = GlobalState[string.format("ff_shoprobbery:store:%s", storeIndex)].lastSafe
         if safeNet then
             local entity = NetworkGetEntityFromNetworkId(safeNet)
-            if not entity or not DoesEntityExist(entity) then return end
-
-            DeleteEntity(entity)
+            if entity and DoesEntityExist(entity) then
+                DeleteEntity(entity)
+            end
             updateStore(storeIndex, "lastSafe", -1)
         end
         
         SendLog(src, GetPlayerName(src), locale("logs.store_cooldown.title"), string.format(locale("logs.store_cooldown.description"), storeIndex), Colours.FiveForgeBlue)
     else
-        Notify(src, locale("error.global_cooldown"), "error")
+        Notify(src, "This store is not on cooldown", "error")
     end
 end)
 
 lib.addCommand('resetstores', {
-    help = 'This will reset all store cooldowns and the global cooldown.',
+    help = 'This will reset all store cooldowns.',
     params = {},
 }, function(source, args)
     if not CanReset(source) then return end
     local src = source
-
-    if GlobalState["ff_shoprobbery:cooldown"] then
-        GlobalState["ff_shoprobbery:cooldown"] = false
-        Wait(1000) -- Wait a second for the statebag to sync
-    else
-        Notify(src, locale("error.global_cooldown"), "error")
-    end
-
-    TriggerClientEvent("ff_shoprobbery:client:reset", -1)
 
     for i = 1, #Config.Locations do
         if GlobalState[string.format("ff_shoprobbery:store:%s", i)].cooldown ~= -1 then
             local safeNet = GlobalState[string.format("ff_shoprobbery:store:%s", i)].lastSafe
             if safeNet then
                 local entity = NetworkGetEntityFromNetworkId(safeNet)
-                if not entity or not DoesEntityExist(entity) then return end
-
-                DeleteEntity(entity)
+                if entity and DoesEntityExist(entity) then
+                    DeleteEntity(entity)
+                end
             end
         end
 
         GlobalState[string.format("ff_shoprobbery:store:%s", i)] = {
+            active = false,
             robbedTill = false,
             cooldown = -1,
             hackedNetwork = false,
@@ -427,7 +331,7 @@ lib.addCommand('resetstores', {
         }
     end
 
-    SendLog(src, GetPlayerName(src), locale("logs.global_cooldown.title"), string.format(locale("logs.global_cooldown.description"), storeIndex), Colours.FiveForgeBlue)
+    SendLog(src, GetPlayerName(src), locale("logs.global_cooldown.title"), "All stores reset", Colours.FiveForgeBlue)
 end)
 
 RegisterNetEvent("ff_shoprobbery:server:cancelRobbery", function(tillCoords)
@@ -437,14 +341,11 @@ RegisterNetEvent("ff_shoprobbery:server:cancelRobbery", function(tillCoords)
     local player = GetPlayer(src)
     if not player then return end
 
-    if not GlobalState["ff_shoprobbery:active"] then return end
-
     local closestStore = getClosestStore(tillCoords)
-    if not closestStore then return end
+    if not closestStore or not GlobalState[string.format("ff_shoprobbery:store:%s", closestStore)].active then return end
 
-    -- Cancel the robbery
     finishRobbery(closestStore)
-    TriggerClientEvent("ff_shoprobbery:client:cancelRobbery", -1) -- Notify all clients
+    TriggerClientEvent("ff_shoprobbery:client:cancelRobbery", -1)
     Notify(src, locale("error.robbery_cancelled_ped_dead"), "error")
     SendLog(src, GetPlayerName(src), locale("logs.cancelled.title"), string.format(locale("logs.cancelled.description"), closestStore), Colours.FiveForgeRed)
 end)

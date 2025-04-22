@@ -4,13 +4,14 @@ local peds = {
 
 --- Create shop peds on server start
 ---@param location vector3
-function peds.create(location)
+function peds.create(location, storeIndex)
     local modelHash = Config.Peds[math.random(1, #Config.Peds)]
     local ped = CreatePed(4, modelHash, location.x, location.y, location.z, location.w, true, false)
     local netId = NetworkGetNetworkIdFromEntity(ped)
 
     if netId and netId > 0 then
         Entity(ped).state:set("ff_shoprobbery:registerPed", true, true)
+        Entity(ped).state:set("storeIndex", storeIndex, true)
         table.insert(peds.created, netId)
     end
 end

@@ -20,7 +20,7 @@ end
 local function startClerkTask()
     CreateThread(function()
         local sleep = 1000
-        while not GlobalState["ff_shoprobbery:active"] and not GlobalState["ff_shoprobbery:cooldown"] do
+        while true do
             local weapon = cache.weapon
             if weapon and weapon ~= `WEAPON_UNARMED` then
                 sleep = 5
@@ -28,29 +28,20 @@ local function startClerkTask()
                     local hit, entity = getPedInFront()
                     if hit and GetEntityType(entity) == 1 and not IsPedAPlayer(entity) then
                         if Entity(entity).state["ff_shoprobbery:registerPed"] then
-                            local clerkPos = GetEntityCoords(entity, false)
-                            local till = GetClosestObjectOfType(clerkPos.x, clerkPos.y, clerkPos.z, 5.0, `prop_till_01`, false, false, false)
-                            if not till or not DoesEntityExist(till) then return end
-                                        
-                            local tillCoords = GetOffsetFromEntityInWorldCoords(till, 0.0, 0.0, -0.12)
-                            local tillRotation = GetEntityRotation(till, 2)
-                            TriggerServerEvent("ff_shoprobbery:server:startedRobbery", tillCoords, tillRotation)
-                                        
-                            -- Monitor ped health
-                            CreateThread(function()
-                                while GlobalState["ff_shoprobbery:active"] do
-                                    local hit, entity = getPedInFront()
-                                    if hit and GetEntityType(entity) == 1 and not IsPedAPlayer(entity) then
-                                        if Entity(entity).state["ff_shoprobbery:registerPed"] and IsEntityDead(entity) then
-                                            TriggerServerEvent("ff_shoprobbery:server:cancelRobbery", tillCoords)
-                                            break
-                                        end
+                            local storeIndex = Entity(entity).state.storeIndex
+                            if storeIndex then
+                                local storeData = GlobalState[string.format("ff_shoprobbery:store:%s", storeIndex)]
+                                if storeData and not storeData.active and storeData.cooldown == -1 then
+                                    local clerkPos = GetEntityCoords(entity, false)
+                                    local till = GetClosestObjectOfType(clerkPos.x, clerkPos.y, clerkPos.z, 5.0, `prop_till_01`, false, false, false)
+                                    if till and DoesEntityExist(till) then
+                                        local tillCoords = GetOffsetFromEntityInWorldCoords(till, 0.0, 0.0, -0.12)
+                                        local tillRotation = GetEntityRotation(till, 2)
+                                        TriggerServerEvent("ff_shoprobbery:server:startedRobbery", tillCoords, tillRotation)
+                                        Wait(5000)
                                     end
-                                    Wait(500)
                                 end
-                            end)
-                                        
-                            Wait(5000) -- Make you wait 5 seconds before sending any other requests so it's not spammed every second
+                            end
                         end
                     end
                 end
@@ -67,8 +58,6 @@ startClerkTask()
 -- Deleting all targets on resource stop/restart
 AddEventHandler("onResourceStop", function(res)
     if res ~= GetCurrentResourceName() then return end
-    network.deleteTargets()
-    safe.deleteTargets()
 end)
 
 --- Used for recreating the aim at clerk task when cooldown is over
@@ -78,27 +67,20 @@ RegisterNetEvent("ff_shoprobbery:client:reset", startClerkTask)
 ---@param index number
 RegisterNetEvent("ff_shoprobbery:client:disableNetwork", function(index)
     if not index or type(index) ~= "number" then return end
-    network.deleteTarget(index)
 end)
 
--- Handle statebag updates
+-- Handle statebag updates for each store
 for i = 1, #Config.Locations do
     AddStateBagChangeHandler(string.format("ff_shoprobbery:store:%s", i), "", function(bagName, key, value, reserved, replicated)
-        Debug("Store data updated (" .. json.encode(value, { indent = true }) .. ")", DebugTypes.Info)
-
+        Debug("Store data updated for store " .. i .. ": " .. json.encode(value, { indent = true }), DebugTypes.Info)
         if value and value.robbedTill and not value.hackedNetwork then
-            if Config.UseTarget then
-                network.createTarget(i)
-            else
-                network.createInteract(i)
-            end
-
-        elseif value and value.robbedTill and value.hackedNetwork and not value.openedSafe then
-            if Config.UseTarget then
-                safe.createTarget(i, value.safeNet)
-            else
-                safe.createInteract(i, value.safeNet)
-            end
+            Wait(100) -- Ensure state sync
+            Debug("Triggering network interaction for store " .. i, DebugTypes.Info)
+            network.createInteract(i)
+        elseif value and value.hackedNetwork and not value.openedSafe then
+            Wait(100) -- Ensure state sync
+            Debug("Triggering safe interaction for store " .. i, DebugTypes.Info)
+            safe.createInteract(i, value.safeNet)
         end
     end)
 end
