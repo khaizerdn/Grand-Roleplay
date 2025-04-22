@@ -14,9 +14,9 @@ end
 ---@param text string
 ---@param position Position
 local function drawText(text, position)
-    position = positions[position] or position
+    -- Force position to always be top-left
     lib.showTextUI(text, {
-        position = position
+        position = 'top-left'
     })
 end
 
@@ -24,16 +24,16 @@ end
 ---@param text string
 ---@param position Position
 local function changeText(text, position)
-    position = positions[position] or position
+    -- Force position to always be top-left
     lib.hideTextUI()
     lib.showTextUI(text, {
-        position = position
+        position = 'top-left'
     })
 end
 
 ---@deprecated use ox_lib showTextUI calls directly
 local function keyPressed()
-    CreateThread(function() -- Not sure if a thread is needed but why not eh?
+    CreateThread(function()
         Wait(500)
         lib.hideTextUI()
     end)
@@ -51,7 +51,7 @@ end)
 
 ---@deprecated use ox_lib showTextUI calls directly
 RegisterNetEvent('qb-core:client:HideText', function()
-    lib.hideTextUI()
+    hideText()
 end)
 
 ---@deprecated use ox_lib showTextUI calls directly

@@ -1,4 +1,4 @@
---[[
+--[[ 
     https://github.com/overextended/ox_lib
 
     This file is licensed under LGPL-3.0 or higher <https://www.gnu.org/licenses/lgpl-3.0.en.html>
@@ -7,11 +7,11 @@
 ]]
 
 ---@class TextUIOptions
----@field position? 'right-center' | 'left-center' | 'top-center' | 'bottom-center';
----@field icon? string | {[1]: IconProp, [2]: string};
----@field iconColor? string;
----@field style? string | table;
----@field alignIcon? 'top' | 'center';
+---@field position? 'top-left' | 'right-center' | 'left-center' | 'top-center' | 'bottom-center'
+---@field icon? string | {[1]: IconProp, [2]: string}
+---@field iconColor? string
+---@field style? string | table
+---@field alignIcon? 'top' | 'center'
 
 local isOpen = false
 local currentText
@@ -22,6 +22,9 @@ function lib.showTextUI(text, options)
     if currentText == text then return end
 
     if not options then options = {} end
+
+    -- Force the position to 'top-left' regardless of what was passed
+    options.position = 'top-left'
 
     options.text = text
     currentText = text
