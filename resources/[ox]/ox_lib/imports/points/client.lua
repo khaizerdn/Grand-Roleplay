@@ -12,10 +12,6 @@
 ---@field onEnter? fun(self: CPoint)
 ---@field onExit? fun(self: CPoint)
 ---@field nearby? fun(self: CPoint)
----@field prompt? { options: { icon: string }?, message: string }
----@field inv? string
----@field invId? number
----@field type? string
 ---@field [string] any
 
 ---@class CPoint : PointProperties
@@ -32,7 +28,6 @@ local nearbyCount = 0
 ---@type CPoint?
 local closestPoint
 local tick
-local lastDisplayedPoint = nil
 
 local function removePoint(self)
     if closestPoint?.id == self.id then
@@ -109,49 +104,16 @@ CreateThread(function()
         if not tick then
             if nearbyCount ~= 0 then
                 tick = SetInterval(function()
-                    local displayed = false
-
                     for i = nearbyCount, 1, -1 do
                         local point = nearbyPoints[i]
 
-                        -- Call nearby function only for points without a prompt
-                        if point and point.nearby and not point.prompt then
+                        if point and point.nearby then
                             point:nearby()
                         end
-
-                        -- Handle prompt points with a smaller radius
-                        if point and point.prompt and point.isClosest then
-                            local promptRadius = 1.0 -- Fixed radius for help text
-                            if point.currentDistance <= promptRadius then
-                                -- Replace control string with ~INPUT_CONTEXT~
-                                local message = point.prompt.message:gsub("%[%w+%]", "~INPUT_CONTEXT~")
-                                -- Display help text
-                                BeginTextCommandDisplayHelp('STRING')
-                                AddTextComponentSubstringPlayerName(message)
-                                EndTextCommandDisplayHelp(0, false, true, -1)
-                                displayed = true
-                                lastDisplayedPoint = point
-
-                                -- Check for E key press to open shop
-                                if point.inv == 'shop' and point.type and IsControlJustPressed(0, 38) then
-                                    client.openInventory('shop', { id = point.invId, type = point.type })
-                                end
-                            end
-                        end
                     end
-
-                    -- Clear help text if no prompt point is within promptRadius or player is not near any prompt point
-                    if not displayed and lastDisplayedPoint then
-                        ClearHelp(true)
-                        lastDisplayedPoint = nil
-                    end
-                end, 0)
+                end)
             end
         elseif nearbyCount == 0 then
-            if lastDisplayedPoint then
-                ClearHelp(true)
-                lastDisplayedPoint = nil
-            end
             tick = ClearInterval(tick)
         end
 
@@ -189,6 +151,7 @@ function lib.points.new(...)
         self.id = id
         self.remove = removePoint
     else
+        -- Backwards compatibility for original implementation (args: coords, distance, data)
         self = {
             id = id,
             coords = args[1],
