@@ -13,16 +13,13 @@ RegisterNetEvent("ff_shoprobbery:client:robTill", function(clerkNet, tillCoords,
     local cashRegister = GetClosestObjectOfType(pedCoords.x, pedCoords.y, pedCoords.z, 5.0, `prop_till_01`, false, false, false)
     if not cashRegister or not DoesEntityExist(cashRegister) then return end
 
+    -- Trigger robbery alert
     RobberyAlert(tillCoords)
-    TriggerServerEvent("ff_shoprobbery:server:removeTill", tillCoords)
 
-    -- Play animation directly from ped's current position
+    -- Play holdup animation
     lib.requestAnimDict("mp_am_hold_up")
     TaskPlayAnim(entity, "mp_am_hold_up", "holdup_victim_20s", 8.0, -8.0, -1, 2, 0, false, false, false)
     while not IsEntityPlayingAnim(entity, "mp_am_hold_up", "holdup_victim_20s", 3) do Wait(0) end
-
-    -- Swap the cashier model to the damaged version to simulate opening during animation
-    CreateModelSwap(GetEntityCoords(cashRegister), 0.5, `prop_till_01`, `prop_till_01_dam`, false)
 
     local timer = GetGameTimer() + 10800
     while timer >= GetGameTimer() do
@@ -33,10 +30,12 @@ RegisterNetEvent("ff_shoprobbery:client:robTill", function(clerkNet, tillCoords,
     end
 
     if not IsEntityDead(entity) then
-        -- Create the plastic bag (only one instance)
-        local bag = CreateObject(`p_poly_bag_01_s`, pedCoords.x, pedCoords.y, pedCoords.z, true, false, false)
-        AttachEntityToEntity(bag, entity, GetPedBoneIndex(entity, 60309), 0.1, -0.11, 0.08, 0.0, -75.0, -75.0, 1, 1, 0, 0, 2, 1)
-        timer = GetGameTimer() + 10000
+        -- Break the closest cash register after animation progresses
+        local cashRegisterCoords = GetEntityCoords(cashRegister, false)
+        CreateModelSwap(cashRegisterCoords.x, cashRegisterCoords.y, cashRegisterCoords.z, 0.5, GetHashKey('prop_till_01'), GetHashKey('prop_till_01_dam'), false)
+
+        -- Small delay before creating bag
+        timer = GetGameTimer() + 200
         while timer >= GetGameTimer() do
             if IsEntityDead(entity) then
                 break
@@ -45,44 +44,63 @@ RegisterNetEvent("ff_shoprobbery:client:robTill", function(clerkNet, tillCoords,
         end
 
         if not IsEntityDead(entity) then
-            DetachEntity(bag, true, false)
-            timer = GetGameTimer() + 75
+            -- Create and attach bag
+            local bag = CreateObject(`p_poly_bag_01_s`, pedCoords.x, pedCoords.y, pedCoords.z, true, false, false)
+            AttachEntityToEntity(bag, entity, GetPedBoneIndex(entity, 60309), 0.1, -0.11, 0.08, 0.0, -75.0, -75.0, 1, 1, 0, 0, 2, 1)
+            timer = GetGameTimer() + 10000
             while timer >= GetGameTimer() do
                 if IsEntityDead(entity) then
                     break
                 end
                 Wait(0)
             end
-            SetEntityHeading(bag, tillRotation.z)
-            ApplyForceToEntity(bag, 3, vector3(0.0, 50.0, 0.0), 0.0, 0.0, 0.0, 0, true, true, false, false, true)
-            TriggerServerEvent("ff_shoprobbery:server:cashDropped", GetEntityCoords(bag, false), GetEntityRotation(bag, 2))
-        else
-            DeleteObject(bag)
+
+            if not IsEntityDead(entity) then
+                DetachEntity(bag, true, false)
+                timer = GetGameTimer() + 75
+                while timer >= GetGameTimer() do
+                    if IsEntityDead(entity) then
+                        break
+                    end
+                    Wait(0)
+                end
+                SetEntityHeading(bag, tillRotation.z)
+                ApplyForceToEntity(bag, 3, vector3(0.0, 50.0, 0.0), 0.0, 0.0, 0.0, 0, true, true, false, false, true)
+                TriggerServerEvent("ff_shoprobbery:server:cashDropped", GetEntityCoords(bag, false), GetEntityRotation(bag, 2))
+                DeleteObject(bag) -- Delete the bag object to prevent duplication with pickup
+            else
+                DeleteObject(bag)
+            end
+
+            -- Play cower animations
+            lib.requestAnimDict("mp_am_hold_up")
+            TaskPlayAnim(entity, "mp_am_hold_up", "cower_intro", 8.0, -8.0, -1, 0, 0, false, false, false)
+            timer = GetGameTimer() + 2500
+            while timer >= GetGameTimer() do Wait(0) end
+            TaskPlayAnim(entity, "mp_am_hold_up", "cower_loop", 8.0, -8.0, -1, 1, 0, false, false, false)
+            local stop = GetGameTimer() + 120000
+            while stop >= GetGameTimer() do
+                Wait(50)
+            end
+            if IsEntityPlayingAnim(entity, "mp_am_hold_up", "cower_loop", 3) then
+                ClearPedTasks(entity)
+            end
         end
     end
 
     -- Ped reacts and flees as if gun is aimed
     TaskReactAndFleePed(entity, cache.ped)
-    TriggerServerEvent("ff_shoprobbery:server:restoreTill", tillCoords)
-end)
-
---- @param tillCoords vector3
-RegisterNetEvent("ff_shoprobbery:client:removeTill", function(tillCoords)
-    if not tillCoords then return end
-
-    -- Replace the default till model to a network scene supported one
-    CreateModelSwap(tillCoords.x, tillCoords.y, tillCoords.z, 0.5, `prop_till_01`, `p_till_01_s`, true)
+    TriggerServerEvent("ff_shoprobbery:server:restoreTill", cashRegisterCoords)
 end)
 
 --- @param tillCoords vector3
 RegisterNetEvent("ff_shoprobbery:client:restoreTill", function(tillCoords)
     if not tillCoords then return end
     
-    -- Return the default till model instead of the network scene supported one
-    CreateModelSwap(tillCoords.x, tillCoords.y, tillCoords.z, 0.5, `p_till_01_s`, `prop_till_01`, true)
+    -- Restore the default till model
+    CreateModelSwap(tillCoords.x, tillCoords.y, tillCoords.z, 0.5, GetHashKey('prop_till_01_dam'), GetHashKey('prop_till_01'), false)
     Wait(1000)
-    RemoveModelSwap(tillCoords.x, tillCoords.y, tillCoords.z, 0.5, `prop_till_01`, `p_till_01_s`, true)
-    RemoveModelSwap(tillCoords.x, tillCoords.y, tillCoords.z, 0.5, `p_till_01_s`, `prop_till_01`, true)
+    RemoveModelSwap(tillCoords.x, tillCoords.y, tillCoords.z, 0.5, GetHashKey('prop_till_01_dam'), GetHashKey('prop_till_01'), false)
 end)
 
 --- Thread for handling picking up the dropped loot from the till
