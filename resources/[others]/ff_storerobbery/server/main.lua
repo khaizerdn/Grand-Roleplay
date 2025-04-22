@@ -126,8 +126,9 @@ RegisterNetEvent("ff_shoprobbery:server:startedRobbery", function(tillCoords, ti
     if not netId or not distance then return end
     if distance >= 3.0 then return end
 
+    local isRobbable = Config.Locations[closestStore].robbable
     updateStore(closestStore, "active", true)
-    TriggerClientEvent("ff_shoprobbery:client:robTill", src, netId, tillCoords, tillRotation)
+    TriggerClientEvent("ff_shoprobbery:client:robTill", src, netId, tillCoords, tillRotation, isRobbable)
     SendLog(src, GetPlayerName(src), locale("logs.started.title"), string.format(locale("logs.started.description"), closestStore), Colours.FiveForgeBlue)
 end)
 
@@ -372,4 +373,12 @@ RegisterNetEvent("ff_shoprobbery:server:cancelRobbery", function(tillCoords)
     TriggerClientEvent("ff_shoprobbery:client:cancelRobbery", -1)
     Notify(src, locale("error.robbery_cancelled_ped_dead"), "error")
     SendLog(src, GetPlayerName(src), locale("logs.cancelled.title"), string.format(locale("logs.cancelled.description"), closestStore), Colours.FiveForgeRed)
+end)
+
+RegisterNetEvent("ff_shoprobbery:server:finishNonRobbableRobbery", function(storeIndex)
+    if not storeIndex or type(storeIndex) ~= "number" then return end
+    local src = source
+    local player = GetPlayer(src)
+    if not player then return end
+    finishRobbery(storeIndex)
 end)
