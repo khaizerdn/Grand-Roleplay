@@ -100,3 +100,11 @@ RegisterNetEvent("ff_shoprobbery:client:cancelRobbery", function()
         end
     end
 end)
+
+lib.callback.register('ff_shoprobbery:isPedDead', function(netId)
+    local entity = NetworkGetEntityFromNetworkId(netId)
+    if entity and DoesEntityExist(entity) then
+        return IsEntityDead(entity)
+    end
+    return false -- Return false if entity doesn’t exist
+end)

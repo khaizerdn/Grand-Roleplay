@@ -6,8 +6,6 @@ RegisterNetEvent("ff_shoprobbery:client:robTill", function(clerkNet, tillCoords,
 
     local entity = NetworkGetEntityFromNetworkId(clerkNet)
     if not entity or not DoesEntityExist(entity) then return end
-    local storeIndex = Entity(entity).state.storeIndex
-    if not storeIndex then return end
 
     if not lib.requestModel(`p_poly_bag_01_s`) then return end
 
@@ -15,91 +13,112 @@ RegisterNetEvent("ff_shoprobbery:client:robTill", function(clerkNet, tillCoords,
     local cashRegister = GetClosestObjectOfType(pedCoords.x, pedCoords.y, pedCoords.z, 5.0, `prop_till_01`, false, false, false)
     if not cashRegister or not DoesEntityExist(cashRegister) then return end
 
-    -- Trigger robbery alert
     RobberyAlert(tillCoords)
 
-    -- Play holdup animation
     lib.requestAnimDict("mp_am_hold_up")
     TaskPlayAnim(entity, "mp_am_hold_up", "holdup_victim_20s", 8.0, -8.0, -1, 2, 0, false, false, false)
     while not IsEntityPlayingAnim(entity, "mp_am_hold_up", "holdup_victim_20s", 3) do Wait(0) end
 
+    if not isRobbable then
+        -- Non-robbable behavior: hands up, brief delay, flee, alert police
+        Wait(5000) -- Simulate starting to open the register (5 seconds)
+        ClearPedTasks(entity)
+        FreezeEntityPosition(entity, false)
+        SetPedFleeAttributes(entity, 0, true)
+        TaskReactAndFleePed(entity, cache.ped)
+        -- Notify server to finish the robbery attempt
+        TriggerServerEvent("ff_shoprobbery:server:finishNonRobbableRobbery", storeIndex)
+        return
+    end
+
+    -- Proceed with full robbery if robbable
     local timer = GetGameTimer() + 10800
     while timer >= GetGameTimer() do
         if IsEntityDead(entity) then
+            TriggerServerEvent("ff_shoprobbery:server:cancelRobbery", tillCoords)
             break
         end
         Wait(0)
     end
 
     if not IsEntityDead(entity) then
-        if isRobbable then
-            -- Break the closest cash register after animation progresses
-            local cashRegisterCoords = GetEntityCoords(cashRegister, false)
-            CreateModelSwap(cashRegisterCoords.x, cashRegisterCoords.y, cashRegisterCoords.z, 0.5, GetHashKey('prop_till_01'), GetHashKey('prop_till_01_dam'), false)
+        local cashRegisterCoords = GetEntityCoords(cashRegister, false)
+        CreateModelSwap(cashRegisterCoords.x, cashRegisterCoords.y, cashRegisterCoords.z, 0.5, GetHashKey('prop_till_01'), GetHashKey('prop_till_01_dam'), false)
 
-            -- Small delay before creating bag
-            timer = GetGameTimer() + 200
+        timer = GetGameTimer() + 200
+        while timer >= GetGameTimer() do
+            if IsEntityDead(entity) then
+                TriggerServerEvent("ff_shoprobbery:server:cancelRobbery", tillCoords)
+                break
+            end
+            Wait(0)
+        end
+
+        if not IsEntityDead(entity) then
+            local bag = CreateObject(`p_poly_bag_01_s`, pedCoords.x, pedCoords.y, pedCoords.z, true, false, false)
+            AttachEntityToEntity(bag, entity, GetPedBoneIndex(entity, 60309), 0.1, -0.11, 0.08, 0.0, -75.0, -75.0, 1, 1, 0, 0, 2, 1)
+            timer = GetGameTimer() + 10000
             while timer >= GetGameTimer() do
                 if IsEntityDead(entity) then
+                    TriggerServerEvent("ff_shoprobbery:server:cancelRobbery", tillCoords)
+                    DeleteObject(bag)
                     break
                 end
                 Wait(0)
             end
 
             if not IsEntityDead(entity) then
-                -- Create and attach bag
-                local bag = CreateObject(`p_poly_bag_01_s`, pedCoords.x, pedCoords.y, pedCoords.z, true, false, false)
-                AttachEntityToEntity(bag, entity, GetPedBoneIndex(entity, 60309), 0.1, -0.11, 0.08, 0.0, -75.0, -75.0, 1, 1, 0, 0, 2, 1)
-                timer = GetGameTimer() + 10000
+                DetachEntity(bag, true, false)
+                timer = GetGameTimer() + 75
                 while timer >= GetGameTimer() do
                     if IsEntityDead(entity) then
+                        TriggerServerEvent("ff_shoprobbery:server:cancelRobbery", tillCoords)
+                        DeleteObject(bag)
                         break
                     end
                     Wait(0)
                 end
-
-                if not IsEntityDead(entity) then
-                    DetachEntity(bag, true, false)
-                    timer = GetGameTimer() + 75
-                    while timer >= GetGameTimer() do
-                        if IsEntityDead(entity) then
-                            break
-                        end
-                        Wait(0)
-                    end
-                    SetEntityHeading(bag, tillRotation.z)
-                    ApplyForceToEntity(bag, 3, vector3(0.0, 50.0, 0.0), 0.0, 0.0, 0.0, 0, true, true, false, false, true)
-                    TriggerServerEvent("ff_shoprobbery:server:cashDropped", GetEntityCoords(bag, false), GetEntityRotation(bag, 2))
-                    DeleteObject(bag) -- Delete the bag object to prevent duplication with pickup
-                else
-                    DeleteObject(bag)
-                end
-
-                -- Play cower animations
-                lib.requestAnimDict("mp_am_hold_up")
-                TaskPlayAnim(entity, "mp_am_hold_up", "cower_intro", 8.0, -8.0, -1, 0, 0, false, false, false)
-                timer = GetGameTimer() + 2500
-                while timer >= GetGameTimer() do Wait(0) end
-                TaskPlayAnim(entity, "mp_am_hold_up", "cower_loop", 8.0, -8.0, -1, 1, 0, false, false, false)
-                local stop = GetGameTimer() + 120000
-                while stop >= GetGameTimer() do
-                    Wait(50)
-                end
-                if IsEntityPlayingAnim(entity, "mp_am_hold_up", "cower_loop", 3) then
-                    ClearPedTasks(entity)
-                end
+                SetEntityHeading(bag, tillRotation.z)
+                ApplyForceToEntity(bag, 3, vector3(0.0, 50.0, 0.0), 0.0, 0.0, 0.0, 0, true, true, false, false, true)
+                TriggerServerEvent("ff_shoprobbery:server:cashDropped", GetEntityCoords(bag, false), GetEntityRotation(bag, 2))
+                DeleteObject(bag)
+            else
+                DeleteObject(bag)
             end
-        else
-            -- For non-robbable stores, end after hands-up and make ped flee
-            FreezeEntityPosition(entity, false)
-            TaskReactAndFleePed(entity, cache.ped)
-            TriggerServerEvent("ff_shoprobbery:server:finishNonRobbableRobbery", storeIndex)
+
+            -- Play cower animations
+            lib.requestAnimDict("mp_am_hold_up")
+            TaskPlayAnim(entity, "mp_am_hold_up", "cower_intro", 8.0, -8.0, -1, 0, 0, false, false, false)
+            timer = GetGameTimer() + 2500
+            while timer >= GetGameTimer() do
+                if IsEntityDead(entity) then
+                    TriggerServerEvent("ff_shoprobbery:server:cancelRobbery", tillCoords)
+                    break
+                end
+                Wait(0)
+            end
+            TaskPlayAnim(entity, "mp_am_hold_up", "cower_loop", 8.0, -8.0, -1, 1, 0, false, false, false)
+            local stop = GetGameTimer() + 120000
+            while stop >= GetGameTimer() do
+                if IsEntityDead(entity) then
+                    TriggerServerEvent("ff_shoprobbery:server:cancelRobbery", tillCoords)
+                    break
+                end
+                Wait(50)
+            end
+            if IsEntityPlayingAnim(entity, "mp_am_hold_up", "cower_loop", 3) then
+                ClearPedTasks(entity)
+            end
         end
-    else
-        -- If ped is dead, cancel robbery
+    end
+
+    if not IsEntityDead(entity) then
+        ClearPedTasks(entity)
         FreezeEntityPosition(entity, false)
+        SetEntityAsMissionEntity(entity, true, true)
+        SetPedFleeAttributes(entity, 0, true)
         TaskReactAndFleePed(entity, cache.ped)
-        TriggerServerEvent("ff_shoprobbery:server:cancelRobbery", tillCoords)
+        TriggerServerEvent("ff_shoprobbery:server:restoreTill", cashRegisterCoords)
     end
 end)
 
