@@ -15,6 +15,7 @@ shared_scripts {
 client_scripts {
     '@qbx_core/modules/playerdata.lua',
     'client/main.lua',
+    'client/hidehud.lua',
 }
 
 server_script 'server/main.lua'
