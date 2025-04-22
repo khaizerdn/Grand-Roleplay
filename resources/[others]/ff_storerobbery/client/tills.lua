@@ -89,6 +89,7 @@ RegisterNetEvent("ff_shoprobbery:client:robTill", function(clerkNet, tillCoords,
     end
 
     -- Ped reacts and flees as if gun is aimed
+    FreezeEntityPosition(entity, false)
     TaskReactAndFleePed(entity, cache.ped)
     TriggerServerEvent("ff_shoprobbery:server:restoreTill", cashRegisterCoords)
 end)
