@@ -72,11 +72,13 @@ RegisterNetEvent("ff_shoprobbery:client:robTill", function(clerkNet, tillCoords,
     local function finishTill(cancelled)
         NetworkStopSynchronisedScene(scene)
         ClearPedTasks(entity)
-        FreezeEntityPosition(entity, true)
         DeleteEntity(till)
         if cancelled then
             DeleteEntity(bag)
+            FreezeEntityPosition(entity, true)
             TriggerServerEvent("ff_shoprobbery:server:cancelRobbery", tillCoords)
+        else
+            TaskCower(entity, 1000)
         end
         TriggerServerEvent("ff_shoprobbery:server:restoreTill", tillCoords)
     end
