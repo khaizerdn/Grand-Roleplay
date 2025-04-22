@@ -1,6 +1,6 @@
---- @param clerkNet number
---- @param tillCoords vector3
---- @param tillRotation vector3
+---@param clerkNet number
+---@param tillCoords vector3
+---@param tillRotation vector3
 RegisterNetEvent("ff_shoprobbery:client:robTill", function(clerkNet, tillCoords, tillRotation)
     if not clerkNet or not NetworkDoesNetworkIdExist(clerkNet) then return end
 
@@ -85,18 +85,16 @@ RegisterNetEvent("ff_shoprobbery:client:robTill", function(clerkNet, tillCoords,
     local isCancelled = false
     local isMonitoring = true
     CreateThread(function()
-        while isMonitoring do
+        while isMonitoring and DoesEntityExist(entity) do
             if IsEntityDead(entity) then
                 isCancelled = true
                 -- Cancel progress bar only if active
-                if Config.Progress == "ox_lib_bar" or Config.Progress == "ox_lib_circle" then
-                    exports.ox_lib:cancelProgress()
-                elseif Config.Progress == "mythic" then
-                    -- Replace with actual mythic cancel function if available
-                    exports.mythic:cancelProgress() -- Adjust if mythic has a specific cancel function
+                if (Config.Progress == "ox_lib_bar" or Config.Progress == "ox_lib_circle") and lib.progressActive() then
+                    lib.cancelProgress()
                 end
                 -- Stop animation and clean up
                 finishTill(true)
+                isMonitoring = false
                 break
             end
             Wait(100)

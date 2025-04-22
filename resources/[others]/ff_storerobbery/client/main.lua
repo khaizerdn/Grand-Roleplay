@@ -111,11 +111,10 @@ lib.callback.register('ff_shoprobbery:createSafe', function(safePosition)
 end)
 
 RegisterNetEvent("ff_shoprobbery:client:cancelRobbery", function()
-    -- Clear any active progress bars or tasks
+    -- Clear any active progress bars or tasks only if a progress bar is active
     if Config.Progress == "ox_lib_bar" or Config.Progress == "ox_lib_circle" then
-        exports.ox_lib:cancelProgress()
-    elseif Config.Progress == "mythic" then
-        -- Assuming mythic has a similar cancel function; adjust as needed
-        exports.mythic:cancelProgress() -- Replace with actual mythic cancel function if available
+        if lib.progressActive() then
+            lib.cancelProgress()
+        end
     end
 end)

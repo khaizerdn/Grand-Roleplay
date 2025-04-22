@@ -128,11 +128,12 @@ function network.deleteTarget(index)
     if not index or type(index) ~= "number" then return end
     local zoneId = string.format("ff_shoprobbery_network_%s_hack", index)
 
-    RemoveCircleZoneTarget(zoneId)
-    
+    -- Check if zone exists in network.zones before removing
     for i = 1, #network.zones do
         if network.zones[i] == zoneId then
+            RemoveCircleZoneTarget(zoneId)
             table.remove(network.zones, i)
+            break
         end
     end
 end
