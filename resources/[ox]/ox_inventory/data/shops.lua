@@ -1,6 +1,6 @@
 return {
 	General = {
-		name = 'shop',
+		name = '247 Supermarket',
 		blip = {
 			id = 59, colour = 69, scale = 0.8
 		}, inventory = {
@@ -30,7 +30,7 @@ return {
 	},
 
 	LTD = {
-		name = 'shop',
+		name = 'LTD',
 		blip = {
 			id = 59, colour = 69, scale = 0.8
 		}, inventory = {
@@ -53,7 +53,7 @@ return {
 	},
 
 	Liquor = {
-		name = 'shop',
+		name = 'Robs Liquor',
 		blip = {
 			id = 93, colour = 69, scale = 0.8
 		}, inventory = {
@@ -78,7 +78,7 @@ return {
 	},
 
 	YouTool = {
-		name = 'tools',
+		name = 'You Tool',
 		blip = {
 			id = 402, colour = 69, scale = 0.8
 		}, inventory = {
@@ -92,7 +92,7 @@ return {
 	},
 
 	Ammunation = {
-		name = 'weapons',
+		name = 'Ammunation',
 		blip = {
 			id = 110, colour = 69, scale = 0.8
 		}, inventory = {
@@ -124,7 +124,7 @@ return {
 	},
 
 	PoliceArmoury = {
-		name = 'armoury',
+		name = 'Police Armoury',
 		groups = shared.police,
 		blip = {
 			id = 110, colour = 84, scale = 0.8
@@ -144,7 +144,7 @@ return {
 	},
 
 	Medicine = {
-		name = 'pharmacy',
+		name = 'Pharmacy',
 		-- groups = {
 		-- 	['ambulance'] = 0
 		-- },
@@ -161,7 +161,7 @@ return {
 	},
 
 	BlackMarketArms = {
-		name = 'weapons',
+		name = 'Black Market',
 		inventory = {
 			{ name = 'WEAPON_DAGGER', price = 5000, metadata = { registered = false	}, currency = 'black_money' },
 			{ name = 'WEAPON_CERAMICPISTOL', price = 50000, metadata = { registered = false }, currency = 'black_money' },
