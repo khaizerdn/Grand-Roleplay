@@ -354,20 +354,26 @@ function safe.createInteract(index, netId)
         and not GlobalState[string.format("ff_shoprobbery:store:%s", index)].openedSafe do
             if not safe.enteringCode then
                 if #(GetEntityCoords(cache.ped, false) - entCoords) < 2.0 then
-                    HelpNotify(locale("interact.safe"))
-                    if IsControlJustPressed(0, 47) then
+                    lib.showTextUI(locale("interact.safe"), {
+                        icon = 'fas fa-lock',
+                        position = 'top-left',
+                    })
+                    if IsControlJustPressed(0, 38) then
+                        lib.hideTextUI()
                         safe.enteringCode = true
                         TriggerEvent("ff_shoprobbery:client:enterSafeCode", { entity = entity }, { index = index, netId = netId })
                     end
-
                     Wait(5)
                 else
+                    lib.hideTextUI()
                     Wait(1000)
                 end
             else
+                lib.hideTextUI()
                 Wait(1000)
             end
         end
+        lib.hideTextUI()
     end)
 end
 

@@ -139,6 +139,8 @@ end
 
 --- Create network hack interaction for the current store
 ---@param index number
+--- Create network hack interaction for the current store
+---@param index number
 function network.createInteract(index)
     if not index or type(index) ~= "number" then return end
     local storeData = GlobalState[string.format("ff_shoprobbery:store:%s", index)]
@@ -151,20 +153,26 @@ function network.createInteract(index)
         and not GlobalState[string.format("ff_shoprobbery:store:%s", index)].hackedNetwork do
             if not network.hackingInteract then
                 if #(GetEntityCoords(cache.ped, false) - coords) < 2.0 then
-                    HelpNotify(locale("interact.network"))
-                    if IsControlJustPressed(0, 47) then
+                    lib.showTextUI(locale('interact.network'), {
+                        icon = 'fas fa-network-wired',
+                        position = 'top-left',
+                    })
+                    if IsControlJustPressed(0, 38) then
+                        lib.hideTextUI()
                         network.hackingInteract = true
                         TriggerEvent("ff_shoprobbery:client:hackNetwork", nil, { index = index })
                     end
-
                     Wait(5)
                 else
+                    lib.hideTextUI()
                     Wait(1000)
                 end
             else
+                lib.hideTextUI()
                 Wait(1000)
             end
         end
+        lib.hideTextUI()
     end)
 end
 

@@ -7,8 +7,8 @@
         "safe": "Enter Safe Code"
     },
     "interact": {
-        "network": "~INPUT_DETONATE~ ~g~Hack Computer",
-        "safe": "~INPUT_DETONATE~ ~g~Enter Safe Code"
+        "network": "Press [E] to hack computer.",
+        "safe": "Press [E] to enter safe code."
     },
     "notification": {
         "safe_code": "The safe code is %s."
