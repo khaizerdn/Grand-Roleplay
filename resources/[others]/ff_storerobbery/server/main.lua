@@ -61,17 +61,29 @@ local function finishRobbery(index)
 
     TriggerClientEvent("ff_shoprobbery:client:disableNetwork", -1, index)
 
-    -- Handle resetting store cooldown
+    -- Delete ped and safe
+    local pedNet = peds.getClosest(Config.Locations[index].ped)
+    if pedNet then
+        local pedEntity = NetworkGetEntityFromNetworkId(pedNet)
+        if pedEntity and DoesEntityExist(pedEntity) then
+            DeleteEntity(pedEntity)
+        end
+    end
+    if safeNetworkId and safeNetworkId > 0 then
+        local safeEntity = NetworkGetEntityFromNetworkId(safeNetworkId)
+        if safeEntity and DoesEntityExist(safeEntity) then
+            DeleteEntity(safeEntity)
+        end
+    end
+
+    -- Reset store after cooldown by respawning ped and safe
     SetTimeout(Config.StoreCooldown * 1000, function()
         if GlobalState[string.format("ff_shoprobbery:store:%s", index)].cooldown ~= -1 then
             updateStore(index, "cooldown", -1)
-            local safeNet = GlobalState[string.format("ff_shoprobbery:store:%s", index)].lastSafe
-            if safeNet then
-                local entity = NetworkGetEntityFromNetworkId(safeNet)
-                if entity and DoesEntityExist(entity) then
-                    DeleteEntity(entity)
-                end
-                updateStore(index, "lastSafe", -1)
+            peds.create(Config.Locations[index].ped, index) -- Respawn ped
+            local success, netId = lib.callback.await("ff_shoprobbery:createSafe", false, Config.Locations[index].safe)
+            if success then
+                updateStore(index, "safeNet", netId)
             end
         end
     end)
@@ -156,22 +168,21 @@ end)
 ---@param pickupCoords vector3
 RegisterNetEvent("ff_shoprobbery:server:cashCollected", function(pickupCoords)
     if not pickupCoords then return end
-
     local src = source
     local player = GetPlayer(src)
     if not player then return end
-
     local closestStore = getClosestStore(pickupCoords)
     if not closestStore or not GlobalState[string.format("ff_shoprobbery:store:%s", closestStore)].active then return end
-
     local ped = GetPlayerPed(src)
     local pedCoords = GetEntityCoords(ped, false)
     if #(pedCoords - pickupCoords) > 1.5 then return end
-
     TriggerClientEvent("ff_shoprobbery:client:cashCollected", -1, pickupCoords)
-
     local value = math.random(Config.TillValue.min, Config.TillValue.max)
-    GiveMoney(src, value, "collected money from till")
+    if Config.UseBlackMoney then
+        GiveItem(src, "black_money", value)
+    else
+        GiveMoney(src, value, "collected money from till")
+    end
     SendLog(src, GetPlayerName(src), locale("logs.loot_collected.title"), string.format(locale("logs.loot_collected.description"), value, closestStore), Colours.FiveForgeBlue)
 end)
 
@@ -302,24 +313,37 @@ lib.addCommand('resetstore', {
     end
 end)
 
+-- Reset all stores
 lib.addCommand('resetstores', {
-    help = 'This will reset all store cooldowns.',
+    help = 'This will reset all store cooldowns and respawn peds and safes.',
     params = {},
 }, function(source, args)
     if not CanReset(source) then return end
     local src = source
 
     for i = 1, #Config.Locations do
-        if GlobalState[string.format("ff_shoprobbery:store:%s", i)].cooldown ~= -1 then
-            local safeNet = GlobalState[string.format("ff_shoprobbery:store:%s", i)].lastSafe
-            if safeNet then
-                local entity = NetworkGetEntityFromNetworkId(safeNet)
-                if entity and DoesEntityExist(entity) then
-                    DeleteEntity(entity)
+        local storeData = GlobalState[string.format("ff_shoprobbery:store:%s", i)]
+        if storeData.cooldown ~= -1 then
+            local pedNet = peds.getClosest(Config.Locations[i].ped)
+            if pedNet then
+                local pedEntity = NetworkGetEntityFromNetworkId(pedNet)
+                if pedEntity and DoesEntityExist(pedEntity) then
+                    DeleteEntity(pedEntity)
                 end
             end
+            local safeNet = storeData.safeNet
+            if safeNet and safeNet > 0 then
+                local safeEntity = NetworkGetEntityFromNetworkId(safeNet)
+                if safeEntity and DoesEntityExist(safeEntity) then
+                    DeleteEntity(safeEntity)
+                end
+            end
+            peds.create(Config.Locations[i].ped, i) -- Respawn ped
+            local success, netId = lib.callback.await("ff_shoprobbery:createSafe", false, Config.Locations[i].safe)
+            if success then
+                updateStore(i, "safeNet", netId)
+            end
         end
-
         GlobalState[string.format("ff_shoprobbery:store:%s", i)] = {
             active = false,
             robbedTill = false,

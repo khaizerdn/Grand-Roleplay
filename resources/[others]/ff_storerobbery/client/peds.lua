@@ -6,7 +6,6 @@ AddStateBagChangeHandler("ff_shoprobbery:registerPed", '', function(entity, _, v
 
         -- Disable fleeing and make sure they remain still
         SetEntityAsMissionEntity(entity, true, true)
-        FreezeEntityPosition(entity, true)
         SetPedCanRagdoll(entity, false)
         TaskSetBlockingOfNonTemporaryEvents(entity, true)
         SetBlockingOfNonTemporaryEvents(entity, true)

@@ -24,10 +24,11 @@ Config.RequiredPolice = 0 -- How many police on duty to start heist
 -- Cooldown
 Config.GlobalCooldown = 0 -- In seconds currently at 15 minutes
 Config.UseStoreCooldown = true -- Individual cooldown for different stores aswell as global
-Config.StoreCooldown = 2700 -- In seconds currently at 45 minutes
+Config.StoreCooldown = 5 -- In seconds currently at 45 minutes
 
 -- Robbery Loot
 Config.UseMoneyItem = false -- Whether or not to give them dirty money as an item (only setup for Qbox, QB & Mythic)
+Config.UseBlackMoney = true -- true to give "black_money" item, false to give "money" cash
 Config.TillValue = { min = 250, max = 800 }
 Config.SafeItems = {
     {
@@ -44,7 +45,7 @@ Config.SafeItems = {
 -- All the different store location data
 Config.Locations = {
     {
-        ped = vec4(2676.61, 3280.18, 54.24, 328.88),
+        ped = vec4(2676.24, 3280.45, 55.24, 329.44),
         safe = vec4(2674.7, 3288.57, 54.24, 154.33),
         network = {
             coords = vec3(2672.87060546875, 3288.09326171875, 55.23943328857422),

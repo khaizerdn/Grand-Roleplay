@@ -7,162 +7,63 @@ RegisterNetEvent("ff_shoprobbery:client:robTill", function(clerkNet, tillCoords,
     local entity = NetworkGetEntityFromNetworkId(clerkNet)
     if not entity or not DoesEntityExist(entity) then return end
 
-    if not lib.requestModel(`p_till_01_s`) then return end
     if not lib.requestModel(`p_poly_bag_01_s`) then return end
 
-    local till = GetClosestObjectOfType(tillCoords.x, tillCoords.y, tillCoords.z, 1.0, `prop_till_01`, false, false, false)
-    if not till or not DoesEntityExist(till) then return end
-
-    local _movePos = GetOffsetFromEntityInWorldCoords(till, 0.0, -1.0, 0.0)
-    FreezeEntityPosition(entity, false)
-    TaskGoStraightToCoord(entity, _movePos.x, _movePos.y, _movePos.z, 1.0, 3000, GetEntityHeading(till), 0.0)
-
-    while #(GetEntityCoords(entity, false) - _movePos) > 0.3 do
-        Wait(100)
-    end
-
-    local till = CreateObject(`p_till_01_s`, tillCoords.x, tillCoords.y, tillCoords.z, true, false, false)
-    local bag = CreateObject(`p_poly_bag_01_s`, tillCoords.x, tillCoords.y, tillCoords.z, true, false, false)
-    
-    local exists = lib.waitFor(function()
-        if DoesEntityExist(till) and DoesEntityExist(bag) then return true end
-    end)
-
-    if not exists then return end
+    local pedCoords = GetEntityCoords(entity, false)
+    local cashRegister = GetClosestObjectOfType(pedCoords.x, pedCoords.y, pedCoords.z, 5.0, `prop_till_01`, false, false, false)
+    if not cashRegister or not DoesEntityExist(cashRegister) then return end
 
     RobberyAlert(tillCoords)
     TriggerServerEvent("ff_shoprobbery:server:removeTill", tillCoords)
 
-    local scene = NetworkCreateSynchronisedScene(tillCoords.x, tillCoords.y, tillCoords.z, tillRotation.x, tillRotation.y, tillRotation.z - 180.0, 2, false, false, -1, 0, 1.0)
-    NetworkAddPedToSynchronisedScene(
-        entity,
-        scene,
-        "mp_am_hold_up",
-        "holdup_victim_20s",
-        1.5,
-        -4.0,
-        1,
-        16,
-        1148846080,
-        0
-    )
-    
-    NetworkAddEntityToSynchronisedScene(
-        till,
-        scene,
-        "mp_am_hold_up",
-        "holdup_victim_20s_till",
-        1.0,
-        1.0,
-        1
-    )
-    
-    NetworkAddEntityToSynchronisedScene(
-        bag,
-        scene,
-        "mp_am_hold_up",
-        "holdup_victim_20s_bag",
-        1.0,
-        1.0,
-        1
-    )
+    -- Play animation directly from ped's current position
+    lib.requestAnimDict("mp_am_hold_up")
+    TaskPlayAnim(entity, "mp_am_hold_up", "holdup_victim_20s", 8.0, -8.0, -1, 2, 0, false, false, false)
+    while not IsEntityPlayingAnim(entity, "mp_am_hold_up", "holdup_victim_20s", 3) do Wait(0) end
 
-    NetworkStartSynchronisedScene(scene)
+    -- Swap the cashier model to the damaged version to simulate opening during animation
+    CreateModelSwap(GetEntityCoords(cashRegister), 0.5, `prop_till_01`, `prop_till_01_dam`, false)
 
-    local function finishTill(cancelled)
-        NetworkStopSynchronisedScene(scene)
-        ClearPedTasks(entity)
-        DeleteEntity(till)
-        if cancelled then
-            DeleteEntity(bag)
-            FreezeEntityPosition(entity, true)
-            TriggerServerEvent("ff_shoprobbery:server:cancelRobbery", tillCoords)
-        else
-            TaskCower(entity, 1000)
+    local timer = GetGameTimer() + 10800
+    while timer >= GetGameTimer() do
+        if IsEntityDead(entity) then
+            break
         end
-        TriggerServerEvent("ff_shoprobbery:server:restoreTill", tillCoords)
+        Wait(0)
     end
 
-    -- Monitor ped health and cancel immediately if dead
-    local isCancelled = false
-    local isMonitoring = true
-    CreateThread(function()
-        while isMonitoring and DoesEntityExist(entity) do
+    if not IsEntityDead(entity) then
+        -- Create the plastic bag (only one instance)
+        local bag = CreateObject(`p_poly_bag_01_s`, pedCoords.x, pedCoords.y, pedCoords.z, true, false, false)
+        AttachEntityToEntity(bag, entity, GetPedBoneIndex(entity, 60309), 0.1, -0.11, 0.08, 0.0, -75.0, -75.0, 1, 1, 0, 0, 2, 1)
+        timer = GetGameTimer() + 10000
+        while timer >= GetGameTimer() do
             if IsEntityDead(entity) then
-                isCancelled = true
-                -- Cancel progress bar only if active
-                if (Config.Progress == "ox_lib_bar" or Config.Progress == "ox_lib_circle") and lib.progressActive() then
-                    lib.cancelProgress()
-                end
-                -- Stop animation and clean up
-                finishTill(true)
-                isMonitoring = false
                 break
             end
-            Wait(100)
+            Wait(0)
         end
-    end)
 
-    if Config.Progress == "ox_lib_bar" then
-        ProgressBar({
-            duration = 21566,
-            label = locale('progress.robbing'),
-            useWhileDead = false,
-            allowRagdoll = true,
-            allowSwimming = false,
-            allowCuffed = false,
-            allowFalling = true,
-            canCancel = true,
-        }, function(cancelled)
-            -- Stop health monitoring on completion
-            isMonitoring = false
-            if isCancelled or cancelled then
-                finishTill(true)
-            else
-                finishTill(false)
-                TriggerServerEvent("ff_shoprobbery:server:cashDropped", GetEntityCoords(bag, false), GetEntityRotation(bag, 2))
+        if not IsEntityDead(entity) then
+            DetachEntity(bag, true, false)
+            timer = GetGameTimer() + 75
+            while timer >= GetGameTimer() do
+                if IsEntityDead(entity) then
+                    break
+                end
+                Wait(0)
             end
-        end)
-    elseif Config.Progress == "ox_lib_circle" then
-        ProgressBar({
-            duration = 21566,
-            label = locale('progress.robbing'),
-            position = "bottom",
-            useWhileDead = false,
-            allowRagdoll = true,
-            allowSwimming = false,
-            allowCuffed = false,
-            allowFalling = true,
-            canCancel = true,
-        }, function(cancelled)
-            -- Stop health monitoring on completion
-            isMonitoring = false
-            if isCancelled or cancelled then
-                finishTill(true)
-            else
-                finishTill(false)
-                TriggerServerEvent("ff_shoprobbery:server:cashDropped", GetEntityCoords(bag, false), GetEntityRotation(bag, 2))
-            end
-        end)
-    elseif Config.Progress == "mythic" then
-        ProgressBar({
-            name = "rob_till",
-            duration = 21566,
-            label = locale('progress.robbing'),
-            useWhileDead = false,
-            canCancel = true,
-            disarm = false
-        }, function(cancelled)
-            -- Stop health monitoring on completion
-            isMonitoring = false
-            if isCancelled or cancelled then
-                finishTill(true)
-            else
-                finishTill(false)
-                TriggerServerEvent("ff_shoprobbery:server:cashDropped", GetEntityCoords(bag, false), GetEntityRotation(bag, 2))
-            end
-        end)
+            SetEntityHeading(bag, tillRotation.z)
+            ApplyForceToEntity(bag, 3, vector3(0.0, 50.0, 0.0), 0.0, 0.0, 0.0, 0, true, true, false, false, true)
+            TriggerServerEvent("ff_shoprobbery:server:cashDropped", GetEntityCoords(bag, false), GetEntityRotation(bag, 2))
+        else
+            DeleteObject(bag)
+        end
     end
+
+    -- Ped reacts and flees as if gun is aimed
+    TaskReactAndFleePed(entity, cache.ped)
+    TriggerServerEvent("ff_shoprobbery:server:restoreTill", tillCoords)
 end)
 
 --- @param tillCoords vector3
