@@ -12,7 +12,6 @@ AddStateBagChangeHandler("ff_shoprobbery:registerPed", '', function(entity, _, v
         SetBlockingOfNonTemporaryEvents(entity, true)
         SetPedFleeAttributes(entity, 0, false)
         SetPedCombatAttributes(entity, 17, true)
-        SetEntityInvincible(entity, true)
         SetPedSeeingRange(entity, 0)
         SetPedDefaultComponentVariation(entity)
         ClearPedTasks(entity)

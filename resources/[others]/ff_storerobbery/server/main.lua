@@ -429,3 +429,22 @@ lib.addCommand('resetstores', {
 
     SendLog(src, GetPlayerName(src), locale("logs.global_cooldown.title"), string.format(locale("logs.global_cooldown.description"), storeIndex), Colours.FiveForgeBlue)
 end)
+
+RegisterNetEvent("ff_shoprobbery:server:cancelRobbery", function(tillCoords)
+    if not tillCoords then return end
+
+    local src = source
+    local player = GetPlayer(src)
+    if not player then return end
+
+    if not GlobalState["ff_shoprobbery:active"] then return end
+
+    local closestStore = getClosestStore(tillCoords)
+    if not closestStore then return end
+
+    -- Cancel the robbery
+    finishRobbery(closestStore)
+    TriggerClientEvent("ff_shoprobbery:client:cancelRobbery", -1) -- Notify all clients
+    Notify(src, locale("error.robbery_cancelled_ped_dead"), "error")
+    SendLog(src, GetPlayerName(src), locale("logs.cancelled.title"), string.format(locale("logs.cancelled.description"), closestStore), Colours.FiveForgeRed)
+end)

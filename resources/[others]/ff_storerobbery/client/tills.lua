@@ -1,6 +1,6 @@
----@param clerkNet number
----@param tillCoords vector3
----@param tillRotation vector3
+--- @param clerkNet number
+--- @param tillCoords vector3
+--- @param tillRotation vector3
 RegisterNetEvent("ff_shoprobbery:client:robTill", function(clerkNet, tillCoords, tillRotation)
     if not clerkNet or not NetworkDoesNetworkIdExist(clerkNet) then return end
 
@@ -68,18 +68,40 @@ RegisterNetEvent("ff_shoprobbery:client:robTill", function(clerkNet, tillCoords,
     )
 
     NetworkStartSynchronisedScene(scene)
-    SetTimeout(21500, function()
-        TriggerServerEvent("ff_shoprobbery:server:cashDropped", GetEntityCoords(bag, false), GetEntityRotation(bag, 2))
-    end)
 
-    local function finishTill()
+    local function finishTill(cancelled)
         NetworkStopSynchronisedScene(scene)
         ClearPedTasks(entity)
         FreezeEntityPosition(entity, true)
-        DeleteEntity(bag)
         DeleteEntity(till)
+        if cancelled then
+            DeleteEntity(bag)
+            TriggerServerEvent("ff_shoprobbery:server:cancelRobbery", tillCoords)
+        end
         TriggerServerEvent("ff_shoprobbery:server:restoreTill", tillCoords)
     end
+
+    -- Monitor ped health and cancel immediately if dead
+    local isCancelled = false
+    local isMonitoring = true
+    CreateThread(function()
+        while isMonitoring do
+            if IsEntityDead(entity) then
+                isCancelled = true
+                -- Cancel progress bar only if active
+                if Config.Progress == "ox_lib_bar" or Config.Progress == "ox_lib_circle" then
+                    exports.ox_lib:cancelProgress()
+                elseif Config.Progress == "mythic" then
+                    -- Replace with actual mythic cancel function if available
+                    exports.mythic:cancelProgress() -- Adjust if mythic has a specific cancel function
+                end
+                -- Stop animation and clean up
+                finishTill(true)
+                break
+            end
+            Wait(100)
+        end
+    end)
 
     if Config.Progress == "ox_lib_bar" then
         ProgressBar({
@@ -90,8 +112,17 @@ RegisterNetEvent("ff_shoprobbery:client:robTill", function(clerkNet, tillCoords,
             allowSwimming = false,
             allowCuffed = false,
             allowFalling = true,
-            canCancel = false,
-        }, finishTill)
+            canCancel = true,
+        }, function(cancelled)
+            -- Stop health monitoring on completion
+            isMonitoring = false
+            if isCancelled or cancelled then
+                finishTill(true)
+            else
+                finishTill(false)
+                TriggerServerEvent("ff_shoprobbery:server:cashDropped", GetEntityCoords(bag, false), GetEntityRotation(bag, 2))
+            end
+        end)
     elseif Config.Progress == "ox_lib_circle" then
         ProgressBar({
             duration = 21566,
@@ -102,33 +133,51 @@ RegisterNetEvent("ff_shoprobbery:client:robTill", function(clerkNet, tillCoords,
             allowSwimming = false,
             allowCuffed = false,
             allowFalling = true,
-            canCancel = false,
-        }, finishTill)
+            canCancel = true,
+        }, function(cancelled)
+            -- Stop health monitoring on completion
+            isMonitoring = false
+            if isCancelled or cancelled then
+                finishTill(true)
+            else
+                finishTill(false)
+                TriggerServerEvent("ff_shoprobbery:server:cashDropped", GetEntityCoords(bag, false), GetEntityRotation(bag, 2))
+            end
+        end)
     elseif Config.Progress == "mythic" then
         ProgressBar({
             name = "rob_till",
             duration = 21566,
             label = locale('progress.robbing'),
             useWhileDead = false,
-            canCancel = false,
+            canCancel = true,
             disarm = false
-        }, finishTill)
+        }, function(cancelled)
+            -- Stop health monitoring on completion
+            isMonitoring = false
+            if isCancelled or cancelled then
+                finishTill(true)
+            else
+                finishTill(false)
+                TriggerServerEvent("ff_shoprobbery:server:cashDropped", GetEntityCoords(bag, false), GetEntityRotation(bag, 2))
+            end
+        end)
     end
 end)
 
----@param tillCoords vector3
+--- @param tillCoords vector3
 RegisterNetEvent("ff_shoprobbery:client:removeTill", function(tillCoords)
     if not tillCoords then return end
 
-    --  Replace the default till model to a network scene supported one
+    -- Replace the default till model to a network scene supported one
     CreateModelSwap(tillCoords.x, tillCoords.y, tillCoords.z, 0.5, `prop_till_01`, `p_till_01_s`, true)
 end)
 
----@param tillCoords vector3
+--- @param tillCoords vector3
 RegisterNetEvent("ff_shoprobbery:client:restoreTill", function(tillCoords)
     if not tillCoords then return end
     
-    --  Return the default till model instead of the network scene supported one
+    -- Return the default till model instead of the network scene supported one
     CreateModelSwap(tillCoords.x, tillCoords.y, tillCoords.z, 0.5, `p_till_01_s`, `prop_till_01`, true)
     Wait(1000)
     RemoveModelSwap(tillCoords.x, tillCoords.y, tillCoords.z, 0.5, `prop_till_01`, `p_till_01_s`, true)
@@ -155,8 +204,8 @@ local function pickupTask()
     end)
 end
 
----@param pickupCoords vector3
----@param pickupRotation vector3
+--- @param pickupCoords vector3
+--- @param pickupRotation vector3
 RegisterNetEvent("ff_shoprobbery:client:cashDropped", function(pickupCoords, pickupRotation)
     if not pickupCoords then return end
     if not pickupRotation then return end
@@ -164,7 +213,7 @@ RegisterNetEvent("ff_shoprobbery:client:cashDropped", function(pickupCoords, pic
     lib.requestModel(`p_poly_bag_01_s`)
 
     -- Create the loot pickup
-    moneyPickup = CreatePickupRotate(`PICKUP_MONEY_MED_BAG`,pickupCoords.x, pickupCoords.y, pickupCoords.z, pickupRotation.x, pickupRotation.y, pickupRotation.z, 8, 1.0, 24, true, `p_poly_bag_01_s`)
+    moneyPickup = CreatePickupRotate(`PICKUP_MONEY_MED_BAG`, pickupCoords.x, pickupCoords.y, pickupCoords.z, pickupRotation.x, pickupRotation.y, pickupRotation.z, 8, 1.0, 24, true, `p_poly_bag_01_s`)
     -- Wait until the pickup exists
     local exists = lib.waitFor(function()
         if DoesPickupExist(moneyPickup) then return true end
@@ -178,7 +227,7 @@ RegisterNetEvent("ff_shoprobbery:client:cashDropped", function(pickupCoords, pic
     SetModelAsNoLongerNeeded(`p_poly_bag_01_s`)
 end)
 
----@param pickupCoords vector3
+--- @param pickupCoords vector3
 RegisterNetEvent("ff_shoprobbery:client:cashCollected", function(pickupCoords)
     if not moneyPickup or not pickupCoords then return end
     local currPickupCoords = GetPickupCoords(moneyPickup)

@@ -1,6 +1,6 @@
 {
     "progress": {
-        "robbing": "Robbing Store"
+        "robbing": "Robbing Store",
     },
     "target": {
         "network": "Access Network",
@@ -56,6 +56,10 @@
         "global_cooldown": {
             "title": "Stores Reset",
             "description": "They have reset all stores."
+        },
+        "cancelled": {
+            "title": "Robbery Cancelled",
+            "description": "Robbery at store %s was cancelled due to clerk death."
         }
     },
     "error": {
@@ -65,6 +69,7 @@
         "not_enough_police": "There are not enough police available, needs %s.",
         "incorrect_code": "You have entered the incorrect code for the safe.",
         "store_cooldown": "Store (%s) doesn't have a cooldown.",
-        "global_cooldown": "There is no global cooldown active."
+        "global_cooldown": "There is no global cooldown active.",
+        "robbery_cancelled_ped_dead": "Robbery cancelled: The clerk was killed."
     }
 }

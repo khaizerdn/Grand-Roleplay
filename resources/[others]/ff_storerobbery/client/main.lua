@@ -16,6 +16,7 @@ local function getPedInFront()
 end
 
 --- Handle starting robbery by aiming at clerk
+--- Handle starting robbery by aiming at clerk
 local function startClerkTask()
     CreateThread(function()
         local sleep = 1000
@@ -34,6 +35,20 @@ local function startClerkTask()
                             local tillCoords = GetOffsetFromEntityInWorldCoords(till, 0.0, 0.0, -0.12)
                             local tillRotation = GetEntityRotation(till, 2)
                             TriggerServerEvent("ff_shoprobbery:server:startedRobbery", tillCoords, tillRotation)
+                                        
+                            -- Monitor ped health
+                            CreateThread(function()
+                                while GlobalState["ff_shoprobbery:active"] do
+                                    local hit, entity = getPedInFront()
+                                    if hit and GetEntityType(entity) == 1 and not IsPedAPlayer(entity) then
+                                        if Entity(entity).state["ff_shoprobbery:registerPed"] and IsEntityDead(entity) then
+                                            TriggerServerEvent("ff_shoprobbery:server:cancelRobbery", tillCoords)
+                                            break
+                                        end
+                                    end
+                                    Wait(500)
+                                end
+                            end)
                                         
                             Wait(5000) -- Make you wait 5 seconds before sending any other requests so it's not spammed every second
                         end
@@ -93,4 +108,14 @@ end
 ---@return boolean, number?
 lib.callback.register('ff_shoprobbery:createSafe', function(safePosition)
     return safe.create(safePosition)
+end)
+
+RegisterNetEvent("ff_shoprobbery:client:cancelRobbery", function()
+    -- Clear any active progress bars or tasks
+    if Config.Progress == "ox_lib_bar" or Config.Progress == "ox_lib_circle" then
+        exports.ox_lib:cancelProgress()
+    elseif Config.Progress == "mythic" then
+        -- Assuming mythic has a similar cancel function; adjust as needed
+        exports.mythic:cancelProgress() -- Replace with actual mythic cancel function if available
+    end
 end)
