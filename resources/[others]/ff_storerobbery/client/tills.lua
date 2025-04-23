@@ -22,7 +22,7 @@ RegisterNetEvent("ff_shoprobbery:client:robTill", function(clerkNet, tillCoords,
     if not isRobbable then
         if activeRobberyStates[storeIndex] then return end
         activeRobberyStates[storeIndex] = true
-
+    
         RobberyAlert(tillCoords)
         lib.requestAnimDict("mp_am_hold_up")
         TaskPlayAnim(entity, "mp_am_hold_up", "holdup_victim_20s", 8.0, -8.0, -1, 2, 0, false, false, false)
@@ -30,7 +30,7 @@ RegisterNetEvent("ff_shoprobbery:client:robTill", function(clerkNet, tillCoords,
         FreezeEntityPosition(entity, false)
         TaskReactAndFleePed(entity, cache.ped)
         TriggerServerEvent("ff_shoprobbery:server:finishNonRobbableRobbery", storeIndex)
-
+    
         -- Start a thread to reset the store when player leaves proximity
         CreateThread(function()
             while true do
@@ -38,6 +38,10 @@ RegisterNetEvent("ff_shoprobbery:client:robTill", function(clerkNet, tillCoords,
                 local distance = #(playerCoords - pedCoords)
                 if distance > 30.0 then
                     activeRobberyStates[storeIndex] = nil
+                    -- Check if ped is dead before deleting
+                    if IsEntityDead(entity) then
+                        DeleteEntity(entity)
+                    end
                     TriggerServerEvent("ff_shoprobbery:server:resetNonRobbableStore", storeIndex)
                     break
                 end
