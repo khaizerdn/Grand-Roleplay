@@ -37,11 +37,20 @@ local function startClerkTask()
                                     if till and DoesEntityExist(till) then
                                         local tillCoords = GetOffsetFromEntityInWorldCoords(till, 0.0, 0.0, -0.12)
                                         local tillRotation = GetEntityRotation(till, 2)
+                                        print(string.format("[DEBUG] Initiating robbery for store %d at coords %s", storeIndex, json.encode(tillCoords)))
                                         TriggerServerEvent("ff_shoprobbery:server:startedRobbery", tillCoords, tillRotation)
                                         Wait(5000)
+                                    else
+                                        print(string.format("[DEBUG] No till found for store %d at ped coords %s", storeIndex, json.encode(clerkPos)))
                                     end
+                                else
+                                    print(string.format("[DEBUG] Store %d not robbable: active=%s, cooldown=%s", storeIndex, tostring(storeData.active), tostring(storeData.cooldown)))
                                 end
+                            else
+                                print("[DEBUG] Ped has no storeIndex")
                             end
+                        else
+                            print("[DEBUG] Ped not registered for robbery")
                         end
                     end
                 end

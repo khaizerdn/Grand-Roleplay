@@ -3,16 +3,36 @@ local peds = {
 }
 
 --- Create shop peds on server start
----@param location vector3
+---@param location vector4
+---@param storeIndex number
 function peds.create(location, storeIndex)
     local modelHash = Config.Peds[math.random(1, #Config.Peds)]
     local ped = CreatePed(4, modelHash, location.x, location.y, location.z, location.w, true, false)
     local netId = NetworkGetNetworkIdFromEntity(ped)
 
     if netId and netId > 0 then
-        Entity(ped).state:set("ff_shoprobbery:registerPed", true, true)
-        Entity(ped).state:set("storeIndex", storeIndex, true)
-        table.insert(peds.created, netId)
+        local success = false
+        for i = 1, 3 do -- Retry up to 3 times
+            Entity(ped).state:set("ff_shoprobbery:registerPed", true, true)
+            Entity(ped).state:set("storeIndex", storeIndex, true)
+            if Entity(ped).state["ff_shoprobbery:registerPed"] and Entity(ped).state.storeIndex == storeIndex then
+                success = true
+                break
+            end
+            Wait(100)
+        end
+        if success then
+            table.insert(peds.created, netId)
+            print(string.format("[DEBUG] Ped created for store %d (netId: %d, model: %s)", storeIndex, netId, modelHash))
+        else
+            print(string.format("[DEBUG] Failed to set state for ped for store %d (netId: %d)", storeIndex, netId))
+            DeleteEntity(ped)
+        end
+    else
+        print(string.format("[DEBUG] Failed to create ped for store %d: invalid netId", storeIndex))
+        if ped and DoesEntityExist(ped) then
+            DeleteEntity(ped)
+        end
     end
 end
 
