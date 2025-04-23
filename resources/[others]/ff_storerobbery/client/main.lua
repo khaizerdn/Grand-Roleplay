@@ -31,20 +31,28 @@ local function startClerkTask()
                             local storeIndex = Entity(entity).state.storeIndex
                             if storeIndex then
                                 local storeData = GlobalState[string.format("ff_shoprobbery:store:%s", storeIndex)]
-                                if storeData and not storeData.active and storeData.cooldown == -1 then
-                                    local clerkPos = GetEntityCoords(entity, false)
-                                    local till = GetClosestObjectOfType(clerkPos.x, clerkPos.y, clerkPos.z, 5.0, `prop_till_01`, false, false, false)
-                                    if till and DoesEntityExist(till) then
-                                        local tillCoords = GetOffsetFromEntityInWorldCoords(till, 0.0, 0.0, -0.12)
-                                        local tillRotation = GetEntityRotation(till, 2)
-                                        print(string.format("[DEBUG] Initiating robbery for store %d at coords %s", storeIndex, json.encode(tillCoords)))
-                                        TriggerServerEvent("ff_shoprobbery:server:startedRobbery", tillCoords, tillRotation)
-                                        Wait(5000)
+                                if storeData and not storeData.active then
+                                    local isNonRobbable = (storeData.nonRobbableUntil or -1) > GetGameTimer()
+                                    if not isNonRobbable and storeData.cooldown == -1 then
+                                        local clerkPos = GetEntityCoords(entity, false)
+                                        local till = GetClosestObjectOfType(clerkPos.x, clerkPos.y, clerkPos.z, 5.0, `prop_till_01`, false, false, false)
+                                        if till and DoesEntityExist(till) then
+                                            local tillCoords = GetOffsetFromEntityInWorldCoords(till, 0.0, 0.0, -0.12)
+                                            local tillRotation = GetEntityRotation(till, 2)
+                                            print(string.format("[DEBUG] Initiating robbery for store %d at coords %s", storeIndex, json.encode(tillCoords)))
+                                            TriggerServerEvent("ff_shoprobbery:server:startedRobbery", tillCoords, tillRotation)
+                                            Wait(5000)
+                                        else
+                                            print(string.format("[DEBUG] No till found for store %d at ped coords %s", storeIndex, json.encode(clerkPos)))
+                                        end
                                     else
-                                        print(string.format("[DEBUG] No till found for store %d at ped coords %s", storeIndex, json.encode(clerkPos)))
+                                        print(string.format("[DEBUG] Store %d not robbable: nonRobbableUntil=%s, cooldown=%s", storeIndex, tostring(storeData.nonRobbableUntil or "nil"), tostring(storeData.cooldown)))
+                                        -- Trigger non-robbable behavior
+                                        TriggerServerEvent("ff_shoprobbery:server:startedRobbery", GetEntityCoords(entity, false), GetEntityRotation(entity, 2), false)
+                                        Wait(5000)
                                     end
                                 else
-                                    print(string.format("[DEBUG] Store %d not robbable: active=%s, cooldown=%s", storeIndex, tostring(storeData.active), tostring(storeData.cooldown)))
+                                    print(string.format("[DEBUG] Store %d not robbable: storeData=%s, active=%s, nonRobbableUntil=%s", storeIndex, tostring(storeData), tostring(storeData and storeData.active), tostring(storeData and storeData.nonRobbableUntil or "nil")))
                                 end
                             else
                                 print("[DEBUG] Ped has no storeIndex")

@@ -36,7 +36,7 @@ RegisterNetEvent("ff_shoprobbery:client:robTill", function(clerkNet, tillCoords,
     local bagDropped = false
     while timer >= GetGameTimer() do
         if IsEntityDead(entity) then
-            TriggerServerEvent("ff_shoprobbery:server:cancelRobbery", tillCoords, true)
+            TriggerServerEvent("ff_shoprobbery:server:cancelRobbery", tillCoords, false)
             break
         end
         -- Check proximity before bag is dropped
@@ -57,7 +57,7 @@ RegisterNetEvent("ff_shoprobbery:client:robTill", function(clerkNet, tillCoords,
         timer = GetGameTimer() + 200
         while timer >= GetGameTimer() do
             if IsEntityDead(entity) then
-                TriggerServerEvent("ff_shoprobbery:server:cancelRobbery", tillCoords)
+                TriggerServerEvent("ff_shoprobbery:server:cancelRobbery", tillCoords, false)
                 break
             end
             Wait(0)
@@ -69,7 +69,7 @@ RegisterNetEvent("ff_shoprobbery:client:robTill", function(clerkNet, tillCoords,
             timer = GetGameTimer() + 10000
             while timer >= GetGameTimer() do
                 if IsEntityDead(entity) then
-                    TriggerServerEvent("ff_shoprobbery:server:cancelRobbery", tillCoords)
+                    TriggerServerEvent("ff_shoprobbery:server:cancelRobbery", tillCoords, false)
                     DeleteObject(bag)
                     break
                 end
@@ -81,7 +81,7 @@ RegisterNetEvent("ff_shoprobbery:client:robTill", function(clerkNet, tillCoords,
                 timer = GetGameTimer() + 75
                 while timer >= GetGameTimer() do
                     if IsEntityDead(entity) then
-                        TriggerServerEvent("ff_shoprobbery:server:cancelRobbery", tillCoords)
+                        TriggerServerEvent("ff_shoprobbery:server:cancelRobbery", tillCoords, false)
                         DeleteObject(bag)
                         break
                     end
@@ -95,7 +95,7 @@ RegisterNetEvent("ff_shoprobbery:client:robTill", function(clerkNet, tillCoords,
                 CreateThread(function()
                     while true do
                         if IsEntityDead(entity) then
-                            TriggerServerEvent("ff_shoprobbery:server:cancelRobbery", tillCoords)
+                            TriggerServerEvent("ff_shoprobbery:server:cancelRobbery", tillCoords, false)
                             break
                         end
                         local playerCoords = GetEntityCoords(cache.ped, false)
@@ -117,7 +117,7 @@ RegisterNetEvent("ff_shoprobbery:client:robTill", function(clerkNet, tillCoords,
             timer = GetGameTimer() + 2500
             while timer >= GetGameTimer() do
                 if IsEntityDead(entity) then
-                    TriggerServerEvent("ff_shoprobbery:server:cancelRobbery", tillCoords)
+                    TriggerServerEvent("ff_shoprobbery:server:cancelRobbery", tillCoords, false)
                     break
                 end
                 Wait(0)
@@ -126,7 +126,7 @@ RegisterNetEvent("ff_shoprobbery:client:robTill", function(clerkNet, tillCoords,
             local stop = GetGameTimer() + 120000
             while stop >= GetGameTimer() do
                 if IsEntityDead(entity) then
-                    TriggerServerEvent("ff_shoprobbery:server:cancelRobbery", tillCoords)
+                    TriggerServerEvent("ff_shoprobbery:server:cancelRobbery", tillCoords, false)
                     break
                 end
                 Wait(50)
