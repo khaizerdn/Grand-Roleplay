@@ -101,7 +101,7 @@ RegisterNetEvent("ff_shoprobbery:client:robTill", function(clerkNet, tillCoords,
                         local playerCoords = GetEntityCoords(cache.ped, false)
                         local distance = #(playerCoords - pedCoords)
                         if distance > 30.0 then
-                            TriggerServerEvent("ff_shoprobbery:server:cancelRobbery", tillCoords)
+                            TriggerServerEvent("ff_shoprobbery:server:startCooldown", tillCoords)
                             break
                         end
                         Wait(100)

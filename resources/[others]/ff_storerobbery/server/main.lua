@@ -91,7 +91,7 @@ local function finishRobbery(index, src, skipCooldown)
         end
     end
     
-    -- Reset store and spawn new ped/safe (skip cooldown logic if specified)
+    -- Reset store and spawn new ped/safe
     if skipCooldown then
         GlobalState[string.format("ff_shoprobbery:store:%s", index)] = {
             active = false,
@@ -295,27 +295,33 @@ end)
 
 ---@param storeIndex number
 ---@param safeNet number
-RegisterNetEvent("ff_shoprobbery:server:lootedSafe", function(storeIndex, safeNet)
+-- Handle safe looting without cancellation
+RegisterNetEvent("ff_shoprobbery:server:lootedSafe", function(safeCoords)
     local src = source
     local player = GetPlayer(src)
     if not player then return end
 
-    local storeData = GlobalState[string.format("ff_shoprobbery:store:%s", storeIndex)]
-    if not storeData or not storeData.active then return end
+    local closestStore = getClosestStore(safeCoords)
+    if not closestStore then return end
+    local storeData = GlobalState[string.format("ff_shoprobbery:store:%s", closestStore)]
+    if not storeData or not storeData.active or not storeData.hackedNetwork or storeData.openedSafe then return end
 
-    local ped = GetPlayerPed(src)
-    local pedCoords = GetEntityCoords(ped, false)
-    local storeConfig = Config.Locations[storeIndex]
-    if not storeConfig or #(pedCoords - vector3(storeConfig.safe.x, storeConfig.safe.y, storeConfig.safe.z)) > 2.0 then return end
+    updateStore(closestStore, "openedSafe", true)
 
-    for _, itemData in pairs(Config.SafeItems) do
-        if not itemData.chance or math.random(100) >= itemData.chance then
-            GiveItem(src, itemData.item, math.random(itemData.amount.min, itemData.amount.max))
+    -- Award safe items
+    for _, item in ipairs(Config.SafeItems) do
+        local chance = math.random(1, 100)
+        if chance <= item.chance then
+            local amount = math.random(item.min, item.max)
+            AddItem(src, item.item, amount)
+            SendLog(src, GetPlayerName(src), locale("logs.item.title"), string.format(locale("logs.item.description"), amount, item.item, closestStore), Colours.FiveForgeGreen)
         end
     end
 
-    finishRobbery(storeIndex, src) -- Pass src
-    SendLog(src, GetPlayerName(src), locale("logs.looted_safe.title"), string.format(locale("logs.looted_safe.description"), storeIndex), Colours.FiveForgeBlue)
+    -- End robbery gracefully without cancellation
+    finishRobbery(closestStore, src)
+    Notify(src, "Safe looted successfully", "success")
+    SendLog(src, GetPlayerName(src), locale("logs.safe.title"), string.format(locale("logs.safe.description"), closestStore), Colours.FiveForgeGreen)
 end)
 
 -- Process store initial setup (store global states and till clerks)
@@ -434,7 +440,7 @@ lib.addCommand('resetstores', {
     SendLog(src, GetPlayerName(src), locale("logs.global_cooldown.title"), "All stores reset", Colours.FiveForgeBlue)
 end)
 
--- Update the cancelRobbery event to handle the beforeBagDropped flag
+-- Handle cancellation for pre-bag scenarios
 RegisterNetEvent("ff_shoprobbery:server:cancelRobbery", function(tillCoords, beforeBagDropped)
     local src = source
     local player = GetPlayer(src)
@@ -455,4 +461,18 @@ RegisterNetEvent("ff_shoprobbery:server:finishNonRobbableRobbery", function(stor
     local player = GetPlayer(src) -- Your framework's player retrieval function
     if not player then return end
     finishRobbery(storeIndex, src) -- Assuming this function exists and uses storeIndex
+end)
+
+-- New event to start cooldown without cancellation
+RegisterNetEvent("ff_shoprobbery:server:startCooldown", function(tillCoords)
+    local src = source
+    local player = GetPlayer(src)
+    if not player then return end
+
+    local closestStore = getClosestStore(tillCoords)
+    if not closestStore or not GlobalState[string.format("ff_shoprobbery:store:%s", closestStore)].active then return end
+
+    finishRobbery(closestStore, src)
+    Notify(src, "You left the store, cooldown started", "info")
+    SendLog(src, GetPlayerName(src), locale("logs.cooldown.title"), string.format(locale("logs.cooldown.description"), closestStore), Colours.FiveForgeBlue)
 end)
