@@ -32,8 +32,9 @@ local function startClerkTask()
                             if storeIndex then
                                 local storeData = GlobalState[string.format("ff_shoprobbery:store:%s", storeIndex)]
                                 if storeData and not storeData.active then
-                                    local isNonRobbable = (storeData.nonRobbableUntil or -1) > GetGameTimer()
+                                    local isNonRobbable = (storeData.nonRobbableUntil or -1) > GetGameTimer() or not Config.Locations[storeIndex].robbable
                                     if not isNonRobbable and storeData.cooldown == -1 then
+                                        -- Normal robbery
                                         local clerkPos = GetEntityCoords(entity, false)
                                         local till = GetClosestObjectOfType(clerkPos.x, clerkPos.y, clerkPos.z, 5.0, `prop_till_01`, false, false, false)
                                         if till and DoesEntityExist(till) then
@@ -46,9 +47,10 @@ local function startClerkTask()
                                             print(string.format("[DEBUG] No till found for store %d at ped coords %s", storeIndex, json.encode(clerkPos)))
                                         end
                                     else
-                                        print(string.format("[DEBUG] Store %d not robbable: nonRobbableUntil=%s, cooldown=%s", storeIndex, tostring(storeData.nonRobbableUntil or "nil"), tostring(storeData.cooldown)))
-                                        -- Trigger non-robbable behavior
-                                        TriggerServerEvent("ff_shoprobbery:server:startedRobbery", GetEntityCoords(entity, false), GetEntityRotation(entity, 2), false)
+                                        -- Non-robbable behavior: trigger hands-up and flee
+                                        print(string.format("[DEBUG] Store %d not robbable: nonRobbableUntil=%s, cooldown=%s, config_robbable=%s", storeIndex, tostring(storeData.nonRobbableUntil or "nil"), tostring(storeData.cooldown), tostring(Config.Locations[storeIndex].robbable)))
+                                        local clerkNet = NetworkGetNetworkIdFromEntity(entity)
+                                        TriggerEvent("ff_shoprobbery:client:robTill", clerkNet, GetEntityCoords(entity, false), GetEntityRotation(entity, 2), false, storeIndex)
                                         Wait(5000)
                                     end
                                 else
@@ -124,4 +126,31 @@ lib.callback.register('ff_shoprobbery:isPedDead', function(netId)
         return IsEntityDead(entity)
     end
     return false -- Return false if entity doesn’t exist
+end)
+
+-- Initialize proximity tracking for each store
+local playerProximity = {}
+for index, _ in ipairs(Config.Locations) do
+    playerProximity[index] = false
+end
+
+-- Thread to monitor player proximity to stores
+CreateThread(function()
+    while true do
+        local playerPed = PlayerPedId()
+        local playerPos = GetEntityCoords(playerPed)
+        for index, location in ipairs(Config.Locations) do
+            local storePos = vector3(location.ped.x, location.ped.y, location.ped.z)
+            local distance = #(playerPos - storePos)
+            local isInProximity = distance < 30.0
+            if isInProximity and not playerProximity[index] then
+                TriggerServerEvent("ff_shoprobbery:server:enterProximity", index)
+                playerProximity[index] = true
+            elseif not isInProximity and playerProximity[index] then
+                TriggerServerEvent("ff_shoprobbery:server:leaveProximity", index)
+                playerProximity[index] = false
+            end
+        end
+        Wait(1000) -- Check every second to reduce resource usage
+    end
 end)

@@ -44,102 +44,64 @@ local function updateStore(storeIndex, key, value)
     GlobalState[string.format("ff_shoprobbery:store:%s", storeIndex)] = storeData
 end
 
---- Resets all the robbery states for a specific store back to default value
----@param index number
----@param src number
----@param skipCooldown boolean
----@param setNonRobbable boolean
+--- Resets robbery states and handles ped respawn logic
+---@param index number Store index
+---@param src number Player source
+---@param skipCooldown boolean Immediate reset (e.g., pre-bag cancellation)
+---@param setNonRobbable boolean Set store as non-robbable (e.g., ped death)
 local function finishRobbery(index, src, skipCooldown, setNonRobbable)
     if not index or type(index) ~= "number" then return end
     local storeData = GlobalState[string.format("ff_shoprobbery:store:%s", index)]
-    if not storeData then
-        print(string.format("[DEBUG] No storeData for store %d, initializing", index))
-        storeData = {
-            active = false,
-            robbedTill = false,
-            cooldown = -1,
-            nonRobbableUntil = -1,
-            hackedNetwork = false,
-            safeCode = generateSafeCode(),
-            openedSafe = false,
-            safeNet = -1
-        }
-    end
+    if not storeData then return end
 
+    -- Reset store states
     local safeNetworkId = storeData.safeNet
     updateStore(index, "active", false)
     updateStore(index, "robbedTill", false)
     updateStore(index, "hackedNetwork", false)
     updateStore(index, "openedSafe", false)
     updateStore(index, "safeNet", -1)
-    updateStore(index, "cooldown", skipCooldown and -1 or GetGameTimer() + Config.StoreCooldown * 1000)
-    updateStore(index, "nonRobbableUntil", setNonRobbable and GetGameTimer() + Config.StoreCooldown * 1000 or -1)
+
+    -- Set cooldown and non-robbable states
+    local cooldownTime = skipCooldown and -1 or GetGameTimer() + Config.StoreCooldown * 1000
+    local nonRobbableTime = setNonRobbable and GetGameTimer() + Config.StoreCooldown * 1000 or -1
+    updateStore(index, "cooldown", cooldownTime)
+    updateStore(index, "nonRobbableUntil", nonRobbableTime)
 
     TriggerClientEvent("ff_shoprobbery:client:disableNetwork", -1, index)
 
-    -- Handle ped
+    -- Handle ped deletion if alive
     local pedNet = peds.getClosest(Config.Locations[index].ped)
     if pedNet then
         local pedEntity = NetworkGetEntityFromNetworkId(pedNet)
         if pedEntity and DoesEntityExist(pedEntity) then
             local isDead = lib.callback.await('ff_shoprobbery:isPedDead', src, pedNet)
             if not isDead then
-                print(string.format("[DEBUG] Deleting ped for store %d (netId: %d)", index, pedNet))
                 DeleteEntity(pedEntity)
-            else
-                print(string.format("[DEBUG] Ped for store %d (netId: %d) is dead, not deleting", index, pedNet))
             end
-        else
-            print(string.format("[DEBUG] No valid ped entity found for store %d (netId: %d)", index, pedNet))
         end
-    else
-        print(string.format("[DEBUG] No ped found for store %d", index))
     end
 
-    -- Delete safe
+    -- Delete safe if it exists
     if safeNetworkId and safeNetworkId > 0 then
         local safeEntity = NetworkGetEntityFromNetworkId(safeNetworkId)
         if safeEntity and DoesEntityExist(safeEntity) then
-            print(string.format("[DEBUG] Deleting safe for store %d (netId: %d)", index, safeNetworkId))
             DeleteEntity(safeEntity)
         end
     end
-    
-    -- Reset store and spawn new ped/safe
-    GlobalState[string.format("ff_shoprobbery:store:%s", index)] = {
-        active = false,
-        robbedTill = false,
-        cooldown = skipCooldown and -1 or GetGameTimer() + Config.StoreCooldown * 1000,
-        nonRobbableUntil = setNonRobbable and GetGameTimer() + Config.StoreCooldown * 1000 or -1,
-        hackedNetwork = false,
-        safeCode = generateSafeCode(),
-        openedSafe = false,
-        safeNet = -1
-    }
-    print(string.format("[DEBUG] Store %d reset: cooldown=%s, nonRobbableUntil=%s, new safe code generated", 
-        index, skipCooldown and -1 or GetGameTimer() + Config.StoreCooldown * 1000, setNonRobbable and GetGameTimer() + Config.StoreCooldown * 1000 or -1))
-    
-    peds.create(Config.Locations[index].ped, index)
-    local pedNet = peds.getClosest(Config.Locations[index].ped)
-    print(string.format("[DEBUG] New ped spawned for store %d (netId: %s)", index, pedNet or "none"))
-    
-    local success, netId = lib.callback.await("ff_shoprobbery:createSafe", src, Config.Locations[index].safe)
-    if success then
-        updateStore(index, "safeNet", netId)
-        print(string.format("[DEBUG] Safe created for store %d (netId: %d)", index, netId))
-    else
-        print(string.format("[DEBUG] Failed to create safe for store %d", index))
+
+    -- Immediate ped respawn only for skipCooldown (pre-bag cancellation)
+    if skipCooldown then
+        peds.create(Config.Locations[index].ped, index)
+        print(string.format("[DEBUG] Immediately respawned ped for store %d", index))
     end
 
-    -- Clear nonRobbableUntil after cooldown
+    -- Set timeout to clear non-robbable state
     if setNonRobbable then
         SetTimeout(Config.StoreCooldown * 1000, function()
-            local storeKey = string.format("ff_shoprobbery:store:%s", index)
-            if GlobalState[storeKey].nonRobbableUntil ~= -1 then
-                updateStore(index, "nonRobbableUntil", -1)
-                updateStore(index, "cooldown", -1)
-                print(string.format("[DEBUG] Store %d non-robbable period ended", index))
-            end
+            updateStore(index, "nonRobbableUntil", -1)
+            updateStore(index, "cooldown", -1)
+            print(string.format("[DEBUG] Store %d non-robbable period ended", index))
         end)
     end
 end
@@ -496,4 +458,65 @@ RegisterNetEvent("ff_shoprobbery:server:startCooldown", function(tillCoords)
     finishRobbery(closestStore, src, false, true)
     Notify(src, "You left the store, cooldown started", "info")
     SendLog(src, GetPlayerName(src), locale("logs.cooldown.title"), string.format(locale("logs.cooldown.description"), closestStore), Colours.FiveForgeBlue)
+end)
+
+-- Table to track players in proximity of each store
+local storeProximityPlayers = {}
+for index, _ in ipairs(Config.Locations) do
+    storeProximityPlayers[index] = {}
+end
+
+-- Player enters proximity
+RegisterNetEvent("ff_shoprobbery:server:enterProximity", function(storeIndex)
+    local src = source
+    if not storeProximityPlayers[storeIndex] then return end
+    table.insert(storeProximityPlayers[storeIndex], src)
+end)
+
+-- Player leaves proximity
+RegisterNetEvent("ff_shoprobbery:server:leaveProximity", function(storeIndex)
+    local src = source
+    if not storeProximityPlayers[storeIndex] then return end
+    for i, playerSrc in ipairs(storeProximityPlayers[storeIndex]) do
+        if playerSrc == src then
+            table.remove(storeProximityPlayers[storeIndex], i)
+            break
+        end
+    end
+    -- Check if no players remain and ped is dead
+    if #storeProximityPlayers[storeIndex] == 0 then
+        local pedNet = peds.getClosest(Config.Locations[storeIndex].ped)
+        if pedNet then
+            local pedEntity = NetworkGetEntityFromNetworkId(pedNet)
+            if pedEntity and DoesEntityExist(pedEntity) and GetEntityHealth(pedEntity) <= 0 then
+                DeleteEntity(pedEntity)
+                peds.create(Config.Locations[storeIndex].ped, storeIndex)
+                print(string.format("[DEBUG] Respawned ped for store %d after last player left proximity", storeIndex))
+            end
+        end
+    end
+end)
+
+-- Handle player disconnects
+AddEventHandler('playerDropped', function()
+    local src = source
+    for storeIndex, players in pairs(storeProximityPlayers) do
+        for i, playerSrc in ipairs(players) do
+            if playerSrc == src then
+                table.remove(storeProximityPlayers[storeIndex], i)
+                if #storeProximityPlayers[storeIndex] == 0 then
+                    local pedNet = peds.getClosest(Config.Locations[storeIndex].ped)
+                    if pedNet then
+                        local pedEntity = NetworkGetEntityFromNetworkId(pedNet)
+                        if pedEntity and DoesEntityExist(pedEntity) and IsEntityDead(pedEntity) then
+                            DeleteEntity(pedEntity)
+                            peds.create(Config.Locations[storeIndex].ped, storeIndex)
+                            print(string.format("[DEBUG] Respawned ped for store %d after player disconnected", storeIndex))
+                        end
+                    end
+                end
+                break
+            end
+        end
+    end
 end)
