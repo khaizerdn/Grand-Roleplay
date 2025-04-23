@@ -441,9 +441,13 @@ end)
 RegisterNetEvent("ff_shoprobbery:server:finishNonRobbableRobbery", function(storeIndex)
     if not storeIndex or type(storeIndex) ~= "number" then return end
     local src = source
-    local player = GetPlayer(src) -- Your framework's player retrieval function
+    local player = GetPlayer(src)
     if not player then return end
-    finishRobbery(storeIndex, src) -- Assuming this function exists and uses storeIndex
+    local storeData = GlobalState[string.format("ff_shoprobbery:store:%s", storeIndex)]
+    if not storeData then return end
+
+    -- Only reset active state, don’t touch ped unless dead
+    updateStore(storeIndex, "active", false)
 end)
 
 -- Start cooldown without cancellation for post-bag proximity
@@ -519,4 +523,28 @@ AddEventHandler('playerDropped', function()
             end
         end
     end
+end)
+
+RegisterNetEvent("ff_shoprobbery:server:resetNonRobbableStore", function(storeIndex)
+    if not storeIndex or type(storeIndex) ~= "number" then return end
+    local src = source
+    local player = GetPlayer(src)
+    if not player then return end
+    local storeData = GlobalState[string.format("ff_shoprobbery:store:%s", storeIndex)]
+    if not storeData then return end
+
+    -- Reset store states
+    updateStore(storeIndex, "active", false)
+    updateStore(storeIndex, "robbedTill", false)
+    updateStore(storeIndex, "hackedNetwork", false)
+    updateStore(storeIndex, "openedSafe", false)
+    updateStore(storeIndex, "safeNet", -1)
+    updateStore(storeIndex, "cooldown", -1)
+    updateStore(storeIndex, "nonRobbableUntil", -1)
+
+    -- Respawn ped without deleting the old one (old ped is fleeing)
+    peds.create(Config.Locations[storeIndex].ped, storeIndex)
+    print(string.format("[DEBUG] Reset non-robbable store %d and respawned ped", storeIndex))
+
+    SendLog(src, GetPlayerName(src), locale("logs.reset_nonrobbable.title"), string.format(locale("logs.reset_nonrobbable.description"), storeIndex), Colours.FiveForgeBlue)
 end)

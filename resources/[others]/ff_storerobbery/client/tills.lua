@@ -1,48 +1,69 @@
+local activeRobberyStates = {}
+
 ---@param clerkNet number
 ---@param tillCoords vector3
 ---@param tillRotation vector3
+---@param isRobbable boolean
+---@param storeIndex string | number
 RegisterNetEvent("ff_shoprobbery:client:robTill", function(clerkNet, tillCoords, tillRotation, isRobbable, storeIndex)
     if not clerkNet or not NetworkDoesNetworkIdExist(clerkNet) then return end
+    if not storeIndex then return end
 
     local entity = NetworkGetEntityFromNetworkId(clerkNet)
     if not entity or not DoesEntityExist(entity) then return end
 
     if not lib.requestModel(`p_poly_bag_01_s`) then return end
 
-    local pedCoords = GetEntityCoords(entity, false)
+    local pedCoords = GetEntityCoords(entity)
     local cashRegister = GetClosestObjectOfType(pedCoords.x, pedCoords.y, pedCoords.z, 5.0, `prop_till_01`, false, false, false)
     if not cashRegister or not DoesEntityExist(cashRegister) then return end
 
-    RobberyAlert(tillCoords)
+    -- Avoid repeating non-robbable logic
+    if not isRobbable then
+        if activeRobberyStates[storeIndex] then return end
+        activeRobberyStates[storeIndex] = true
 
+        RobberyAlert(tillCoords)
+        lib.requestAnimDict("mp_am_hold_up")
+        TaskPlayAnim(entity, "mp_am_hold_up", "holdup_victim_20s", 8.0, -8.0, -1, 2, 0, false, false, false)
+        Wait(5000)
+        FreezeEntityPosition(entity, false)
+        TaskReactAndFleePed(entity, cache.ped)
+        TriggerServerEvent("ff_shoprobbery:server:finishNonRobbableRobbery", storeIndex)
+
+        -- Start a thread to reset the store when player leaves proximity
+        CreateThread(function()
+            while true do
+                local playerCoords = GetEntityCoords(cache.ped)
+                local distance = #(playerCoords - pedCoords)
+                if distance > 30.0 then
+                    activeRobberyStates[storeIndex] = nil
+                    TriggerServerEvent("ff_shoprobbery:server:resetNonRobbableStore", storeIndex)
+                    break
+                end
+                Wait(100)
+            end
+        end)
+        return
+    end
+
+    -- Proceed with full robbery logic
+    RobberyAlert(tillCoords)
     lib.requestAnimDict("mp_am_hold_up")
     TaskPlayAnim(entity, "mp_am_hold_up", "holdup_victim_20s", 8.0, -8.0, -1, 2, 0, false, false, false)
     while not IsEntityPlayingAnim(entity, "mp_am_hold_up", "holdup_victim_20s", 3) do Wait(0) end
 
-    if not isRobbable then
-        -- Non-robbable behavior: hands up, brief delay, flee, alert police
-        Wait(5000) -- Simulate starting to open the register (5 seconds)
-        ClearPedTasks(entity)
-        FreezeEntityPosition(entity, false)
-        SetPedFleeAttributes(entity, 0, true)
-        TaskReactAndFleePed(entity, cache.ped)
-        -- Notify server to finish the robbery attempt
-        TriggerServerEvent("ff_shoprobbery:server:finishNonRobbableRobbery", storeIndex)
-        return
-    end
-
-    -- Proceed with full robbery if robbable
     local timer = GetGameTimer() + 10800
     local bagDropped = false
+
     while timer >= GetGameTimer() do
         if IsEntityDead(entity) then
             TriggerServerEvent("ff_shoprobbery:server:cancelRobbery", tillCoords, false)
-            break
+            return
         end
-        -- Check proximity before bag is dropped
-        local playerCoords = GetEntityCoords(cache.ped, false)
-        local distance = #(playerCoords - pedCoords)
-        if distance > 30.0 then
+
+        local playerCoords = GetEntityCoords(cache.ped)
+        if #(playerCoords - pedCoords) > 30.0 then
             TriggerServerEvent("ff_shoprobbery:server:cancelRobbery", tillCoords, true)
             ClearPedTasks(entity)
             return
@@ -51,14 +72,14 @@ RegisterNetEvent("ff_shoprobbery:client:robTill", function(clerkNet, tillCoords,
     end
 
     if not IsEntityDead(entity) then
-        local cashRegisterCoords = GetEntityCoords(cashRegister, false)
-        CreateModelSwap(cashRegisterCoords.x, cashRegisterCoords.y, cashRegisterCoords.z, 0.5, GetHashKey('prop_till_01'), GetHashKey('prop_till_01_dam'), false)
+        local cashRegisterCoords = GetEntityCoords(cashRegister)
+        CreateModelSwap(cashRegisterCoords.x, cashRegisterCoords.y, cashRegisterCoords.z, 0.5, `prop_till_01`, `prop_till_01_dam`, false)
 
-        timer = GetGameTimer() + 200
+        local timer = GetGameTimer() + 200
         while timer >= GetGameTimer() do
             if IsEntityDead(entity) then
                 TriggerServerEvent("ff_shoprobbery:server:cancelRobbery", tillCoords, false)
-                break
+                return
             end
             Wait(0)
         end
@@ -71,7 +92,7 @@ RegisterNetEvent("ff_shoprobbery:client:robTill", function(clerkNet, tillCoords,
                 if IsEntityDead(entity) then
                     TriggerServerEvent("ff_shoprobbery:server:cancelRobbery", tillCoords, false)
                     DeleteObject(bag)
-                    break
+                    return
                 end
                 Wait(0)
             end
@@ -83,24 +104,19 @@ RegisterNetEvent("ff_shoprobbery:client:robTill", function(clerkNet, tillCoords,
                     if IsEntityDead(entity) then
                         TriggerServerEvent("ff_shoprobbery:server:cancelRobbery", tillCoords, false)
                         DeleteObject(bag)
-                        break
+                        return
                     end
                     Wait(0)
                 end
                 SetEntityHeading(bag, tillRotation.z)
                 ApplyForceToEntity(bag, 3, vector3(0.0, 50.0, 0.0), 0.0, 0.0, 0.0, 0, true, true, false, false, true)
-                TriggerServerEvent("ff_shoprobbery:server:cashDropped", GetEntityCoords(bag, false), GetEntityRotation(bag, 2))
+                TriggerServerEvent("ff_shoprobbery:server:cashDropped", GetEntityCoords(bag), GetEntityRotation(bag, 2))
                 bagDropped = true
-                -- Start proximity check after bag is dropped
+
                 CreateThread(function()
                     while true do
-                        if IsEntityDead(entity) then
-                            TriggerServerEvent("ff_shoprobbery:server:cancelRobbery", tillCoords, false)
-                            break
-                        end
-                        local playerCoords = GetEntityCoords(cache.ped, false)
-                        local distance = #(playerCoords - pedCoords)
-                        if distance > 30.0 then
+                        local playerCoords = GetEntityCoords(cache.ped)
+                        if #(playerCoords - pedCoords) > 30.0 then
                             TriggerServerEvent("ff_shoprobbery:server:startCooldown", tillCoords)
                             break
                         end
@@ -111,29 +127,8 @@ RegisterNetEvent("ff_shoprobbery:client:robTill", function(clerkNet, tillCoords,
                 DeleteObject(bag)
             end
 
-            -- Play cower animations
-            lib.requestAnimDict("mp_am_hold_up")
-            TaskPlayAnim(entity, "mp_am_hold_up", "cower_intro", 8.0, -8.0, -1, 0, 0, false, false, false)
-            timer = GetGameTimer() + 2500
-            while timer >= GetGameTimer() do
-                if IsEntityDead(entity) then
-                    TriggerServerEvent("ff_shoprobbery:server:cancelRobbery", tillCoords, false)
-                    break
-                end
-                Wait(0)
-            end
-            TaskPlayAnim(entity, "mp_am_hold_up", "cower_loop", 8.0, -8.0, -1, 1, 0, false, false, false)
-            local stop = GetGameTimer() + 120000
-            while stop >= GetGameTimer() do
-                if IsEntityDead(entity) then
-                    TriggerServerEvent("ff_shoprobbery:server:cancelRobbery", tillCoords, false)
-                    break
-                end
-                Wait(50)
-            end
-            if IsEntityPlayingAnim(entity, "mp_am_hold_up", "cower_loop", 3) then
-                ClearPedTasks(entity)
-            end
+            FreezeEntityPosition(entity, false)
+            TaskReactAndFleePed(entity, cache.ped)
         end
     end
 
@@ -141,7 +136,7 @@ RegisterNetEvent("ff_shoprobbery:client:robTill", function(clerkNet, tillCoords,
         ClearPedTasks(entity)
         FreezeEntityPosition(entity, false)
         SetEntityAsMissionEntity(entity, true, true)
-        TriggerServerEvent("ff_shoprobbery:server:restoreTill", cashRegisterCoords)
+        TriggerServerEvent("ff_shoprobbery:server:restoreTill", GetEntityCoords(cashRegister))
     end
 end)
 
