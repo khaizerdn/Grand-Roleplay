@@ -45,7 +45,7 @@ Config.SafeItems = {
 -- All the different store location data
 Config.Locations = {
     {
-        ped = vec4(2676.24, 3280.45, 55.24, 329.44),
+        ped = vec4(2676.61, 3280.18, 54.24, 328.88),
         safe = vec4(2674.7, 3288.57, 54.24, 154.33),
         network = {
             coords = vec3(2672.87060546875, 3288.09326171875, 55.23943328857422),
