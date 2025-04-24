@@ -111,15 +111,6 @@ lib.callback.register('ff_shoprobbery:createSafe', function(safePosition)
     return safe.create(safePosition)
 end)
 
-RegisterNetEvent("ff_shoprobbery:client:cancelRobbery", function()
-    -- Clear any active progress bars or tasks only if a progress bar is active
-    if Config.Progress == "ox_lib_bar" or Config.Progress == "ox_lib_circle" then
-        if lib.progressActive() then
-            lib.cancelProgress()
-        end
-    end
-end)
-
 lib.callback.register('ff_shoprobbery:isPedDead', function(netId)
     local entity = NetworkGetEntityFromNetworkId(netId)
     if entity and DoesEntityExist(entity) then

@@ -535,8 +535,6 @@ RegisterNetEvent("ff_shoprobbery:server:resetNonRobbableStore", function(storeIn
     updateStore(storeIndex, "hackedNetwork", false)
     updateStore(storeIndex, "openedSafe", false)
     updateStore(storeIndex, "safeNet", -1)
-    updateStore(storeIndex, "cooldown", -1)
-    updateStore(storeIndex, "nonRobbableUntil", -1)
 
     -- Respawn ped without deleting the old one (old ped is fleeing)
     peds.create(Config.Locations[storeIndex].ped, storeIndex)
