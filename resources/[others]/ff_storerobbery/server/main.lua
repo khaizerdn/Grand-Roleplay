@@ -31,17 +31,13 @@ end
 local function updateStore(storeIndex, key, value)
     if not storeIndex or type(storeIndex) ~= "number" then return end
     if not key or type(key) ~= "string" then return end
-    if not value then return end
+    if value == nil then return end
 
-    local storeData = GlobalState[string.format("ff_shoprobbery:store:%s", storeIndex)]
-
-    for k, v in pairs(storeData) do
-        if k == key then
-            storeData[k] = value
-        end
-    end
-
-    GlobalState[string.format("ff_shoprobbery:store:%s", storeIndex)] = storeData
+    local storeKey = string.format("ff_shoprobbery:store:%s", storeIndex)
+    local storeData = GlobalState[storeKey] or {}
+    
+    storeData[key] = value
+    GlobalState[storeKey] = storeData
 end
 
 --- Resets robbery states and handles ped respawn logic
