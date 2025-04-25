@@ -127,6 +127,11 @@ RegisterNetEvent("ff_shoprobbery:server:startedRobbery", function(tillCoords, ti
         return Notify(src, locale("error.already_robbed"), "error")
     end
 
+    local storeConfig = Config.Locations[closestStore]
+    if storeConfig.robbable == false then
+        return Notify(src, locale("error.cannot_rob"), "error")
+    end
+
     -- Prevent robbing the store if not enough police are available
     local activePolice = GetPoliceCount()
     if activePolice < Config.RequiredPolice then

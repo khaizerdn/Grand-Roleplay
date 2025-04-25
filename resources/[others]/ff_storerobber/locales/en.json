@@ -65,6 +65,7 @@
         "not_enough_police": "There are not enough police available, needs %s.",
         "incorrect_code": "You have entered the incorrect code for the safe.",
         "store_cooldown": "Store (%s) doesn't have a cooldown.",
-        "global_cooldown": "There is no global cooldown active."
+        "global_cooldown": "There is no global cooldown active.",
+        "cannot_rob": "You cannot rob this store."
     }
 }
