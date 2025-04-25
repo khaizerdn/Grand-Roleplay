@@ -13,9 +13,15 @@ end
 function GiveMoney(source, amount, reason)
     if Config.UseMoneyItem then
         if Config.Framework == "Qbox" or Config.Framework == "QB" then
-            GiveItem(source, "markedbills", 1, {
-                worth = amount
-            })
+            if Config.BlackMoney then
+                GiveItem(source, "black_money", 1, {
+                    worth = amount
+                })
+            else
+                GiveItem(source, "money", 1, {
+                    worth = amount
+                })
+            end
         elseif Config.Framework == "Mythic" then
             GiveItem(source, "moneyroll", math.floor(amount / 100))
         elseif Config.Framework == "ESX" then
