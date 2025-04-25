@@ -24,7 +24,7 @@ Config.RequiredPolice = 0 -- How many police on duty to start heist
 -- Cooldown
 Config.GlobalCooldown = 0 -- In seconds currently at 15 minutes
 Config.UseStoreCooldown = true -- Individual cooldown for different stores aswell as global
-Config.StoreCooldown = 0 -- In seconds currently at 45 minutes
+Config.StoreCooldown = 1 -- In seconds currently at 45 minutes
 
 -- Robbery Loot
 Config.UseMoneyItem = false -- Whether or not to give them dirty money as an item (only setup for Qbox, QB & Mythic)
@@ -54,13 +54,13 @@ Config.Locations = {
         robbable = false  -- Can be robbed
     },
     {
-        ped = vec4(-2966.25, 391.53, 15.04, 86.9),
+        ped = vec4(-2966.39, 391.09, 15.04, 88.67),
         safe = vec4(-2959.03, 387.61, 13.04, 0.58),
         network = {
             coords = vec3(-2957.36474609375, 390.2129211425781, 14.49756336212158),
             radius = 0.6,
         },
-        robbable = false  -- Cannot be robbed
+        robbable = true  -- Cannot be robbed
     },
     {
         ped = vec4(1959.43, 3741.15, 32.34, 300.68),

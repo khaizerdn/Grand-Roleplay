@@ -58,7 +58,7 @@ local function startClerkTask()
                                     local isNonRobbable = (storeData.nonRobbableUntil or -1) > GetGameTimer() or not Config.Locations[storeIndex].robbable
                                     if not isNonRobbable and storeData.cooldown == -1 then
                                         local clerkPos = GetEntityCoords(entity, false)
-                                        local till = GetClosestObjectOfType(clerkPos.x, clerkPos.y, clerkPos.z, 5.0, `prop_till_01`, false, false, false)
+                                        local till = GetClosestObjectOfType(clerkPos.x, clerkPos.y, clerkPos.z, 1.0, `prop_till_01`, false, false, false)
                                         if till and DoesEntityExist(till) then
                                             local tillCoords = GetOffsetFromEntityInWorldCoords(till, 0.0, 0.0, -0.12)
                                             local tillRotation = GetEntityRotation(till, 2)
@@ -158,8 +158,8 @@ RegisterNetEvent("ff_shoprobbery:client:robTill", function(clerkNet, tillCoords,
     end
 
     if not IsEntityDead(entity) then
-        local cashRegisterCoords = GetEntityCoords(cashRegister)
-        CreateModelSwap(cashRegisterCoords.x, cashRegisterCoords.y, cashRegisterCoords.z, 0.5, `prop_till_01`, `prop_till_01_dam`, false)
+        -- Notify server to set tillDamaged to true instead of swapping model directly
+        TriggerServerEvent("ff_shoprobbery:server:setTillDamaged", storeIndex, true)
 
         local timer = GetGameTimer() + 200
         while timer >= GetGameTimer() do
@@ -203,6 +203,7 @@ RegisterNetEvent("ff_shoprobbery:client:robTill", function(clerkNet, tillCoords,
                     while true do
                         local playerCoords = GetEntityCoords(cache.ped)
                         if #(playerCoords - pedCoords) > 30.0 then
+                            TriggerServerEvent("ff_shoprobbery:server:setTillDamaged", storeIndex, false)
                             TriggerServerEvent("ff_shoprobbery:server:startCooldown", tillCoords)
                             break
                         end
@@ -224,13 +225,6 @@ RegisterNetEvent("ff_shoprobbery:client:robTill", function(clerkNet, tillCoords,
         SetEntityAsMissionEntity(entity, true, true)
         TriggerServerEvent("ff_shoprobbery:server:restoreTill", GetEntityCoords(cashRegister))
     end
-end)
-
-RegisterNetEvent("ff_shoprobbery:client:restoreTill", function(tillCoords)
-    if not tillCoords then return end
-    CreateModelSwap(tillCoords.x, tillCoords.y, tillCoords.z, 0.5, GetHashKey('prop_till_01_dam'), GetHashKey('prop_till_01'), false)
-    Wait(1000)
-    RemoveModelSwap(tillCoords.x, tillCoords.y, tillCoords.z, 0.5, GetHashKey('prop_till_01_dam'), GetHashKey('prop_till_01'), false)
 end)
 
 RegisterNetEvent("ff_shoprobbery:client:cashDropped", function(pickupCoords, pickupRotation)
@@ -264,18 +258,32 @@ AddEventHandler("onResourceStop", function(res)
     if res ~= GetCurrentResourceName() then return end
 end)
 
--- State bag handlers
+-- State bag handlers with tillDamaged logic
 for i = 1, #Config.Locations do
     AddStateBagChangeHandler(string.format("ff_shoprobbery:store:%s", i), "", function(bagName, key, value, reserved, replicated)
-        Debug("Store data updated for store " .. i .. ": " .. json.encode(value, { indent = true }), DebugTypes.Info)
         if value and value.robbedTill and not value.hackedNetwork then
             Wait(100)
-            Debug("Triggering network interaction for store " .. i, DebugTypes.Info)
             network.createInteract(i)
         elseif value and value.hackedNetwork and not value.openedSafe then
             Wait(100)
-            Debug("Triggering safe interaction for store " .. i, DebugTypes.Info)
             safe.createInteract(i, value.safeNet)
+        end
+
+        -- Handle till model swap based on tillDamaged state
+        local storeConfig = Config.Locations[i]
+        local pedCoords = storeConfig.ped.xyz
+        if value.tillDamaged then
+            local cashRegister = GetClosestObjectOfType(pedCoords.x, pedCoords.y, pedCoords.z, 5.0, `prop_till_01`, false, false, false)
+            if cashRegister and DoesEntityExist(cashRegister) then
+                local cashRegisterCoords = GetEntityCoords(cashRegister)
+                CreateModelSwap(cashRegisterCoords.x, cashRegisterCoords.y, cashRegisterCoords.z, 0.5, `prop_till_01`, `prop_till_01_dam`, false)
+            end
+        else
+            local cashRegister = GetClosestObjectOfType(pedCoords.x, pedCoords.y, pedCoords.z, 5.0, `prop_till_01_dam`, false, false, false)
+            if cashRegister and DoesEntityExist(cashRegister) then
+                local cashRegisterCoords = GetEntityCoords(cashRegister)
+                CreateModelSwap(cashRegisterCoords.x, cashRegisterCoords.y, cashRegisterCoords.z, 0.5, `prop_till_01_dam`, `prop_till_01`, false)
+            end
         end
     end)
 end

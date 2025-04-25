@@ -23,7 +23,14 @@ function peds.create(location, storeIndex)
         end
         if success then
             table.insert(peds.created, netId)
-            print(string.format("[DEBUG] Ped created for store %d (netId: %d, model: %s)", storeIndex, netId, modelHash))
+            -- Reset tillDamaged for the store when a new ped is created
+            local storeKey = string.format("ff_shoprobbery:store:%s", storeIndex)
+            local storeData = GlobalState[storeKey]
+            if storeData then
+                storeData.tillDamaged = false
+                GlobalState[storeKey] = storeData
+            end
+            print(string.format("[DEBUG] Ped created for store %d (netId: %d, model: %s), tillDamaged reset", storeIndex, netId, modelHash))
         else
             print(string.format("[DEBUG] Failed to set state for ped for store %d (netId: %d)", storeIndex, netId))
             DeleteEntity(ped)
