@@ -81,38 +81,43 @@ RegisterNetEvent("ff_shoprobbery:client:robTill", function(clerkNet, tillCoords,
         TriggerServerEvent("ff_shoprobbery:server:restoreTill", tillCoords)
     end
 
-    if Config.Progress == "ox_lib_bar" then
-        ProgressBar({
-            duration = 21566,
-            label = locale('progress.robbing'),
-            useWhileDead = false,
-            allowRagdoll = true,
-            allowSwimming = false,
-            allowCuffed = false,
-            allowFalling = true,
-            canCancel = false,
-        }, finishTill)
-    elseif Config.Progress == "ox_lib_circle" then
-        ProgressBar({
-            duration = 21566,
-            label = locale('progress.robbing'),
-            position = "bottom",
-            useWhileDead = false,
-            allowRagdoll = true,
-            allowSwimming = false,
-            allowCuffed = false,
-            allowFalling = true,
-            canCancel = false,
-        }, finishTill)
-    elseif Config.Progress == "mythic" then
-        ProgressBar({
-            name = "rob_till",
-            duration = 21566,
-            label = locale('progress.robbing'),
-            useWhileDead = false,
-            canCancel = false,
-            disarm = false
-        }, finishTill)
+    if Config.UseProgressBar then
+        if Config.Progress == "ox_lib_bar" then
+            ProgressBar({
+                duration = 21566,
+                label = locale('progress.robbing'),
+                useWhileDead = false,
+                allowRagdoll = true,
+                allowSwimming = false,
+                allowCuffed = false,
+                allowFalling = true,
+                canCancel = false,
+            }, finishTill)
+        elseif Config.Progress == "ox_lib_circle" then
+            ProgressBar({
+                duration = 21566,
+                label = locale('progress.robbing'),
+                position = "bottom",
+                useWhileDead = false,
+                allowRagdoll = true,
+                allowSwimming = false,
+                allowCuffed = false,
+                allowFalling = true,
+                canCancel = false,
+            }, finishTill)
+        elseif Config.Progress == "mythic" then
+            ProgressBar({
+                name = "rob_till",
+                duration = 21566,
+                label = locale('progress.robbing'),
+                useWhileDead = false,
+                canCancel = false,
+                disarm = false
+            }, finishTill)
+        end
+    else
+        Wait(21566)
+        finishTill()
     end
 end)
 

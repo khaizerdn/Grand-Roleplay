@@ -15,6 +15,7 @@ Config.Target = "ox_target" -- Supports ox_target, qb-target & mythic-targeting
 Config.Notifications = "ox_lib" -- Supports ox_lib, qb, esx, mythic, okok, sd-notify, wasabi_notify, gta or custom
 Config.Progress = "ox_lib_bar" -- Support ox_lib_bar, ox_lib_circle or mythic
 Config.Notify = "gtao" -- Supports ox_lib and gtao
+Config.UseProgressBar = false -- Whether to display a progress bar during till robbery
 
 -- Police & Dispatch Related
 Config.Dispatch = "ps-dispatch" -- Supports cd_dispatch, qs-dispatch, ps-dispatch, rcore_dispatch, mythic-mdt, custom
@@ -29,7 +30,7 @@ Config.StoreCooldown = 0 -- In seconds currently at 45 minutes
 
 -- Robbery Loot
 Config.UseMoneyItem = true -- If you want to give them money as an item or not
-Config.BlackMoney = false -- If you want to give them black money or not
+Config.BlackMoney = true -- If you want to give them black money or not
 Config.TillValue = { min = 250, max = 800 }
 Config.SafeItems = {
     {
