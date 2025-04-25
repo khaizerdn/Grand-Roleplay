@@ -15,7 +15,7 @@ RegisterNetEvent("ff_shoprobbery:client:robTill", function(clerkNet, tillCoords,
     if not lib.requestModel(`p_poly_bag_01_s`) then return end
 
     local pedCoords = GetEntityCoords(entity)
-    local cashRegister = GetClosestObjectOfType(pedCoords.x, pedCoords.y, pedCoords.z, 5.0, `prop_till_01`, false, false, false)
+    local cashRegister = GetClosestObjectOfType(pedCoords.x, pedCoords.y, pedCoords.z, 3.0, `prop_till_01`, false, false, false)
     if not cashRegister or not DoesEntityExist(cashRegister) then return end
 
     -- Avoid repeating non-robbable logic
@@ -29,7 +29,6 @@ RegisterNetEvent("ff_shoprobbery:client:robTill", function(clerkNet, tillCoords,
         Wait(5000)
         FreezeEntityPosition(entity, false)
         TaskReactAndFleePed(entity, cache.ped)
-        TriggerServerEvent("ff_shoprobbery:server:finishNonRobbableRobbery", storeIndex)
     
         -- Start a thread to reset the store when player leaves proximity
         CreateThread(function()
