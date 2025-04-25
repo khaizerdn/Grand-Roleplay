@@ -359,8 +359,10 @@ function safe.createInteract(index, netId)
                         safe.enteringCode = true
                         TriggerEvent("ff_shoprobbery:client:enterSafeCode", { entity = entity }, { index = index, netId = netId })
                     end
-
                     Wait(5)
+                elseif Config.Notify == "ox_lib" then
+                    lib.hideTextUI()
+                    Wait(1000)
                 else
                     Wait(1000)
                 end
