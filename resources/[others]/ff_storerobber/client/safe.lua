@@ -212,6 +212,7 @@ AddEventHandler("ff_shoprobbery:client:enterSafeCode", function(entity, data)
             return
         end
         
+        lib.hideTextUI()
         TriggerServerEvent("ff_shoprobbery:server:lootedSafe", data.index, data.netId)
     else
         Notify(locale("error.incorrect_code"), 'error')

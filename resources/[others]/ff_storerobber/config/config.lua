@@ -26,7 +26,7 @@ Config.RequiredPolice = 0 -- How many police on duty to start heist
 -- Cooldown
 Config.GlobalCooldown = 0 -- In seconds currently at 15 minutes
 Config.UseStoreCooldown = false -- Individual cooldown for different stores aswell as global
-Config.StoreCooldown = 0 -- In seconds currently at 45 minutes
+Config.StoreCooldown = 2700 -- In seconds currently at 45 minutes
 
 -- Robbery Loot
 Config.UseMoneyItem = true -- If you want to give them money as an item or not
@@ -34,13 +34,9 @@ Config.BlackMoney = true -- If you want to give them black money or not
 Config.TillValue = { min = 250, max = 800 }
 Config.SafeItems = {
     {
-        item = "goldbar",
-        amount = { min = 1, max = 3 },
-        chance = 60
-    },
-    {
-        item = "rolex",
-        amount = { min = 1, max = 6},
+        item = "black_money",
+        amount = { min = 750, max = 2400 },
+        chance = 0
     }
 }
 

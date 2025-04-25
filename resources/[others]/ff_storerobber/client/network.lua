@@ -62,7 +62,8 @@ function network.createTarget(index)
                                 network.hackingInteract = false
                                 return
                             end
-
+                            
+                            lib.hideTextUI()
                             Notify(string.format(locale("notification.safe_code"), safeCode), "inform", 20000)
                         else
                             if not lastAlert or GetGameTimer() > lastAlert then -- Handles cooldown for alert so it isn't spammed
