@@ -13,14 +13,6 @@ RegisterNetEvent("ff_shoprobbery:client:robTill", function(clerkNet, tillCoords,
     local till = GetClosestObjectOfType(tillCoords.x, tillCoords.y, tillCoords.z, 1.0, `prop_till_01`, false, false, false)
     if not till or not DoesEntityExist(till) then return end
 
-    local _movePos = GetOffsetFromEntityInWorldCoords(till, 0.0, -1.0, 0.0)
-    FreezeEntityPosition(entity, false)
-    TaskGoStraightToCoord(entity, _movePos.x, _movePos.y, _movePos.z, 1.0, 3000, GetEntityHeading(till), 0.0)
-
-    while #(GetEntityCoords(entity, false) - _movePos) > 0.3 do
-        Wait(100)
-    end
-
     local till = CreateObject(`p_till_01_s`, tillCoords.x, tillCoords.y, tillCoords.z, true, false, false)
     local bag = CreateObject(`p_poly_bag_01_s`, tillCoords.x, tillCoords.y, tillCoords.z, true, false, false)
     
