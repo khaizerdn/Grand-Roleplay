@@ -24,7 +24,7 @@ Config.RequiredPolice = 0 -- How many police on duty to start heist
 -- Cooldown
 Config.GlobalCooldown = 0 -- In seconds currently at 15 minutes
 Config.UseStoreCooldown = true -- Individual cooldown for different stores aswell as global
-Config.StoreCooldown = 5 -- In seconds currently at 45 minutes
+Config.StoreCooldown = 0 -- In seconds currently at 45 minutes
 
 -- Robbery Loot
 Config.UseMoneyItem = false -- Whether or not to give them dirty money as an item (only setup for Qbox, QB & Mythic)

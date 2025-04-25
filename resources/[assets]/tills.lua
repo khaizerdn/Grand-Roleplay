@@ -69,6 +69,7 @@ RegisterNetEvent("ff_shoprobbery:client:robTill", function(clerkNet, tillCoords,
         if #(playerCoords - pedCoords) > 30.0 then
             TriggerServerEvent("ff_shoprobbery:server:cancelRobbery", tillCoords, true)
             ClearPedTasks(entity)
+            DeleteEntity(entity)
             return
         end
         Wait(0)
