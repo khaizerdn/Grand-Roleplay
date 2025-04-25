@@ -14,7 +14,7 @@ Config.Target = "ox_target" -- Supports ox_target, qb-target & mythic-targeting
 -- Interface Related Options
 Config.Notifications = "ox_lib" -- Supports ox_lib, qb, esx, mythic, okok, sd-notify, wasabi_notify, gta or custom
 Config.Progress = "ox_lib_bar" -- Support ox_lib_bar, ox_lib_circle or mythic
-Config.Notify = "gtao" -- Supports ox_lib and gtao
+Config.Notify = "ox_lib" -- Supports ox_lib and gtao
 Config.UseProgressBar = false -- Whether to display a progress bar during till robbery
 
 -- Police & Dispatch Related
