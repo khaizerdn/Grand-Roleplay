@@ -8,23 +8,24 @@ Config.Language = 'en' -- Locale language
 
 -- Framework Related
 Config.Framework = 'Qbox' -- Supports Qbox, QB, ESX & Mythic
-Config.UseTarget = true -- If you don't want to use target, will use HelpNotify in bridge/functions
+Config.UseTarget = false -- If you don't want to use target, will use HelpNotify in bridge/functions
 Config.Target = "ox_target" -- Supports ox_target, qb-target & mythic-targeting
 
 -- Interface Related Options
 Config.Notifications = "ox_lib" -- Supports ox_lib, qb, esx, mythic, okok, sd-notify, wasabi_notify, gta or custom
 Config.Progress = "ox_lib_bar" -- Support ox_lib_bar, ox_lib_circle or mythic
+Config.Notify = "gtao" -- Supports ox_lib and gtao
 
 -- Police & Dispatch Related
 Config.Dispatch = "ps-dispatch" -- Supports cd_dispatch, qs-dispatch, ps-dispatch, rcore_dispatch, mythic-mdt, custom
 Config.DispatchJobs = { "police" } -- Only for Qbox, QB & ESX
 Config.NetworkAlertTimeout = 120 -- How often in seconds it limits the network alert so it can only be sent once and then have to wait this long before sending again (prevents spam)
-Config.RequiredPolice = 2 -- How many police on duty to start heist
+Config.RequiredPolice = 0 -- How many police on duty to start heist
 
 -- Cooldown
-Config.GlobalCooldown = 900 -- In seconds currently at 15 minutes
+Config.GlobalCooldown = 0 -- In seconds currently at 15 minutes
 Config.UseStoreCooldown = true -- Individual cooldown for different stores aswell as global
-Config.StoreCooldown = 2700 -- In seconds currently at 45 minutes
+Config.StoreCooldown = 0 -- In seconds currently at 45 minutes
 
 -- Robbery Loot
 Config.UseMoneyItem = true -- Whether or not to give them dirty money as an item (only setup for Qbox, QB & Mythic)

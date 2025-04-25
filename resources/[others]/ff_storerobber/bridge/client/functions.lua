@@ -71,9 +71,16 @@ end
 RegisterNetEvent("ff_shoprobbery:client:notify", Notify)
 
 function HelpNotify(text)
-    AddTextEntry('ff_shoprobbery', text)
-    BeginTextCommandDisplayHelp('ff_shoprobbery')
-    EndTextCommandDisplayHelp(0, false, true, -1)
+    if Config.Notify == 'ox_lib' then
+        lib.showTextUI(text, {
+            icon = 'fa-solid fa-car',
+            position = 'top-left',
+        })
+    elseif Config.Notify == 'gtao' then
+        AddTextEntry('ff_shoprobbery', text)
+        BeginTextCommandDisplayHelp('ff_shoprobbery')
+        EndTextCommandDisplayHelp(0, false, true, -1)
+    end
 end
 
 ---@param entity integer

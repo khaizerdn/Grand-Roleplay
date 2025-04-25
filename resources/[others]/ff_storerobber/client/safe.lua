@@ -355,7 +355,7 @@ function safe.createInteract(index, netId)
             if not safe.enteringCode then
                 if #(GetEntityCoords(cache.ped, false) - entCoords) < 2.0 then
                     HelpNotify(locale("interact.safe"))
-                    if IsControlJustPressed(0, 47) then
+                    if IsControlJustPressed(0, 38) then
                         safe.enteringCode = true
                         TriggerEvent("ff_shoprobbery:client:enterSafeCode", { entity = entity }, { index = index, netId = netId })
                     end

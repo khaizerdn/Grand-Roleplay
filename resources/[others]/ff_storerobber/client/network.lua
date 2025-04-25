@@ -152,7 +152,7 @@ function network.createInteract(index)
             if not network.hackingInteract then
                 if #(GetEntityCoords(cache.ped, false) - coords) < 2.0 then
                     HelpNotify(locale("interact.network"))
-                    if IsControlJustPressed(0, 47) then
+                    if IsControlJustPressed(0, 38) then
                         network.hackingInteract = true
                         TriggerEvent("ff_shoprobbery:client:hackNetwork", nil, { index = index })
                     end
