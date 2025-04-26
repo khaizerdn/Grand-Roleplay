@@ -158,7 +158,7 @@ function network.createInteract(index)
                         TriggerEvent("ff_shoprobbery:client:hackNetwork", nil, { index = index })
                     end
                     Wait(5)
-                elseif Config.Notify == "ox_lib" then
+                elseif Config.HelpNotify == "ox_lib" then
                     lib.hideTextUI()
                     Wait(1000)
                 else
