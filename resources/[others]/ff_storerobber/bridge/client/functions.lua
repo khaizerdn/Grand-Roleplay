@@ -31,10 +31,9 @@ end
 ---@param icon? string
 function Notify(message, type, time, icon)
     if Config.Notifications ~= "gta" then
-        -- Removes tilda styling which is used in GTA labels
         message = message:gsub("~.-~", "")
     end
-
+    
     if Config.Notifications == 'ox_lib' then
         lib.notify({
             description = message,
@@ -71,12 +70,12 @@ end
 RegisterNetEvent("ff_shoprobbery:client:notify", Notify)
 
 function HelpNotify(text)
-    if Config.Notify == 'ox_lib' then
+    if Config.HelpNotify == 'ox_lib' then
         lib.showTextUI(text, {
             icon = 'fa-solid fa-car',
             position = 'top-left',
         })
-    elseif Config.Notify == 'gtao' then
+    elseif Config.HelpNotify == 'gtao' then
         AddTextEntry('ff_shoprobbery', text)
         BeginTextCommandDisplayHelp('ff_shoprobbery')
         EndTextCommandDisplayHelp(0, false, true, -1)

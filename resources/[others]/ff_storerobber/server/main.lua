@@ -229,7 +229,17 @@ RegisterNetEvent("ff_shoprobbery:server:cashCollected", function(pickupCoords)
     TriggerClientEvent("ff_shoprobbery:client:cashCollected", -1, pickupCoords)
 
     local value = math.random(Config.TillValue.min, Config.TillValue.max)
-    GiveMoney(src, value, "collected money from till")
+    if Config.UseMoneyItem then
+        if Config.Framework == "Qbox" or Config.Framework == "QB" then
+            if Config.BlackMoney then
+                GiveItem(src, "black_money", value)
+            else
+                GiveItem(src, "money", value)
+            end
+        end
+    else
+        GiveMoney(src, value, "collected money from till")
+    end
     SendLog(src, GetPlayerName(src), locale("logs.loot_collected.title"), string.format(locale("logs.loot_collected.description"), value, closestStore), Colours.FiveForgeBlue)
 end)
 

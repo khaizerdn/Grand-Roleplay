@@ -14,7 +14,7 @@ Config.Target = "ox_target" -- Supports ox_target, qb-target & mythic-targeting
 -- Interface Related Options
 Config.Notifications = "ox_lib" -- Supports ox_lib, qb, esx, mythic, okok, sd-notify, wasabi_notify, gta or custom
 Config.Progress = "ox_lib_bar" -- Support ox_lib_bar, ox_lib_circle or mythic
-Config.Notify = "ox_lib" -- Supports ox_lib and gtao
+Config.HelpNotify = "ox_lib" -- Supports ox_lib and gtao
 Config.UseProgressBar = false -- Whether to display a progress bar during till robbery
 
 -- Police & Dispatch Related
@@ -24,8 +24,8 @@ Config.NetworkAlertTimeout = 120 -- How often in seconds it limits the network a
 Config.RequiredPolice = 0 -- How many police on duty to start heist
 
 -- Cooldown
-Config.GlobalCooldown = 0 -- In seconds currently at 15 minutes
-Config.UseStoreCooldown = false -- Individual cooldown for different stores aswell as global
+Config.GlobalCooldown = 900 -- In seconds currently at 15 minutes
+Config.UseStoreCooldown = true -- Individual cooldown for different stores aswell as global
 Config.StoreCooldown = 2700 -- In seconds currently at 45 minutes
 
 -- Robbery Loot
@@ -36,7 +36,7 @@ Config.SafeItems = {
     {
         item = "black_money",
         amount = { min = 750, max = 2400 },
-        chance = 0
+        chance = 30
     }
 }
 
