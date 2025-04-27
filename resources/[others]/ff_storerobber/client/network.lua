@@ -33,6 +33,44 @@ AddEventHandler("ff_shoprobbery:client:hackNetwork", function(_, data)
     ClearPedTasks(cache.ped)
 end)
 
+local function createNetworkZones()
+    for index, location in ipairs(Config.Locations) do
+        if location.robbable then
+            local zone = lib.zones.poly({
+                points = {
+                    vec3(location.network.coords.x - 1, location.network.coords.y - 1, location.network.coords.z),
+                    vec3(location.network.coords.x + 1, location.network.coords.y - 1, location.network.coords.z),
+                    vec3(location.network.coords.x + 1, location.network.coords.y + 1, location.network.coords.z),
+                    vec3(location.network.coords.x - 1, location.network.coords.y + 1, location.network.coords.z),
+                },
+                onEnter = function()
+                    local storeData = GlobalState[string.format("ff_shoprobbery:store:%s", index)]
+                    if storeData and GlobalState["ff_shoprobbery:active"] and not GlobalState["ff_shoprobbery:cooldown"] and storeData.robbedTill and not storeData.hackedNetwork then
+                        lib.showTextUI(locale('target.network'), {
+                            icon = 'fa-solid fa-network-wired',
+                            position = 'top-left',
+                        })
+                    end
+                end,
+                onExit = function()
+                    lib.hideTextUI()
+                end,
+                inside = function()
+                    local storeData = GlobalState[string.format("ff_shoprobbery:store:%s", index)]
+                    if storeData and GlobalState["ff_shoprobbery:active"] and not GlobalState["ff_shoprobbery:cooldown"] and storeData.robbedTill and not storeData.hackedNetwork then
+                        if IsControlJustPressed(0, 38) then -- E key
+                            lib.hideTextUI()
+                            network.hackingInteract = true
+                            TriggerEvent("ff_shoprobbery:client:hackNetwork", nil, { index = index })
+                        end
+                    end
+                end,
+            })
+            table.insert(network.zones, zone)
+        end
+    end
+end
+
 --- Create network hack target for the current store
 ---@param index number
 function network.createTarget(index)
@@ -146,29 +184,30 @@ function network.createInteract(index)
     if not storeData then return end
 
     local coords = Config.Locations[index].network.coords
-    CreateThread(function()
-        while GlobalState["ff_shoprobbery:active"]
-        and GlobalState[string.format("ff_shoprobbery:store:%s", index)].robbedTill
-        and not GlobalState[string.format("ff_shoprobbery:store:%s", index)].hackedNetwork do
-            if not network.hackingInteract then
-                if #(GetEntityCoords(cache.ped, false) - coords) < 2.0 then
-                    HelpNotify(locale("interact.network"))
-                    if IsControlJustPressed(0, 38) then
-                        network.hackingInteract = true
-                        TriggerEvent("ff_shoprobbery:client:hackNetwork", nil, { index = index })
+    if Config.HelpNotify == "ox_lib" then
+        createNetworkZones()
+    else
+        CreateThread(function()
+            while GlobalState["ff_shoprobbery:active"]
+            and GlobalState[string.format("ff_shoprobbery:store:%s", index)].robbedTill
+            and not GlobalState[string.format("ff_shoprobbery:store:%s", index)].hackedNetwork do
+                if not network.hackingInteract then
+                    if #(GetEntityCoords(cache.ped, false) - coords) < 2.0 then
+                            HelpNotify(locale("interact.network"))
+                        if IsControlJustPressed(0, 38) then
+                            network.hackingInteract = true
+                            TriggerEvent("ff_shoprobbery:client:hackNetwork", nil, { index = index })
+                        end
+                        Wait(5)
+                    else
+                        Wait(1000)
                     end
-                    Wait(5)
-                elseif Config.HelpNotify == "ox_lib" then
-                    lib.hideTextUI()
-                    Wait(1000)
                 else
                     Wait(1000)
                 end
-            else
-                Wait(1000)
             end
-        end
-    end)
+        end)
+    end
 end
 
 return network

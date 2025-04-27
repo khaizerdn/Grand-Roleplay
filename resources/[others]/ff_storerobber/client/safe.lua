@@ -178,9 +178,87 @@ local function openSafe(safeEntity)
 end
 
 local safe = {
+    zones = {},
     targets = {},
     enteringCode = false
 }
+
+local function createSafeZones()
+    for index, location in ipairs(Config.Locations) do
+        if location.robbable then
+            local zone = lib.zones.poly({
+                points = {
+                    vec3(location.safe.x - 1, location.safe.y - 1, location.safe.z),
+                    vec3(location.safe.x + 1, location.safe.y - 1, location.safe.z),
+                    vec3(location.safe.x + 1, location.safe.y + 1, location.safe.z),
+                    vec3(location.safe.x - 1, location.safe.y + 1, location.safe.z),
+                },
+                onEnter = function()
+                    local storeData = GlobalState[string.format("ff_shoprobbery:store:%s", index)]
+                    if storeData and GlobalState["ff_shoprobbery:active"] and not GlobalState["ff_shoprobbery:cooldown"] and storeData.robbedTill and storeData.hackedNetwork and not storeData.openedSafe then
+                        lib.showTextUI(locale('target.safe'), {
+                            icon = 'fa-solid fa-qrcode',
+                            position = 'top-left',
+                        })
+                    end
+                end,
+                onExit = function()
+                    lib.hideTextUI()
+                end,
+                inside = function()
+                    local storeData = GlobalState[string.format("ff_shoprobbery:store:%s", index)]
+                    if storeData and GlobalState["ff_shoprobbery:active"] and not GlobalState["ff_shoprobbery:cooldown"] and storeData.robbedTill and storeData.hackedNetwork and not storeData.openedSafe then
+                        if IsControlJustPressed(0, 38) then -- E key
+                            lib.hideTextUI()
+                            safe.enteringCode = true
+                            local inputtedCode = lib.inputDialog(locale("prompt.safe.title"), {
+                                {
+                                    type = 'number',
+                                    label = locale("prompt.safe.input.code.label"),
+                                    description = locale("prompt.safe.input.code.description"),
+                                    icon = 'qrcode',
+                                    required = true
+                                },
+                            }, {
+                                allowCancel = true
+                            })
+                            if not inputtedCode then
+                                safe.enteringCode = false
+                                lib.showTextUI(locale('target.safe'), {
+                                    icon = 'fa-solid fa-qrcode',
+                                    position = 'top-left',
+                                })
+                                return
+                            end
+                            local success = lib.callback.await('ff_shoprobbery:openSafe', false, index, string.format("%04d", inputtedCode[1]))
+                            if success then
+                                local netId = storeData.safeNet
+                                local entity = NetworkGetEntityFromNetworkId(netId)
+                                if not openSafe(entity) then
+                                    safe.enteringCode = false
+                                    lib.showTextUI(locale('target.safe'), {
+                                        icon = 'fa-solid fa-qrcode',
+                                        position = 'top-left',
+                                    })
+                                    return
+                                end
+                                TriggerServerEvent("ff_shoprobbery:server:lootedSafe", index, netId)
+                            else
+                                Notify(locale("error.incorrect_code"), 'error')
+                                lib.showTextUI(locale('target.safe'), {
+                                    icon = 'fa-solid fa-qrcode',
+                                    position = 'top-left',
+                                })
+                            end
+                            safe.enteringCode = false
+                        end
+                    end
+                end,
+            })
+            table.insert(safe.zones, zone)
+        end
+    end
+end
 
 --- Event used for mythic safe code entering
 ---@param entity any
@@ -349,29 +427,30 @@ function safe.createInteract(index, netId)
     if not storeData then return end
 
     local entCoords = GetEntityCoords(entity, false)
-    CreateThread(function()
-        while GlobalState["ff_shoprobbery:active"]
-        and GlobalState[string.format("ff_shoprobbery:store:%s", index)].hackedNetwork
-        and not GlobalState[string.format("ff_shoprobbery:store:%s", index)].openedSafe do
-            if not safe.enteringCode then
-                if #(GetEntityCoords(cache.ped, false) - entCoords) < 2.0 then
-                    HelpNotify(locale("interact.safe"))
-                    if IsControlJustPressed(0, 38) then
-                        safe.enteringCode = true
-                        TriggerEvent("ff_shoprobbery:client:enterSafeCode", { entity = entity }, { index = index, netId = netId })
+    if Config.HelpNotify == "ox_lib" then
+        createSafeZones()
+    else
+        CreateThread(function()
+            while GlobalState["ff_shoprobbery:active"]
+            and GlobalState[string.format("ff_shoprobbery:store:%s", index)].hackedNetwork
+            and not GlobalState[string.format("ff_shoprobbery:store:%s", index)].openedSafe do
+                if not safe.enteringCode then
+                    if #(GetEntityCoords(cache.ped, false) - entCoords) < 2.0 then
+                        HelpNotify(locale("interact.safe"))
+                        if IsControlJustPressed(0, 38) then
+                            safe.enteringCode = true
+                            TriggerEvent("ff_shoprobbery:client:enterSafeCode", { entity = entity }, { index = index, netId = netId })
+                        end
+                        Wait(5)
+                    else
+                        Wait(1000)
                     end
-                    Wait(5)
-                elseif Config.HelpNotify == "ox_lib" then
-                    lib.hideTextUI()
-                    Wait(1000)
                 else
                     Wait(1000)
                 end
-            else
-                Wait(1000)
             end
-        end
-    end)
+        end)
+    end
 end
 
 return safe
