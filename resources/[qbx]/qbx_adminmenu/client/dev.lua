@@ -1,3 +1,4 @@
+local getVector4OnAim = false
 local showCoords = false
 local vehicleDev = false
 local vehicleTypes = {'Compacts', 'Sedans', 'SUVs', 'Coupes', 'Muscle', 'Sports Classics', 'Sports', 'Super', 'Motorcycles', 'Off-road', 'Industrial', 'Utility', 'Vans', 'Cycles', 'Boats', 'Helicopters', 'Planes', 'Service', 'Emergency', 'Military', 'Commercial', 'Trains', 'Open Wheel'}
@@ -59,6 +60,51 @@ local options = {
             end
         end
     end,
+    function()
+        getVector4OnAim = not getVector4OnAim
+        if getVector4OnAim then
+            while getVector4OnAim do
+                Wait(0)
+                if IsPlayerFreeAiming(PlayerId()) and GetSelectedPedWeapon(cache.ped) ~= `WEAPON_UNARMED` then
+                    local _, entity = GetEntityPlayerIsFreeAimingAt(PlayerId())
+                    if entity and DoesEntityExist(entity) and (GetEntityType(entity) == 1 or GetEntityType(entity) == 3) then
+                        local min, max = GetModelDimensions(GetEntityModel(entity))
+                        local coords = GetEntityCoords(entity)
+                        local rotation = GetEntityRotation(entity, 2)
+                        local scale = vector3(1.0, 1.0, 1.0)
+        
+                        -- Calculate the 8 corners of the bounding box
+                        local corners = {
+                            coords + rotation * (min * scale),
+                            coords + rotation * (vector3(max.x, min.y, min.z) * scale),
+                            coords + rotation * (vector3(max.x, max.y, min.z) * scale),
+                            coords + rotation * (vector3(min.x, max.y, min.z) * scale),
+                            coords + rotation * (vector3(min.x, min.y, max.z) * scale),
+                            coords + rotation * (vector3(max.x, min.y, max.z) * scale),
+                            coords + rotation * (vector3(max.x, max.y, max.z) * scale),
+                            coords + rotation * (vector3(min.x, max.y, max.z) * scale),
+                        }
+        
+                        -- Draw lines between the corners to form the box
+                        for i = 1, 4 do
+                            local next = i % 4 + 1
+                            DrawLine(corners[i].x, corners[i].y, corners[i].z, corners[next].x, corners[next].y, corners[next].z, 255, 0, 0, 255)
+                            DrawLine(corners[i + 4].x, corners[i + 4].y, corners[i + 4].z, corners[next + 4].x, corners[next + 4].y, corners[next + 4].z, 255, 0, 0, 255)
+                            DrawLine(corners[i].x, corners[i].y, corners[i].z, corners[i + 4].x, corners[i + 4].y, corners[i + 4].z, 255, 0, 0, 255)
+                        end
+        
+                        if IsControlJustPressed(0, 38) then -- 'E' key
+                            local x, y, z = qbx.math.round(coords.x, 2), qbx.math.round(coords.y, 2), qbx.math.round(coords.z, 2)
+                            local h = qbx.math.round(GetEntityHeading(entity), 2)
+                            local data = string.format('vec4(%s, %s, %s, %s)', x, y, z, h)
+                            lib.setClipboard(data)
+                            exports.qbx_core:Notify('Vector4 copied to clipboard', 'success')
+                        end
+                    end
+                end
+            end
+        end
+    end,
 }
 
 lib.registerMenu({
@@ -77,7 +123,8 @@ lib.registerMenu({
         {label = locale('dev_options.label3'), description = locale('dev_options.desc3'), icon = 'fas fa-compass'},
         {label = locale('dev_options.label4'), description = locale('dev_options.desc4'), icon = 'fas fa-compass'},
         {label = locale('dev_options.label5'), description = locale('dev_options.desc5'), icon = 'fas fa-compass-drafting', close = false},
-        {label = locale('dev_options.label6'), description = locale('dev_options.desc6'), icon = 'fas fa-car-side', close = false}
+        {label = locale('dev_options.label6'), description = locale('dev_options.desc6'), icon = 'fas fa-car-side', close = false},
+        {label = 'Toggle Get Vector4 on Aim', description = 'When enabled, aim at an object or ped with your weapon and press E to copy its vector4', icon = 'fas fa-crosshairs', close = false}
     }
 }, function(selected)
     options[selected]()
