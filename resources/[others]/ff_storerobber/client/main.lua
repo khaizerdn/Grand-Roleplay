@@ -32,7 +32,7 @@ local function startClerkTask()
                     end
                 end
             end
-            Wait(1000)
+            Wait(500)
         end
     end)
 end
