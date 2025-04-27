@@ -9,7 +9,7 @@ function RobberyAlert(coords)
             unique_id = 'storerobbery',
             sound = 1,
             blip = {
-                sprite = 52, 
+                sprite = 161, 
                 scale = 1.0, 
                 colour = 1,
                 flashes = false, 
@@ -24,7 +24,7 @@ function RobberyAlert(coords)
             message = "Robbery reported at general store.",
             flashes = false,
             blip = {
-                sprite = 52, 
+                sprite = 161, 
                 scale = 1.0, 
                 colour = 1,
                 time = (5 * 60000),
@@ -42,7 +42,7 @@ function RobberyAlert(coords)
             type = 'alerts',
             blip_time = 0,
             blip = {
-                sprite = 52, 
+                sprite = 161, 
                 scale = 1.0, 
                 colour = 1,
                 radius = 0,
@@ -70,7 +70,7 @@ function NetworkAlert(coords)
             unique_id = 'storenetwork',
             sound = 1,
             blip = {
-                sprite = 629, 
+                sprite = 161, 
                 scale = 1.0, 
                 colour = 1,
                 flashes = false, 
@@ -85,7 +85,7 @@ function NetworkAlert(coords)
             message = "Unauthorized network access at general store.",
             flashes = false,
             blip = {
-                sprite = 629, 
+                sprite = 161, 
                 scale = 1.0, 
                 colour = 1,
                 time = (5 * 60000),
@@ -99,7 +99,7 @@ function NetworkAlert(coords)
             coords = coords,
             job = Config.DispatchJobs,
             alert = {
-                sprite = 629, 
+                sprite = 161, 
                 scale = 1.0, 
                 colour = 1,
             }
@@ -114,7 +114,7 @@ function NetworkAlert(coords)
             type = 'alerts',
             blip_time = 0,
             blip = {
-                sprite = 629, 
+                sprite = 161, 
                 scale = 1.0, 
                 colour = 1,
                 radius = 0,

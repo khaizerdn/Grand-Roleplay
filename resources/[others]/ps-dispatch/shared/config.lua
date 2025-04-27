@@ -206,7 +206,7 @@ Config.Blips = {
     },
     ['storerobbery'] = {
         radius = 0,
-        sprite = 52,
+        sprite = 161,
         color = 1,
         scale = 1.5,
         length = 2,
