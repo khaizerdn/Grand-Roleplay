@@ -37,11 +37,11 @@ return {
 			{ name = 'burger', price = 10 },
 			{ name = 'water', price = 10 }
 		}, locations = {
-			vec3(-48.47, -1757.98, 29.42),
+			vec3(-47.3, -1756.75, 29.42),
 			vec3(-707.32, -914.77, 19.22),
-			vec3(1697.85, 4924.55, 42.06),
-			vec3(-1820.22, 792.53, 138.11),
-			vec3(1163.71, -324.1, 69.21),
+			vec3(1699.26, 4923.54, 42.06),
+			vec3(-1821.36, 793.8, 138.11),
+			vec3(1163.42, -322.39, 69.21),
 			
 		}, targets = {
 			{ loc = vec3(-46.66, -1757.88, 28.42), length = 0.5, width = 0.5, heading = 54.25, minZ = 42.06, maxZ = 42.46, distance = 1.5, ped = `mp_m_shopkeep_01`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' },
@@ -66,7 +66,7 @@ return {
 			vec3(-2968.243, 390.910, 15.043),
 			vec3(1166.024, 2708.930, 38.157),
 			vec3(1392.562, 3604.684, 34.980),
-			vec3(-1393.409, -606.624, 30.319)
+			vec3(-1393.18, -606.39, 30.32)
 		}, targets = {
 			{ loc = vec3(1134.14, -982.51, 45.42), length = 0.5, width = 0.5, heading = 276.9, minZ = 46.4, maxZ = 46.8, distance = 1.5, ped = `mp_m_shopkeep_01`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' },
 			{ loc = vec3(-1221.97, -908.28, 11.33), length = 0.6, width = 0.5, heading = 32.6, minZ = 12.3, maxZ = 12.7, distance = 1.5, ped = `mp_m_shopkeep_01`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' },
@@ -74,6 +74,20 @@ return {
 			{ loc = vec3(-2966.45, 390.92, 14.04), length = 0.7, width = 0.5, heading = 82.55, minZ = 15.0, maxZ = 15.4, distance = 1.5, ped = `mp_m_shopkeep_01`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' },
 			{ loc = vec3(1165.87, 2710.77, 37.16), length = 0.6, width = 0.5, heading = 177.88, minZ = 38.1, maxZ = 38.5, distance = 1.5, ped = `mp_m_shopkeep_01`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' },
 			{ loc = vec3(1392.74, 3606.37, 33.98), length = 0.6, width = 0.6, heading = 198.93, minZ = 35.0, maxZ = 35.4, distance = 1.5, ped = `mp_m_shopkeep_01`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' }
+		}
+	},
+
+	BahamaMamas = {
+		name = 'Bahama Mamas',
+		blip = {
+			id = 93, colour = 69, scale = 0.8
+		}, inventory = {
+			{ name = 'water', price = 10 },
+			{ name = 'burger', price = 15 },
+		}, locations = {
+			vec3(-1393.18, -606.39, 30.32)
+		}, targets = {
+		
 		}
 	},
 

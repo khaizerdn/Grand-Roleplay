@@ -42,6 +42,7 @@ Config.SafeItems = {
 
 -- All the different store location data
 Config.Locations = {
+    -- General Shops
     {
         ped = vec4(2676.38, 3279.9, 55.25, 331.74),
         safe = vec4(2674.7, 3288.57, 54.24, 154.33),
@@ -194,7 +195,125 @@ Config.Locations = {
             radius = 0.6
         },
         robbable = true
-    }
+    },
+    {
+        ped = vec4(-1820.29, 794.89, 138.13, 133.31),
+        safe = vec4(-1828.39, 799.44, 137.17, 225.82),
+        network = {
+            coords = vec3(-1828.74, 797.46, 138.0),
+            radius = 0.6
+        },
+        robbable = true
+    },
+    {
+        ped = vec4(1165.31, 2711.07, 38.16, 179.43),
+        safe = vec4(1168.65, 2718.43, 36.16, 88.98),
+        network = {
+            coords = vec3(1166.44, 2719.45, 37.16),
+            radius = 0.6
+        },
+        robbable = true
+    },
+    {
+        ped = vec4(1392.15, 3606.54, 35.01, 200.85),
+        safe = vec4(1395.28, 3613.23, 33.98, 201.5),
+        network = {
+            coords = vec3(1394.25, 3611.49, 35.01),
+            radius = 0.6
+        },
+        robbable = true
+    },
+    { -- Bahamas West Mamas
+        ped = vec4(-1391.8, -605.55, 30.32, 110.08),
+        safe = vec4(1395.28, 3613.23, 33.98, 201.5),
+        network = {
+            coords = vec3(1394.25, 3611.49, 35.01),
+            radius = 0.6
+        },
+        robbable = false
+    },
+    -- Weapon Shops
+    {
+        ped = vec4(-661.6, -933.25, 21.85, 180.93),
+        safe = vec4(1395.28, 3613.23, 33.98, 201.5),
+        network = {
+            coords = vec3(1394.25, 3611.49, 35.01),
+            radius = 0.6
+        },
+        robbable = false
+    },
+    {
+        ped = vec4(809.53, -2159.37, 29.63, 0.35),
+        safe = vec4(1395.28, 3613.23, 33.98, 201.5),
+        network = {
+            coords = vec3(1394.25, 3611.49, 35.01),
+            radius = 0.6
+        },
+        robbable = false
+    },
+    {
+        ped = vec4(1692.49, 3761.69, 34.72, 228.01),
+        safe = vec4(1395.28, 3613.23, 33.98, 201.5),
+        network = {
+            coords = vec3(1394.25, 3611.49, 35.01),
+            radius = 0.6
+        },
+        robbable = false
+    },
+    {
+        ped = vec4(-331.37, 6085.68, 31.47, 225.58),
+        safe = vec4(1395.28, 3613.23, 33.98, 201.5),
+        network = {
+            coords = vec3(1394.25, 3611.49, 35.01),
+            radius = 0.6
+        },
+        robbable = false
+    },
+    {
+        ped = vec4(253.89, -51.29, 69.96, 70.78),
+        safe = vec4(1395.28, 3613.23, 33.98, 201.5),
+        network = {
+            coords = vec3(1394.25, 3611.49, 35.01),
+            radius = 0.6
+        },
+        robbable = false
+    },
+    {
+        ped = vec4(23.35, -1105.43, 29.81, 160.82),
+        safe = vec4(1395.28, 3613.23, 33.98, 201.5),
+        network = {
+            coords = vec3(1394.25, 3611.49, 35.01),
+            radius = 0.6
+        },
+        robbable = false
+    },
+    {
+        ped = vec4(2567.26, 292.27, 108.75, 0.6),
+        safe = vec4(1395.28, 3613.23, 33.98, 201.5),
+        network = {
+            coords = vec3(1394.25, 3611.49, 35.01),
+            radius = 0.6
+        },
+        robbable = false
+    },
+    {
+        ped = vec4(-1118.68, 2700.46, 18.57, 222.58),
+        safe = vec4(1395.28, 3613.23, 33.98, 201.5),
+        network = {
+            coords = vec3(1394.25, 3611.49, 35.01),
+            radius = 0.6
+        },
+        robbable = false
+    },
+    {
+        ped = vec4(841.72, -1035.62, 28.21, 0.75),
+        safe = vec4(1395.28, 3613.23, 33.98, 201.5),
+        network = {
+            coords = vec3(1394.25, 3611.49, 35.01),
+            radius = 0.6
+        },
+        robbable = false
+    },
 }
 
 -- List of peds used for the cashier
