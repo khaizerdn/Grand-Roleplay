@@ -42,9 +42,7 @@ Config.SafeItems = {
 
 Config.PedPools = {
     general = {
-        `mp_m_shopkeep_01`,          -- General shopkeeper
-        `a_m_y_business_01`,         -- Business male
-        `a_f_y_business_01`          -- Business female
+        `mp_m_shopkeep_01`          -- General shopkeeper
     },
     weapon = {
         `s_m_y_ammucity_01`,         -- Ammu-Nation clerk
@@ -262,7 +260,7 @@ Config.Locations = {
             coords = vec3(1394.25, 3611.49, 35.01),
             radius = 0.6
         },
-        robbable = true,
+        robbable = false,
         pedPool = "general"
     },
     -- Weapon Shops
@@ -273,7 +271,7 @@ Config.Locations = {
             coords = vec3(1394.25, 3611.49, 35.01),
             radius = 0.6
         },
-        robbable = true,
+        robbable = false,
         pedPool = "weapon"
     },
     {
@@ -283,7 +281,7 @@ Config.Locations = {
             coords = vec3(1394.25, 3611.49, 35.01),
             radius = 0.6
         },
-        robbable = true,
+        robbable = false,
         pedPool = "weapon"
     },
     {
@@ -293,7 +291,7 @@ Config.Locations = {
             coords = vec3(1394.25, 3611.49, 35.01),
             radius = 0.6
         },
-        robbable = true,
+        robbable = false,
         pedPool = "weapon"
     },
     {
@@ -303,7 +301,7 @@ Config.Locations = {
             coords = vec3(1394.25, 3611.49, 35.01),
             radius = 0.6
         },
-        robbable = true,
+        robbable = false,
         pedPool = "weapon"
     },
     {
@@ -313,7 +311,7 @@ Config.Locations = {
             coords = vec3(1394.25, 3611.49, 35.01),
             radius = 0.6
         },
-        robbable = true,
+        robbable = false,
         pedPool = "weapon"
     },
     {
@@ -323,7 +321,7 @@ Config.Locations = {
             coords = vec3(1394.25, 3611.49, 35.01),
             radius = 0.6
         },
-        robbable = true,
+        robbable = false,
         pedPool = "weapon"
     },
     {
@@ -333,7 +331,7 @@ Config.Locations = {
             coords = vec3(1394.25, 3611.49, 35.01),
             radius = 0.6
         },
-        robbable = true,
+        robbable = false,
         pedPool = "weapon"
     },
     {
@@ -343,7 +341,7 @@ Config.Locations = {
             coords = vec3(1394.25, 3611.49, 35.01),
             radius = 0.6
         },
-        robbable = true,
+        robbable = false,
         pedPool = "weapon"
     },
     {
@@ -353,7 +351,7 @@ Config.Locations = {
             coords = vec3(1394.25, 3611.49, 35.01),
             radius = 0.6
         },
-        robbable = true,
+        robbable = false,
         pedPool = "weapon"
     },
 }
