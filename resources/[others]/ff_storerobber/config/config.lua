@@ -40,6 +40,18 @@ Config.SafeItems = {
     }
 }
 
+Config.PedPools = {
+    general = {
+        `mp_m_shopkeep_01`,          -- General shopkeeper
+        `a_m_y_business_01`,         -- Business male
+        `a_f_y_business_01`          -- Business female
+    },
+    weapon = {
+        `s_m_y_ammucity_01`,         -- Ammu-Nation clerk
+        `mp_m_weapexp_01`          -- Security male
+    }
+}
+
 -- All the different store location data
 Config.Locations = {
     -- General Shops
@@ -50,7 +62,8 @@ Config.Locations = {
             coords = vec3(2672.87060546875, 3288.09326171875, 55.23943328857422),
             radius = 0.6
         },
-        robbable = true -- Whether this store can be robbed
+        robbable = true,
+        pedPool = "general"
     },
     {
         ped = vec4(-2966.12, 391.5, 15.05, 86.08),
@@ -59,7 +72,8 @@ Config.Locations = {
             coords = vec3(-2957.36474609375, 390.2129211425781, 14.49756336212158),
             radius = 0.6,
         },
-        robbable = true
+        robbable = true,
+        pedPool = "general"
     },
     {
         ped = vec4(1958.91, 3741.28, 32.36, 300.77),
@@ -68,7 +82,8 @@ Config.Locations = {
             coords = vec3(1960.0970458984376, 3750.116943359375, 32.38667297363281),
             radius = 0.6,
         },
-        robbable = true
+        robbable = true,
+        pedPool = "general"
     },
     {
         ped = vec4(1698.36, 4922.29, 42.07, 325.64),
@@ -77,7 +92,8 @@ Config.Locations = {
             coords = vec3(1707.291259765625, 4921.75634765625, 42.01290893554687),
             radius = 0.6,
         },
-        robbable = true
+        robbable = true,
+        pedPool = "general"
     },
     {
         ped = vec4(372.6, 328.15, 103.58, 256.76),
@@ -86,7 +102,8 @@ Config.Locations = {
             coords = vec3(379.6080322265625, 333.66180419921877, 103.54884338378906),
             radius = 0.6,
         },
-        robbable = true
+        robbable = true,
+        pedPool = "general"
     },
     {
         ped = vec4(1134.04, -983.12, 46.42, 277.56),
@@ -95,7 +112,8 @@ Config.Locations = {
             coords = vec3(1125.1610107421876, -983.6082763671875, 45.8283805847168),
             radius = 0.6,
         },
-        robbable = true
+        robbable = true,
+        pedPool = "general"
     },
     {
         ped = vec4(1164.93, -322.08, 69.22, 100.89),
@@ -104,7 +122,8 @@ Config.Locations = {
             coords = vec3(1158.995361328125, -315.3978271484375, 69.1527099609375),
             radius = 0.6,
         },
-        robbable = true
+        robbable = true,
+        pedPool = "general"
     },
     {
         ped = vec4(-705.78, -915.06, 19.23, 90.86),
@@ -113,7 +132,8 @@ Config.Locations = {
             coords = vec3(-710.4667358398438, -905.4218139648438, 19.13999557495117),
             radius = 0.6,
         },
-        robbable = true
+        robbable = true,
+        pedPool = "general"
     },
     {
         ped = vec4(-1221.31, -908.18, 12.33, 33.58),
@@ -122,7 +142,8 @@ Config.Locations = {
             coords = vec3(-1216.9649658203126, -915.9669799804688, 11.73851585388183),
             radius = 0.6,
         },
-        robbable = true
+        robbable = true,
+        pedPool = "general"
     },
     {
         ped = vec4(-1486.52, -377.39, 40.17, 134.64),
@@ -131,7 +152,8 @@ Config.Locations = {
             coords = vec3(-1479.7227783203126, -371.64654541015627, 39.5917854309082),
             radius = 0.6,
         },
-        robbable = true
+        robbable = true,
+        pedPool = "general"
     },
     {
         ped = vec4(-46.11, -1757.71, 29.43, 50.84),
@@ -140,7 +162,8 @@ Config.Locations = {
             coords = vec3(-44.71, -1748.96, 29.2),
             radius = 0.6,
         },
-        robbable = true
+        robbable = true,
+        pedPool = "general"
     },
     {
         ped = vec4(24.09, -1345.62, 29.51, 270.84),
@@ -149,7 +172,8 @@ Config.Locations = {
             coords = vec3(29.52338027954101, -1338.5648193359376, 29.50686836242675),
             radius = 0.6
         },
-        robbable = true
+        robbable = true,
+        pedPool = "general"
     },
     {
         ped = vec4(-3040.46, 583.65, 7.92, 18.68),
@@ -158,7 +182,8 @@ Config.Locations = {
             coords = vec3(-3048.66, 586.72, 7.71), 
             radius = 0.6
         },
-        robbable = true
+        robbable = true,
+        pedPool = "general"
     },
     {
         ped = vec4(-3243.98, 999.74, 12.84, 355.13),
@@ -167,7 +192,8 @@ Config.Locations = {
             coords = vec3(-3250.37, 1005.74, 12.63), 
             radius = 0.6
         },
-        robbable = true
+        robbable = true,
+        pedPool = "general"
     },
     {
         ped = vec4(1728.26, 6416.91, 35.05, 244.27),
@@ -176,7 +202,8 @@ Config.Locations = {
             coords = vec3(1736.17, 6420.66, 34.84), 
             radius = 0.6
         },
-        robbable = true
+        robbable = true,
+        pedPool = "general"
     },
     {
         ped = vec4(549.67, 2669.72, 42.17, 98.01),
@@ -185,7 +212,8 @@ Config.Locations = {
             coords = vec3(545.19, 2662.19, 41.96),
             radius = 0.6
         },
-        robbable = true
+        robbable = true,
+        pedPool = "general"
     },
     {
         ped = vec4(2555.51, 380.5, 108.63, 357.87),
@@ -194,7 +222,8 @@ Config.Locations = {
             coords = vec3(2548.85, 386.19, 108.43),
             radius = 0.6
         },
-        robbable = true
+        robbable = true,
+        pedPool = "general"
     },
     {
         ped = vec4(-1820.29, 794.89, 138.13, 133.31),
@@ -203,7 +232,8 @@ Config.Locations = {
             coords = vec3(-1828.74, 797.46, 138.0),
             radius = 0.6
         },
-        robbable = true
+        robbable = true,
+        pedPool = "general"
     },
     {
         ped = vec4(1165.31, 2711.07, 38.16, 179.43),
@@ -212,7 +242,8 @@ Config.Locations = {
             coords = vec3(1166.44, 2719.45, 37.16),
             radius = 0.6
         },
-        robbable = true
+        robbable = true,
+        pedPool = "general"
     },
     {
         ped = vec4(1392.15, 3606.54, 35.01, 200.85),
@@ -221,7 +252,8 @@ Config.Locations = {
             coords = vec3(1394.25, 3611.49, 35.01),
             radius = 0.6
         },
-        robbable = true
+        robbable = true,
+        pedPool = "general"
     },
     { -- Bahamas West Mamas
         ped = vec4(-1391.8, -605.55, 30.32, 110.08),
@@ -230,7 +262,8 @@ Config.Locations = {
             coords = vec3(1394.25, 3611.49, 35.01),
             radius = 0.6
         },
-        robbable = false
+        robbable = true,
+        pedPool = "general"
     },
     -- Weapon Shops
     {
@@ -240,7 +273,8 @@ Config.Locations = {
             coords = vec3(1394.25, 3611.49, 35.01),
             radius = 0.6
         },
-        robbable = false
+        robbable = true,
+        pedPool = "weapon"
     },
     {
         ped = vec4(809.53, -2159.37, 29.63, 0.35),
@@ -249,7 +283,8 @@ Config.Locations = {
             coords = vec3(1394.25, 3611.49, 35.01),
             radius = 0.6
         },
-        robbable = false
+        robbable = true,
+        pedPool = "weapon"
     },
     {
         ped = vec4(1692.49, 3761.69, 34.72, 228.01),
@@ -258,7 +293,8 @@ Config.Locations = {
             coords = vec3(1394.25, 3611.49, 35.01),
             radius = 0.6
         },
-        robbable = false
+        robbable = true,
+        pedPool = "weapon"
     },
     {
         ped = vec4(-331.37, 6085.68, 31.47, 225.58),
@@ -267,7 +303,8 @@ Config.Locations = {
             coords = vec3(1394.25, 3611.49, 35.01),
             radius = 0.6
         },
-        robbable = false
+        robbable = true,
+        pedPool = "weapon"
     },
     {
         ped = vec4(253.89, -51.29, 69.96, 70.78),
@@ -276,7 +313,8 @@ Config.Locations = {
             coords = vec3(1394.25, 3611.49, 35.01),
             radius = 0.6
         },
-        robbable = false
+        robbable = true,
+        pedPool = "weapon"
     },
     {
         ped = vec4(23.35, -1105.43, 29.81, 160.82),
@@ -285,7 +323,8 @@ Config.Locations = {
             coords = vec3(1394.25, 3611.49, 35.01),
             radius = 0.6
         },
-        robbable = false
+        robbable = true,
+        pedPool = "weapon"
     },
     {
         ped = vec4(2567.26, 292.27, 108.75, 0.6),
@@ -294,7 +333,8 @@ Config.Locations = {
             coords = vec3(1394.25, 3611.49, 35.01),
             radius = 0.6
         },
-        robbable = false
+        robbable = true,
+        pedPool = "weapon"
     },
     {
         ped = vec4(-1118.68, 2700.46, 18.57, 222.58),
@@ -303,7 +343,8 @@ Config.Locations = {
             coords = vec3(1394.25, 3611.49, 35.01),
             radius = 0.6
         },
-        robbable = false
+        robbable = true,
+        pedPool = "weapon"
     },
     {
         ped = vec4(841.72, -1035.62, 28.21, 0.75),
@@ -312,14 +353,15 @@ Config.Locations = {
             coords = vec3(1394.25, 3611.49, 35.01),
             radius = 0.6
         },
-        robbable = false
+        robbable = true,
+        pedPool = "weapon"
     },
 }
 
 -- List of peds used for the cashier
-Config.Peds = {
-    `mp_m_shopkeep_01`
-}
+-- Config.Peds = {
+--     `mp_m_shopkeep_01`
+-- }
 
 Config.ResetAccess = {
     Jobs = {

@@ -367,7 +367,8 @@ CreateThread(function()
             openedSafe = false,
             safeNet = -1
         }
-        peds.create(Config.Locations[i].ped)
+        -- Pass both the location and the pedPool to peds.create
+        peds.create(Config.Locations[i].ped, Config.Locations[i].pedPool)
     end
 end)
 

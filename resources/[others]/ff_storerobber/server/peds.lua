@@ -3,9 +3,21 @@ local peds = {
 }
 
 --- Create shop peds on server start
----@param location vector3
-function peds.create(location)
-    local modelHash = Config.Peds[math.random(1, #Config.Peds)]
+---@param location vector4
+---@param pedPool string|nil
+function peds.create(location, pedPool)
+    -- Default to "general" pool if pedPool is nil
+    pedPool = pedPool or "general"
+    
+    -- Check if the specified ped pool exists
+    if not Config.PedPools[pedPool] then
+        print("Error: Ped pool '" .. pedPool .. "' does not exist in Config.PedPools.")
+        return
+    end
+    
+    -- Select a random ped from the specified pool
+    local pedModels = Config.PedPools[pedPool]
+    local modelHash = pedModels[math.random(1, #pedModels)]
     local ped = CreatePed(4, modelHash, location.x, location.y, location.z, location.w, true, false)
     local netId = NetworkGetNetworkIdFromEntity(ped)
 
