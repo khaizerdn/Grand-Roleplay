@@ -24,8 +24,8 @@
         "veh_impounded": "Your vehicle has been impounded by the police"
     },
     "info": {
-        "car_e": "E - Open Garage",
-        "park_e": "E - Store Vehicle",
-        "impound_e": "E - Open Impound"
+        "car_e": "Press [E] to open garage.",
+        "park_e": "Press [E] to store vehicle.",
+        "impound_e": "Press [E] to open impound."
     }
 }
