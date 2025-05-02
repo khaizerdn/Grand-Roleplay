@@ -1,0 +1,23 @@
+{
+    "hack": "Hack",
+
+    "hack_vault": "Hack",
+    "hack_vault_name": "Bedienfeld",
+
+    "grab_cash": "Nehmen",
+    "grab_cash_name": "Geldbündel",
+
+    "no_laptop": "Dir fehlt etwas.",
+    "vault_empty": "Die Security ist alamiert, versuche es später nocheinmal.",
+
+    "alert_title": "Bankraub",
+    "alert_content": "Ein bewafneter Überfall ist im gange!",
+
+    "no_bag": "Dir fehlt eine Tasche.",
+
+    "hack_failed_name": "Laptop",
+    "hack_failed": "Hack fehlgeschlagen.",
+    
+    "not_enough_police_title": "Bankraub",
+    "not_enough_police": "Es sind nicht genügend Polizisten online."
+}

@@ -21,7 +21,7 @@ files {
 }
 
 shared_scripts {
-    -- '@ox_lib/init.lua',
+    '@ox_lib/init.lua',
     'resource/init.lua',
 } 
 
