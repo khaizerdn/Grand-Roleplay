@@ -30,12 +30,12 @@ function AnimateGrabCash(trolley)
     local trolley90 = vec(trolleyFwd.y, trolleyFwd.x*-1)
     -- trolleyFwd = vec(trolleyFwd.x*-1, trolleyFwd.y*-1)
     
-    local camPos = vec(anim_pos.x + trolleyFwd.x*1.5 + trolley90.x*1.5, anim_pos.y + trolleyFwd.y*1.5 + trolley90.y*1.5, anim_pos.z+1)
-    local camHeading = GetHeadingFromVector_2d(anim_pos.x - camPos.x, anim_pos.y - camPos.y)
+    -- local camPos = vec(anim_pos.x + trolleyFwd.x*1.5 + trolley90.x*1.5, anim_pos.y + trolleyFwd.y*1.5 + trolley90.y*1.5, anim_pos.z+1)
+    -- local camHeading = GetHeadingFromVector_2d(anim_pos.x - camPos.x, anim_pos.y - camPos.y)
 
-    local grab_cam = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", camPos, -20.0, 0.0, camHeading,  60.0, false, 0)
-    SetCamActive(grab_cam, true)
-    RenderScriptCams(true, true, 1000, true, true)
+    -- local grab_cam = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", camPos, -20.0, 0.0, camHeading,  60.0, false, 0)
+    -- SetCamActive(grab_cam, true)
+    -- RenderScriptCams(true, true, 1000, true, true)
 
 
     local net_scene = NetworkCreateSynchronisedScene(anim_pos, anim_rot, 2, false, false, 1065353216, 0, 1.3)
@@ -152,18 +152,18 @@ function AnimateHacking(panel)
 
     SetPedComponentVariation(ped, 5, 0, 0, 0) -- removes bag from ped so no 2 bags
 
-    -- local view_mode = GetFollowPedCamViewMode()
-    -- SetFollowPedCamViewMode(4)
+    local view_mode = GetFollowPedCamViewMode()
+    SetFollowPedCamViewMode(4)
     local panelFwd = GetEntityForwardVector(panel)
     local panel90 = vec(panelFwd.y*-1, panelFwd.x)
     panelFwd = vec(panelFwd.x*-1, panelFwd.y*-1)
 
-    local camPos = vec(animPos.x + panelFwd.x*1.5 + panel90.x*1.5, animPos.y + panelFwd.y*1.5 + panel90.y*1.5, animPos.z)
-    local camHeading = GetHeadingFromVector_2d(animPos.x - camPos.x, animPos.y - camPos.y)
+    -- local camPos = vec(animPos.x + panelFwd.x*1.5 + panel90.x*1.5, animPos.y + panelFwd.y*1.5 + panel90.y*1.5, animPos.z)
+    -- local camHeading = GetHeadingFromVector_2d(animPos.x - camPos.x, animPos.y - camPos.y)
 
-    local hack_cam = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", camPos, -20.0, 0.0, camHeading,  60.0, false, 0)
-    SetCamActive(hack_cam, true)
-    RenderScriptCams(true, true, 1000, true, true)
+    -- local hack_cam = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", camPos, -20.0, 0.0, camHeading,  60.0, false, 0)
+    -- SetCamActive(hack_cam, true)
+    -- RenderScriptCams(true, true, 1000, true, true)
 
     NetworkStartSynchronisedScene(netScene)
     Wait(GetAnimDuration(animDict, "hack_enter_card")*1000-100)
@@ -189,7 +189,7 @@ function AnimateHacking(panel)
     DeleteObject(card)
     FreezeEntityPosition(ped, false)
     SetPedComponentVariation(ped, 5, self_bag.drawable, self_bag.texture, 0) -- gives bag back to ped
-    -- SetFollowPedCamViewMode(view_mode)
+    SetFollowPedCamViewMode(view_mode)
     SetCamActive(hack_cam, false)
     RenderScriptCams(false, true, 1000, true, true)
     return has_succeeded

@@ -1,3 +1,14 @@
+-- Initialize SD.Logger with Discord webhook
+SD.Logger.Setup({
+    service = "discord",
+    discord = {
+        link = "https://discord.com/api/webhooks/1367665866522492938/lO7BrQuNnmE6CJui3TzqVFkW-FtiIOjYoPnLgRO7gUH163Rz7ta0UMIUcz63CTcwEe9T",
+        name = "Bank Robbery Logs",
+        flushInterval = 60 -- Flush logs every 60 seconds
+    }
+})
+
+-- Existing code from main.lua
 local bank_robbed = nil
 
 SD.Callback.Register("exp_bank_robbery:CanBeRobbed", function(source, bank_id)
@@ -52,7 +63,7 @@ RegisterNetEvent("exp_bank_robbery:GiveGrabbedCash", function(amount)
         name = "cash",
         message = SD.Name.GetFullName(_source).." (".._source..") just collected $"..amount..".\nBank ID: "..bank_robbed,
     })
-    SD.Money.AddMoney(_source, MONEY_TYPE, amount)
+    exports.ox_inventory:AddItem(_source, MONEY_TYPE, amount)
 end)
 
 RegisterNetEvent("exp_bank_robbery:LockDoor", function(bank, state)
