@@ -1,0 +1,275 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Yarndings+12&display=swap');
+
+html,
+body {
+    width: 100%;
+    height: 100vh;
+    background-color: transparent;
+    font-family: "Poppins", sans-serif;
+    overflow: hidden;
+    user-select: none;
+}
+
+.hack-wrap {
+    background-color: #303238;
+    width: 800px !important;
+    height: 600px !important;
+    position: relative;
+    box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.363);
+    border-radius: 10px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    overflow: hidden;
+    transform: translate(-50%, -50%);
+    transition: top 1s ease-in-out;
+}
+
+.hack-wrap.disable-hover {
+    pointer-events: none;
+}
+
+.hack-wrap.hide {
+    top: 150%;
+}
+
+.hack-wrap.fail {
+    pointer-events: none;
+}
+
+.option-container {
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    padding-bottom: 80px;
+}
+
+.options {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    background-color: rgb(1 8 34);
+    margin: 0 auto;
+    text-align: center;
+    display: flex;
+    justify-content: space-around;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.option {
+    height: 100%;
+    width: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.option div {
+    height: 60px;
+    width: 100%;
+    background-color: rgb(0 50 141);
+    border: 1px solid rgb(45, 97, 209);
+    box-shadow: 0 0 10px 1px rgb(45, 97, 209), inset 0 0 10px 1px rgb(45, 97, 209);
+    margin-bottom: 10px;
+    border-radius: 10px;
+    -webkit-transition: opacity 0.5s ease-in-out;
+    -moz-transition: opacity 0.5s ease-in-out;
+    transition: opacity 0.5s ease-in-out;
+    opacity: 1;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-family: "Yarndings 12", system-ui;
+    font-size: 2em;
+
+    cursor: pointer;
+}
+
+.option div:hover {
+    scale: 1.05;
+}
+
+.option.noselect div {
+    box-shadow: none;
+    background-color: rgb(0 50 141 / 24%);
+    pointer-events: none !important;
+}
+
+.option.noselectfail div {
+    box-shadow: none;
+    background-color: rgb(0 50 141 / 24%) !important;
+    pointer-events: none !important;
+}
+
+.option div.notinpattern {
+    box-shadow: none;
+    background-color: rgb(0 50 141 / 24%);
+    pointer-events: none !important;
+}
+
+.option div.hide {
+    opacity: 0;
+}
+
+.option div.error {
+    background-color: rgba(158, 0, 0, 0.637);
+    border: 1px solid rgb(160, 16, 16);
+    box-shadow: 0 0 10px 1px rgb(160, 16, 16), inset 0 0 10px 1px rgb(160, 16, 16);
+}
+
+.option div.correct {
+    background-color: rgba(0, 175, 67, 0.637);
+    border: 1px solid rgb(16, 160, 40);
+    box-shadow: 0 0 10px 1px rgb(16, 160, 40), inset 0 0 10px 1px rgb(16, 160, 40);
+}
+
+.option div:last-of-type {
+    margin-bottom: 0px;
+}
+
+.attempts {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    width: 50%;
+    position: absolute;
+    bottom: 20px;
+    left: 15px;
+}
+
+.timer {
+    width: 30px;
+    position: absolute;
+    bottom: 20px;
+    right: 18px;
+    height: 40px;
+    color: #ffffff;
+    font-size: 30px;
+    text-align: right;
+    line-height: 38px;
+}
+
+.attempts div {
+    width: 40px;
+    height: 40px;
+    background-color: rgba(0, 0, 0, 0.342);
+    margin: 0px 5px;
+    border-radius: 10px;
+}
+
+.attempts div.wrong {
+    background-color: #c51111;
+}
+
+.loader,
+.outcome {
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    padding-bottom: 80px;
+    float: left;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: #fff;
+    opacity: 1;
+    -webkit-transition: opacity 0.5s ease-in-out;
+    -moz-transition: opacity 0.5s ease-in-out;
+    transition: opacity 0.5s ease-in-out;
+    pointer-events: none;
+    z-index: 23602760;
+    position: absolute;
+}
+
+.outcome {
+    background-color: rgba(0, 0, 0, 0.548);
+    border-radius: 10px;
+    pointer-events: all !important;
+}
+
+.loader.hide,
+.outcome.hide {
+    opacity: 0;
+    pointer-events: none !important;
+}
+
+.outcome>.message {
+    width: 200px;
+    height: 100px;
+    line-height: 100px;
+    border-radius: 10px;
+}
+
+.outcome>.message.fail {
+    background-color: rgba(77, 2, 2);
+    border: 1px solid rgb(160, 16, 16);
+    box-shadow: 0 0 10px 1px rgb(160, 16, 16), inset 0 0 10px 1px rgb(160, 16, 16);
+}
+
+.outcome>.message.success {
+    background-color: rgb(2, 77, 21);
+    border: 1px solid rgb(16, 160, 40);
+    box-shadow: 0 0 10px 1px rgb(16, 160, 40), inset 0 0 10px 1px rgb(16, 160, 40);
+}
+
+#countdown svg {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 40px;
+    height: 40px;
+    transform: rotateY(-180deg) rotateZ(-90deg);
+}
+
+#countdown svg circle {
+    stroke-dasharray: 113px;
+    stroke-dashoffset: 0px;
+    stroke-linecap: round;
+    stroke-width: 2px;
+    stroke: white;
+    fill: none;
+}
+
+svg circle.circle--10s {
+    animation: countdown 10s linear infinite forwards;
+}
+
+svg circle.circle--8s {
+    animation: countdown 8s linear infinite forwards;
+}
+
+@keyframes countdown {
+    from {
+        stroke-dashoffset: 0px;
+    }
+
+    to {
+        stroke-dashoffset: 113px;
+    }
+}
+
+.effect {
+    position: absolute;
+    background-image: url(../images/effect.png);
+    background-size: cover;
+    width: 100%;
+    height: 100%;
+    opacity: 0.05;
+    pointer-events: none;
+}
+
+.plastic {
+    position: absolute;
+    background-image: url(../images/plastic.jpg);
+    background-size: cover;
+    width: 100%;
+    height: 100%;
+    mix-blend-mode: overlay;
+    opacity: 0.5;
+    pointer-events: none;
+
+}
