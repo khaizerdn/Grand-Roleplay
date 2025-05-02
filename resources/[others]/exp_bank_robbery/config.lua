@@ -24,7 +24,7 @@ POLICE_JOBS = {     --job = minimum rank, Example: police = 0,
 }
 
 POL_ALERT_TIME = 30 * 1000  -- 30 seconds
-POL_ALERT_SPRITE = 108      -- radar_financier_strand...
+POL_ALERT_SPRITE = 161      -- radar_financier_strand...
 POL_ALERT_COLOR = 1         -- Red
 POL_ALERT_WAVE = true       -- Enables the blip wave.
 

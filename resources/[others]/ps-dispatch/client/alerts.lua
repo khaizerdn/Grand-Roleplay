@@ -24,7 +24,7 @@ local function CustomAlert(data)
         automaticGunfire = data.automaticGunfire or false, -- Automatic Gun or not
         alert = {
             radius = data.radius or 0, -- Radius around the blip
-            sprite = data.sprite or 1, -- Sprite of the blip
+            sprite = data.sprite or 161, -- Sprite of the blip
             color = data.color or 1, -- Color of the blip
             scale = data.scale or 0.5, -- Scale of the blip
             length = data.length or 2, -- How long it stays on the map
@@ -33,7 +33,7 @@ local function CustomAlert(data)
             offset = data.offset or false, -- Blip / radius offset
             flash = data.flash or false -- Blip flash
         },
-        jobs = data.jobs or { 'leo' },
+        jobs = data.jobs or { 'police' },
     }
 
     TriggerServerEvent('ps-dispatch:server:notify', dispatchData)

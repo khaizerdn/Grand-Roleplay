@@ -100,6 +100,21 @@ function StartVaultHack(entity)
     end, bank.bank)
 end
 
+RegisterNetEvent("exp_bank_robbery:SendPoliceAlert", function(position)
+    exports["ps-dispatch"]:CustomAlert({
+        message = "Bank Robbery in Progress",
+        code = "10-90",
+        icon = "fas fa-university",
+        coords = { x = position.x, y = position.y, z = position.z },
+        jobs = { "police" },
+        alert = {
+            sprite = 161, 
+            scale = 1.0, 
+            colour = 1,
+        }
+    })
+end)
+
 RegisterNetEvent("exp_bank_robbery:GrabCash", function(data)
     local entity = data.entity
     player.Ped = PlayerPedId()
@@ -303,24 +318,24 @@ RegisterNetEvent("exp_bank_robbery:CloseVaultDoor", function(bank_id)
     bank = nil
 end)
 
-RegisterNetEvent("exp_bank_robbery:ShowPoliceAlert", function(position)
-    local blip_icon = SetBlip(SD.Locale.T("alert_title"), position, POL_ALERT_SPRITE, POL_ALERT_COLOR, 1.0)
-    SetBlipAsShortRange(blip_icon, false)
-    if POL_ALERT_WAVE then
-        local blip_wave = SetBlip("", position, 161, POL_ALERT_COLOR, 1.0)
-        SetBlipDisplay(blip_wave, 8)
-        SetBlipAsShortRange(blip_wave, false)
-    end
+-- RegisterNetEvent("exp_bank_robbery:ShowPoliceAlert", function(position)
+--     local blip_icon = SetBlip(SD.Locale.T("alert_title"), position, POL_ALERT_SPRITE, POL_ALERT_COLOR, 1.0)
+--     SetBlipAsShortRange(blip_icon, false)
+--     if POL_ALERT_WAVE then
+--         local blip_wave = SetBlip("", position, 161, POL_ALERT_COLOR, 1.0)
+--         SetBlipDisplay(blip_wave, 8)
+--         SetBlipAsShortRange(blip_wave, false)
+--     end
 
-    Wait(POL_ALERT_TIME)
+--     Wait(POL_ALERT_TIME)
     
-    RemoveBlip(blip_icon)
-    RemoveBlip(blip_wave)
-    ShowNotification({
-        title = SD.Locale.T("alert_title"),
-        message = SD.Locale.T("alert_content")
-    })
-end)
+--     RemoveBlip(blip_icon)
+--     RemoveBlip(blip_wave)
+--     ShowNotification({
+--         title = SD.Locale.T("alert_title"),
+--         message = SD.Locale.T("alert_content")
+--     })
+-- end)
 
 RegisterNetEvent("exp_bank_robbery:ShowNotification", function(data)
     ShowNotification(data)

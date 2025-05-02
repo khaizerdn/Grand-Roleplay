@@ -85,3 +85,7 @@ end)
 function ShowNotification(player_src, event)
     TriggerClientEvent("exp_bank_robbery:ShowNotification", player_src, event)
 end
+
+RegisterNetEvent("exp_bank_robbery:SendPoliceAlert", function(coords)
+    TriggerClientEvent("exp_bank_robbery:SendPoliceAlert", -1, coords)
+end)

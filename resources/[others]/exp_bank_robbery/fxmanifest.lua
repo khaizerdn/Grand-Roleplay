@@ -29,5 +29,6 @@ files {
 }
 
 dependencies {
-    "sd_lib"
+    "sd_lib",
+    "ps-dispatch"
 }
