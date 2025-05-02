@@ -170,17 +170,42 @@ function AnimateHacking(panel)
 
     NetworkStartSynchronisedScene(netScene2)
     Wait(1000)
-    local has_succeeded = exports.exp_hack:StartHack({
-        rounds = 2,
-        squares = 3
-    }, nil , function ()
-        ShowNotification({
-            title = SD.Locale.T("hack_failed_name"),
-            message = SD.Locale.T("hack_failed"),
-            type = "error"
-        })
+
+    local has_succeeded = false
+    local hack_completed = false
+    TriggerEvent('ultra-voltlab', 30, function(outcome, reason)
+        if outcome == 1 then
+            has_succeeded = true
+            lib.notify({
+                title = SD.Locale.T("hack_vault_name"),
+                description = SD.Locale.T("vault_hacked"),
+                type = "success"
+            })
+            -- Trigger door/vault opening
+            if bank and bank.bank then
+                TriggerServerEvent("exp_bank_robbery:OpenVaultDoor", bank.bank)
+            end
+        else
+            local message = SD.Locale.T("hack_failed")
+            if outcome == 0 then
+                message = SD.Locale.T("hack_failed") .. ": " .. reason
+            elseif outcome == 2 then
+                message = SD.Locale.T("hack_failed") .. ": Timed out"
+            elseif outcome == -1 then
+                message = SD.Locale.T("hack_failed") .. ": Error - " .. reason
+            end
+            lib.notify({
+                title = SD.Locale.T("hack_failed_name"),
+                description = message,
+                type = "error"
+            })
+        end
+        hack_completed = true
     end)
-    
+
+    -- Wait for hack to complete
+    while not hack_completed do Wait(100) end
+
     NetworkStartSynchronisedScene(netScene3)
     Wait(GetAnimDuration(animDict, "hack_exit_card")*1000-100)
     
