@@ -634,4 +634,9 @@ return {
         label = 'Handcuffs',
         weight = 200,
     },
+
+    ['laptop'] = {
+        label = 'Laptop',
+        weight = 1000,
+    },
 }
