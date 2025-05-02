@@ -69,8 +69,8 @@
         "managed_sell_txt": "Sell vehicle to Player",
         "managed_finance_txt": "Finance vehicle to Player",
         "submit_ID": "Server ID (#)",
-        "keypress_showFinanceMenu": "[E] Open Finance Menu",
-        "keypress_vehicleViewMenu": "[E] View Vehicle",
+        "keypress_showFinanceMenu": "Press [E] to open finance menu.",
+        "keypress_vehicleViewMenu": "Press [E] to open vehicle menu.",
         "target_showFinanceMenu": "Open Finance Menu"
     },
     "general": {
