@@ -101,18 +101,7 @@ function StartVaultHack(entity)
 end
 
 RegisterNetEvent("exp_bank_robbery:SendPoliceAlert", function(position)
-    exports["ps-dispatch"]:CustomAlert({
-        message = "Bank Robbery in Progress",
-        code = "10-90",
-        icon = "fas fa-university",
-        coords = { x = position.x, y = position.y, z = position.z },
-        jobs = { "police" },
-        alert = {
-            sprite = 161, 
-            scale = 1.0, 
-            colour = 1,
-        }
-    })
+    exports["ps-dispatch"]:BankRobbery()
 end)
 
 RegisterNetEvent("exp_bank_robbery:GrabCash", function(data)

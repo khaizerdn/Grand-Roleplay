@@ -217,8 +217,18 @@ Config.Blips = {
     },
     ['bankrobbery'] = {
         radius = 0,
-        sprite = 500,
-        color = 2,
+        sprite = 161,
+        color = 1,
+        scale = 1.5,
+        length = 2,
+        sound = 'robberysound',
+        offset = false,
+        flash = false
+    },
+    ['fleecabankrobbery'] = {
+        radius = 0,
+        sprite = 161,
+        color = 1,
         scale = 1.5,
         length = 2,
         sound = 'robberysound',
