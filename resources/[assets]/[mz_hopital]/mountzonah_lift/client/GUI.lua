@@ -101,24 +101,24 @@ function Menu.Option(option, coords, distanceAmount)
 	local distance = GetDistanceBetweenCoords(coords[1], coords[2], coords[3], playerpos.x, playerpos.y, playerpos.z, 1)
 	if distance < distanceAmount then
 
-		-- local thisOption = nil
-		-- if(currentOption == optionCount) then
-		-- 	thisOption = true
-		-- else
-		-- 	thisOption = false
-		-- end
+		local thisOption = nil
+		if(currentOption == optionCount) then
+			thisOption = true
+		else
+			thisOption = false
+		end
 
-		-- if (optionCount > currentOption - GUI.maxVisOptions and optionCount <= currentOption) then
-		-- 	GUI.Text(option, GUI.scroller, {coords[1], coords[2], coords[3] + 0.3 * (optionCount * 0.45)})
-		-- 	if(thisOption) then
-		-- 		GUI.Text(option, GUI.optionText, {coords[1], coords[2], coords[3] + 0.3 * (optionCount * 0.45)})
-		-- 	end
-		-- elseif(currentOption <= GUI.maxVisOptions and optionCount <= GUI.maxVisOptions) then
-		-- 	GUI.Text(option, GUI.scroller, {coords[1], coords[2], coords[3] + 0.3 * (optionCount * 0.45)})
-		-- 	if(thisOption) then
-		-- 		GUI.Text(option, GUI.optionText, {coords[1], coords[2], coords[3] + 0.3 * (optionCount * 0.45)})
-		-- 	end
-		-- end
+		if (optionCount > currentOption - GUI.maxVisOptions and optionCount <= currentOption) then
+			GUI.Text(option, GUI.scroller, {coords[1], coords[2], coords[3] + 0.3 * (optionCount * 0.45)})
+			if(thisOption) then
+				GUI.Text(option, GUI.optionText, {coords[1], coords[2], coords[3] + 0.3 * (optionCount * 0.45)})
+			end
+		elseif(currentOption <= GUI.maxVisOptions and optionCount <= GUI.maxVisOptions) then
+			GUI.Text(option, GUI.scroller, {coords[1], coords[2], coords[3] + 0.3 * (optionCount * 0.45)})
+			if(thisOption) then
+				GUI.Text(option, GUI.optionText, {coords[1], coords[2], coords[3] + 0.3 * (optionCount * 0.45)})
+			end
+		end
 
 		if (optionCount == currentOption and selectPressed) then
 			return true

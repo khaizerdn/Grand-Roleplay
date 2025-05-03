@@ -16,7 +16,3 @@ server_scripts {
 	-- '@es_extended/locale.lua',
 	'config.lua'
 }
-
-dependencies {
-    'ox_lib'
-}

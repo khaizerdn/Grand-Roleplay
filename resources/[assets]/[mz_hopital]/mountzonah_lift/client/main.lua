@@ -90,111 +90,149 @@ Citizen.CreateThread(function()
 end)
 
 AddEventHandler('esx_lift:hasExitedMarker', function(zone)
+
     CurrentAction = nil
-    -- Hide text UI when exiting the marker
-    lib.hideTextUI()
+    -- --ESX.UI.Menu.CloseAll()
+
 end)
 
 
 function _U(text)
-    return Locales[Config.Locale][text]
+	return Locales['fr'][text]
+	-- tostring(text)
 end
 
 AddEventHandler('esx_lift:hasEnteredMarker', function(zone)
+
     if zone == 'Entrance1' then
-        CurrentAction     = 'menu_Entrance1'
-        CurrentActionMsg  = _U('PushForChooseYourFloor') -- Kept for compatibility, though not displayed
-        CurrentActionData = {}
-    elseif zone == 'Entrance2' then
-        CurrentAction     = 'menu_Entrance2'
-        CurrentActionMsg  = _U('PushForChooseYourFloor')
-        CurrentActionData = {}
-    elseif zone == 'Entrance3' then
-        CurrentAction     = 'menu_Entrance3'
-        CurrentActionMsg  = _U('PushForChooseYourFloor')
-        CurrentActionData = {}
-    elseif zone == 'UrgenceParking' then
-        CurrentAction     = 'menu_UrgenceParking'
-        CurrentActionMsg  = _U('PushForChooseYourFloor')
-        CurrentActionData = {}
-    elseif zone == 'Parking' then
-        CurrentAction     = 'menu_Parking'
-        CurrentActionMsg  = _U('PushForChooseYourFloor')
-        CurrentActionData = {}
-    elseif zone == 'UrgencePrive' then
-        CurrentAction     = 'menu_UrgencePrive'
-        CurrentActionMsg  = _U('PushForChooseYourFloor')
-        CurrentActionData = {}
-    elseif zone == 'Operation' then
-        CurrentAction     = 'menu_Operation'
-        CurrentActionMsg  = _U('PushForChooseYourFloor')
-        CurrentActionData = {}
-    elseif zone == 'RoomPrive' then
-        CurrentAction     = 'menu_RoomPrive'
-        CurrentActionMsg  = _U('PushForChooseYourFloor')
-        CurrentActionData = {}
-    elseif zone == 'Room1' then
-        CurrentAction     = 'menu_Room1'
-        CurrentActionMsg  = _U('PushForChooseYourFloor')
-        CurrentActionData = {}
-    elseif zone == 'Room2' then
-        CurrentAction     = 'menu_Room2'
-        CurrentActionMsg  = _U('PushForChooseYourFloor')
-        CurrentActionData = {}
-    elseif zone == 'Room3' then
-        CurrentAction     = 'menu_Room3'
-        CurrentActionMsg  = _U('PushForChooseYourFloor')
-        CurrentActionData = {}
+      CurrentAction     = 'menu_Entrance1'
+      CurrentActionMsg  = _U('PushForChooseYourFloor')
+      CurrentActionData = {}
     end
 
-    -- Show ox_lib text UI when entering any marker
-    lib.showTextUI(_U('PressEToChooseFloor'), {
-        icon = 'fa-solid fa-elevator',
-        position = 'top-center'
-    })
+    if zone == 'Entrance2' then
+      CurrentAction     = 'menu_Entrance2'
+      CurrentActionMsg  = _U('PushForChooseYourFloor')
+      CurrentActionData = {}
+    end
+
+    if zone == 'Entrance3' then
+      CurrentAction     = 'menu_Entrance3'
+      CurrentActionMsg  = _U('PushForChooseYourFloor')
+      CurrentActionData = {}
+    end
+
+    if zone == 'UrgenceParking' then
+      CurrentAction     = 'menu_UrgenceParking'
+      CurrentActionMsg  = _U('PushForChooseYourFloor')
+      CurrentActionData = {}
+    end
+
+    if zone == 'Parking' then
+      CurrentAction     = 'menu_Parking'
+      CurrentActionMsg  = _U('PushForChooseYourFloor')
+      CurrentActionData = {}
+    end
+
+    if zone == 'UrgencePrive' then
+      CurrentAction     = 'menu_UrgencePrive'
+      CurrentActionMsg  = _U('PushForChooseYourFloor')
+      CurrentActionData = {}
+    end
+
+    if zone == 'Operation' then
+      CurrentAction     = 'menu_Operation'
+      CurrentActionMsg  = _U('PushForChooseYourFloor')
+      CurrentActionData = {}
+    end
+
+    if zone == 'RoomPrive' then
+      CurrentAction     = 'menu_RoomPrive'
+      CurrentActionMsg  = _U('PushForChooseYourFloor')
+      CurrentActionData = {}
+    end
+
+    if zone == 'Room1' then
+      CurrentAction     = 'menu_Room1'
+      CurrentActionMsg  = _U('PushForChooseYourFloor')
+      CurrentActionData = {}
+    end
+
+    if zone == 'Room2' then
+      CurrentAction     = 'menu_Room2'
+      CurrentActionMsg  = _U('PushForChooseYourFloor')
+      CurrentActionData = {}
+    end
+
+    if zone == 'Room3' then
+      CurrentAction     = 'menu_Room3'
+      CurrentActionMsg  = _U('PushForChooseYourFloor')
+      CurrentActionData = {}
+    end
+
 end)
 
 -- Key Controls
 Citizen.CreateThread(function()
     while true do
-        Citizen.Wait(5)
-        if CurrentAction ~= nil then
-            -- Remove native help text display
-            -- SetTextComponentFormat('STRING')
-            -- AddTextComponentString(CurrentActionMsg)
-            -- DisplayHelpTextFromStringLabel(0, 0, 1, -1)
 
-            if IsControlJustPressed(0, 38) then
-                -- Hide text UI before opening the menu
-                lib.hideTextUI()
-                if CurrentAction == 'menu_Entrance1' then
-                    OpenLift01()
-                elseif CurrentAction == 'menu_Entrance2' then
-                    OpenLift02()
-                elseif CurrentAction == 'menu_Entrance3' then
-                    OpenLift03()
-                elseif CurrentAction == 'menu_UrgenceParking' then
-                    OpenParking()
-                elseif CurrentAction == 'menu_Parking' then
-                    OpenParking()
-                elseif CurrentAction == 'menu_UrgencePrive' then
-                    OpenStaff()
-                elseif CurrentAction == 'menu_Operation' then
-                    OpenStaff()
-                elseif CurrentAction == 'menu_RoomPrive' then
-                    OpenStaff()
-                elseif CurrentAction == 'menu_Room1' then
-                    OpenLift01()
-                elseif CurrentAction == 'menu_Room2' then
-                    OpenLift02()
-                elseif CurrentAction == 'menu_Room3' then
-                    OpenLift03()
-                end
+        Citizen.Wait(5)
+
+        if CurrentAction ~= nil then
+
+            SetTextComponentFormat('STRING')
+            AddTextComponentString(CurrentActionMsg)
+            DisplayHelpTextFromStringLabel(0, 0, 1, -1)
+
+            if IsControlJustReleased(0,  Keys['E']) then
+
+				if CurrentAction == 'menu_Entrance1' then
+					OpenLift01()
+				end
+
+				if CurrentAction == 'menu_Entrance2' then
+					OpenLift02()
+				end
+
+				if CurrentAction == 'menu_Entrance3' then
+					OpenLift03()
+				end
+
+				if CurrentAction == 'menu_UrgenceParking' then
+					OpenParking()
+				end
+
+				if CurrentAction == 'menu_Parking' then
+					OpenParking()
+				end
+
+				if CurrentAction == 'menu_UrgencePrive' then
+					OpenStaff()
+				end
+
+				if CurrentAction == 'menu_Operation' then
+					OpenStaff()
+				end
+
+				if CurrentAction == 'menu_RoomPrive' then
+					OpenStaff()
+				end
+
+				if CurrentAction == 'menu_Room1' then
+					OpenLift01()
+				end
+
+				if CurrentAction == 'menu_Room2' then
+					OpenLift02()
+				end
+
+				if CurrentAction == 'menu_Room3' then
+					OpenLift03()
+				end
+
                 CurrentAction = nil
+
             end
-        else
-            -- Optimize by sleeping longer when not in a zone
-            Citizen.Wait(500)
         end
     end
 end)
@@ -559,10 +597,4 @@ end
         end
 
 end]]
-
-Citizen.CreateThread(function()
-    while not lib do
-        Citizen.Wait(100)
-    end
-end)
 
