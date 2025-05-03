@@ -1,14 +1,14 @@
 return {
     cityhalls = {
         {
-            coords = vec3(-265.0, -963.6, 31.2),
+            coords = vec3(-554.68, -185.1, 38.22),
             showBlip = true,
             blip = {
                 label = 'City Services',
                 shortRange = true,
-                sprite = 487,
+                sprite = 419,
                 display = 4,
-                scale = 0.65,
+                scale = 1,
                 colour = 0,
             },
             licenses = {

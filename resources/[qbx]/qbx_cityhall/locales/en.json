@@ -9,8 +9,8 @@
     },
     "info": {
         "cityhall": "Cityhall",
-        "open_cityhall": "[E] Open Cityhall",
-        "target_open_cityhall": "Open Cityhall",
+        "open_cityhall": "Press [E] to talk to Mr. Lopez (City Clerk)",
+        "target_open_cityhall": "Talk to Mr. Lopez",
         "identity": "Identity",
         "employment": "Employment",
         "obtain_license_identity": "Obtain your licenses",
