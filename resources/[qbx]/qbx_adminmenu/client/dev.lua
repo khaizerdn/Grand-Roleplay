@@ -107,11 +107,17 @@ local options = {
                     end
 
                     -- Handle 'Q' for vector3
-                    if IsControlJustPressed(0, 44) then
+                    if IsControlJustPressed(0, 45) then
                         local x, y, z = qbx.math.round(coords.x, 2), qbx.math.round(coords.y, 2), qbx.math.round(coords.z, 2)
                         local data = string.format('vec3(%s, %s, %s)', x, y, z)
                         lib.setClipboard(data)
                         exports.qbx_core:Notify('Vector3 copied to clipboard', 'success')
+                    end
+
+                    if IsControlJustPressed(0, 23) then -- F
+                        local model = GetEntityModel(entity)
+                        lib.setClipboard(tostring(model))
+                        exports.qbx_core:Notify('Model ID copied to clipboard: ' .. model, 'success')
                     end
                 end
             end
