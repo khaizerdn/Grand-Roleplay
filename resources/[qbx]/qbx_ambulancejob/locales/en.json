@@ -54,12 +54,12 @@
         "status": "Health Status"
     },
     "text": {
-    "pstash_button": "Press [E] to access your personal stash.",
+    "pstash_button": "Press [E] to access inventory.",
     "pstash": "Personal stash",
     "onduty_button": "Press [E] to go on duty.",
     "offduty_button": "Press [E] to go off duty.",
     "duty": "On/Off Duty",
-    "armory_button": "Press [E] to access the armory.",
+    "armory_button": "Press [E] to access inventory.",
     "armory": "Armory",
     "veh_button": "Press [E] to grab or store a vehicle.",
     "elevator_roof": "Press [E] to take the elevator to the roof.",

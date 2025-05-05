@@ -4,20 +4,18 @@ return {
 
     locations = { -- Various interaction points
         duty = {
-            vec3(-441.58, -318.56, 34.91),
+            vec3(-441.34, -318.44, 33.92),
         },
         vehicle = {
-            vec4(294.578, -574.761, 43.179, 35.79),
-            vec4(-234.28, 6329.16, 32.15, 222.5),
+            vec4(-454.36, -340.08, 33.39, -6.94),
         },
         helicopter = {
-            vec4(351.58, -587.45, 74.16, 160.5),
-            vec4(-475.43, 5988.353, 31.716, 31.34),
+            vec4(-476.85, -336.72, 90.02, 83.17),
         },
         armory = {
             {
                 shopType = 'AmbulanceArmory',
-                name = 'Armory',
+                name = 'Inventory',
                 groups = { ambulance = 0 },
                 inventory = {
                     { name = 'radio', price = 0 },
@@ -28,25 +26,25 @@ return {
                     { name = 'weapon_fireextinguisher', price = 0 },
                 },
                 locations = {
-                    vec3(309.93, -602.94, 43.29)
+                    vec3(-453.48, -308.58, 33.92)
                 }
             }
         },
         roof = {
-            vec3(338.54, -583.88, 74.17),
+            vec3(0 , 0 , 0),
         },
         main = {
-            vec3(298.62, -599.66, 43.29),
+            vec3(0, 0, 0),
         },
         stash = {
             {
                 name = 'ambulanceStash',
-                label = 'Personal stash',
+                label = 'Inventory',
                 weight = 100000,
                 slots = 30,
                 groups = { ambulance = 0 },
-                owner = true, -- Set to false for group stash
-                location = vec3(309.78, -596.6, 43.29)
+                owner = false, -- Set to false for group stash
+                location = vec3(-456.99, -309.90, 33.95)
             }
         },
 
@@ -58,7 +56,7 @@ return {
         hospitals = {
             mountzonah = {
                 coords = vec3(-435.19, -324.13, 34.91),
-                checkIn = vec3(-435.82, -325.84, 34.91),
+                checkIn = vec3(-435.97, -325.97, 33.92),
                 beds = {
                     {coords = vec4(-459.0, -279.65, 34.47, 203.0), model = 2117668672},
                     {coords = vec4(-462.75, -281.23, 34.47, 203.0), model = 2117668672},
