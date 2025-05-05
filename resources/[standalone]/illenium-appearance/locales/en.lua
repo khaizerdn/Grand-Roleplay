@@ -324,7 +324,7 @@ Locales["en"] = {
         barber = "Barber - Price: $%d",
         tattoo = "Tattoo Shop - Price: $%d",
         surgeon = "Plastic Surgeon - Price: $%d",
-        clothingRoom = "Clothing Room",
+        clothingRoom = "change clothes.",
         playerOutfitRoom = "Outfits"
     },
     migrate = {

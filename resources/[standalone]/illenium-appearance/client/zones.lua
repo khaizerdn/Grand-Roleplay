@@ -40,7 +40,7 @@ local function onStoreEnter(data)
             name = store.type,
             index = index
         }
-        local prefix = Config.UseRadialMenu and "" or "[E] "
+        local prefix = Config.UseRadialMenu and "" or "Press [E] "
         if currentZone.name == "clothing" then
             lib.showTextUI(prefix .. string.format(_L("textUI.clothing"), Config.ClothingCost), Config.TextUIOptions)
         elseif currentZone.name == "barber" then
@@ -65,7 +65,7 @@ local function onClothingRoomEnter(data)
                 name = "clothingRoom",
                 index = index
             }
-            local prefix = Config.UseRadialMenu and "" or "[E] "
+            local prefix = Config.UseRadialMenu and "" or "Press [E] to "
             lib.showTextUI(prefix .. _L("textUI.clothingRoom"), Config.TextUIOptions)
             Radial.AddOption(currentZone)
         end
@@ -82,7 +82,7 @@ local function onPlayerOutfitRoomEnter(data)
             name = "playerOutfitRoom",
             index = index
         }
-        local prefix = Config.UseRadialMenu and "" or "[E] "
+        local prefix = Config.UseRadialMenu and "" or "Press [E] "
         lib.showTextUI(prefix .. _L("textUI.playerOutfitRoom"), Config.TextUIOptions)
         Radial.AddOption(currentZone)
     end

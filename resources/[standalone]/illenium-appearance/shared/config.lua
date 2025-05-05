@@ -14,7 +14,7 @@ Config.RCoreTattoosCompatibility = false
 
 Config.AsynchronousLoading = false -- Change this to false if you want the NUI data to load before displaying the appearance UI
 
-Config.UseTarget = true
+Config.UseTarget = false
 
 Config.TextUIOptions = {
     position = "left-center"
@@ -176,8 +176,8 @@ Config.TargetConfig = {
 Config.Stores = {
     {
         type = "clothing",
-        coords = vector4(1693.2, 4828.11, 42.07, 188.66),
-        size = vector3(4, 4, 4),
+        coords = vec4(1695.33, 4822.69, 42.06, 98.82),
+        size = vector3(7, 7, 7),
         rotation = 45,
         usePoly = false, -- false => uses the size + rotation to create the zone | true => uses points to create the zone
         showBlip = true, -- overrides the blip visibilty configured above for the group
@@ -192,8 +192,8 @@ Config.Stores = {
     },
     {
         type = "clothing",
-        coords = vector4(-705.5, -149.22, 37.42, 122),
-        size = vector3(4, 4, 4),
+        coords = vec4(-709.08, -151.62, 37.42, 120.74),
+        size = vector3(7, 7, 7),
         rotation = 45,
         usePoly = false,
         points = {
@@ -205,8 +205,8 @@ Config.Stores = {
     },
     {
         type = "clothing",
-        coords = vector4(-1192.61, -768.4, 17.32, 216.6),
-        size = vector3(4, 4, 4),
+        coords = vec4(-1192.33, -770.66, 17.32, 139.81),
+        size = vector3(7, 7, 7),
         rotation = 45,
         usePoly = false,
         points = {
@@ -561,6 +561,23 @@ Config.ClothingRooms = {
     {
         job = "police",
         coords = vector4(454.91, -990.89, 30.69, 193.4),
+        size = vector3(4, 4, 4),
+        rotation = 45,
+        usePoly = false,
+        points = {
+            vector3(460.41918945312, -993.11444091797, 30.69),
+            vector3(449.39508056641, -993.60614013672, 30.69),
+            vector3(449.88696289062, -990.23779296875, 30.69),
+            vector3(450.97882080078, -989.71411132812, 30.69),
+            vector3(451.0325012207, -987.89904785156, 30.69),
+            vector3(453.47863769531, -987.76928710938, 30.69),
+            vector3(454.35513305664, -988.46459960938, 30.69),
+            vector3(460.4231262207, -987.94573974609, 30.69)
+        }
+    },
+    {
+        job = "ambulance",
+        coords = vec4(-443.51, -310.3, 34.91, 191.54),
         size = vector3(4, 4, 4),
         rotation = 45,
         usePoly = false,
