@@ -29,14 +29,14 @@ local function setBedCam()
     lib.playAnim(cache.ped, InBedDict, InBedAnim, 8.0, 1.0, -1, 1, 0, false, false, false)
     SetEntityHeading(cache.ped, bedOccupyingData.coords.w)
 
-    cam = CreateCam('DEFAULT_SCRIPTED_CAMERA', true)
-    SetCamActive(cam, true)
-    RenderScriptCams(true, false, 1, true, true)
-    AttachCamToPedBone(cam, cache.ped, 31085, 0, 1.0, 1.0, true)
-    SetCamFov(cam, 90.0)
-    local heading = GetEntityHeading(cache.ped)
-    heading = (heading > 180) and heading - 180 or heading + 180
-    SetCamRot(cam, -45.0, 0.0, heading, 2)
+    -- cam = CreateCam('DEFAULT_SCRIPTED_CAMERA', true)
+    -- SetCamActive(cam, true)
+    -- RenderScriptCams(true, false, 1, true, true)
+    -- AttachCamToPedBone(cam, cache.ped, 31085, 0, 1.0, 1.0, true)
+    -- SetCamFov(cam, 90.0)
+    -- local heading = GetEntityHeading(cache.ped)
+    -- heading = (heading > 180) and heading - 180 or heading + 180
+    -- SetCamRot(cam, -45.0, 0.0, heading, 2)
 
     DoScreenFadeIn(1000)
 
