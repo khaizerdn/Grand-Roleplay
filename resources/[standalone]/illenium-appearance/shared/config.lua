@@ -153,8 +153,8 @@ Config.TargetConfig = {
     ["surgeon"] = {
         model = "s_m_m_doctor_01",
         scenario = "WORLD_HUMAN_STAND_MOBILE",
-        icon = "fas fa-scalpel",
-        label = "Open Surgeon",
+        icon = "fas fa-user-doctor",
+        label = "Surgery",
         distance = 3
     },
     ["clothingroom"] = {
@@ -543,7 +543,7 @@ Config.Stores = {
     },
     {
         type = "surgeon",
-        coords = vec4(361.48, -587.11, 43.31, 95.58),
+        coords = vec4(0, 0, 0, 0),
         size = vector3(4, 4, 4),
         rotation = 45,
         usePoly = false,
