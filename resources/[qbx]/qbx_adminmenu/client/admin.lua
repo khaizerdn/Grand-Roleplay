@@ -8,7 +8,7 @@ local noclipEnabled = false
 local ent
 local invisible = nil
 local noclipCam = nil
-local speed = 1.0
+local noclipSpeed = 1.0 -- Global speed variable
 local maxSpeed = 32.0
 local minY, maxY = -150.0, 160.0
 local inputRotEnabled = false
@@ -47,13 +47,15 @@ local function toggleNoclip()
             SetEntityVisible(cache.ped, false, false)
         end
 
+        local markerOffsetZ = 0.0 -- For coordinate capture mode
         while noclipEnabled do
             Wait(0)
             local _, fv = GetCamMatrix(noclipCam)
+            -- Adjust speed with mouse wheel (shared with coordinate capture)
             if IsDisabledControlPressed(2, 17) then -- Scroll Wheel Up
-                speed = math.min(speed + 0.1, maxSpeed)
+                noclipSpeed = math.min(noclipSpeed + 0.1, maxSpeed)
             elseif IsDisabledControlPressed(2, 16) then -- Scroll Wheel Down
-                speed = math.max(0.1, speed - 0.1)
+                noclipSpeed = math.max(0.1, noclipSpeed - 0.1)
             end
 
             local multiplier = 1.0
@@ -66,13 +68,13 @@ local function toggleNoclip()
             end
 
             if IsDisabledControlPressed(2, 32) then -- W
-                local setPos = GetEntityCoords(ent) + fv * (speed * multiplier)
+                local setPos = GetEntityCoords(ent) + fv * (noclipSpeed * multiplier)
                 SetEntityCoordsNoOffset(ent, setPos.x, setPos.y, setPos.z, false, false, false)
                 if not inVehicle then
                     SetEntityCoordsNoOffset(cache.ped, setPos.x, setPos.y, setPos.z, false, false, false)
                 end
             elseif IsDisabledControlPressed(2, 33) then -- S
-                local setPos = GetEntityCoords(ent) - fv * (speed * multiplier)
+                local setPos = GetEntityCoords(ent) - fv * (noclipSpeed * multiplier)
                 SetEntityCoordsNoOffset(ent, setPos.x, setPos.y, setPos.z, false, false, false)
                 if not inVehicle then
                     SetEntityCoordsNoOffset(cache.ped, setPos.x, setPos.y, setPos.z, false, false, false)
@@ -80,13 +82,13 @@ local function toggleNoclip()
             end
 
             if IsDisabledControlPressed(2, 34) then -- A
-                local setPos = GetOffsetFromEntityInWorldCoords(ent, -speed * multiplier, 0.0, 0.0)
+                local setPos = GetOffsetFromEntityInWorldCoords(ent, -noclipSpeed * multiplier, 0.0, 0.0)
                 SetEntityCoordsNoOffset(ent, setPos.x, setPos.y, setPos.z, false, false, false)
                 if not inVehicle then
                     SetEntityCoordsNoOffset(cache.ped, setPos.x, setPos.y, setPos.z, false, false, false)
                 end
             elseif IsDisabledControlPressed(2, 35) then -- D
-                local setPos = GetOffsetFromEntityInWorldCoords(ent, speed * multiplier, 0.0, 0.0)
+                local setPos = GetOffsetFromEntityInWorldCoords(ent, noclipSpeed * multiplier, 0.0, 0.0)
                 SetEntityCoordsNoOffset(ent, setPos.x, setPos.y, setPos.z, false, false, false)
                 if not inVehicle then
                     SetEntityCoordsNoOffset(cache.ped, setPos.x, setPos.y, setPos.z, false, false, false)
@@ -94,13 +96,13 @@ local function toggleNoclip()
             end
 
             if IsDisabledControlPressed(2, 51) then -- E
-                local setPos = GetOffsetFromEntityInWorldCoords(ent, 0.0, 0.0, multiplier * speed / 2)
+                local setPos = GetOffsetFromEntityInWorldCoords(ent, 0.0, 0.0, multiplier * noclipSpeed / 2)
                 SetEntityCoordsNoOffset(ent, setPos.x, setPos.y, setPos.z, false, false, false)
                 if not inVehicle then
                     SetEntityCoordsNoOffset(cache.ped, setPos.x, setPos.y, setPos.z, false, false, false)
                 end
             elseif IsDisabledControlPressed(2, 52) then -- Q
-                local setPos = GetOffsetFromEntityInWorldCoords(ent, 0.0, 0.0, multiplier * -speed / 2)
+                local setPos = GetOffsetFromEntityInWorldCoords(ent, 0.0, 0.0, multiplier * -noclipSpeed / 2)
                 SetEntityCoordsNoOffset(ent, setPos.x, setPos.y, setPos.z, false, false, false)
                 if not inVehicle then
                     SetEntityCoordsNoOffset(cache.ped, setPos.x, setPos.y, setPos.z, false, false, false)
@@ -120,23 +122,68 @@ local function toggleNoclip()
             end
 
             DisablePlayerFiring(cache.playerId, true)
+
+            -- Coordinate capture mode logic (if active)
+            if coordinateCapture then
+                local camPos = GetGameplayCamCoord()
+                local camRot = GetGameplayCamRot(2)
+                local forward = vector3(
+                    -math.sin(math.rad(camRot.z)) * math.cos(math.rad(camRot.x)),
+                    math.cos(math.rad(camRot.z)) * math.cos(math.rad(camRot.x)),
+                    math.sin(math.rad(camRot.x))
+                )
+                local endPos = camPos + forward * 1000.0
+                local rayHandle = StartShapeTestRay(camPos.x, camPos.y, camPos.z, endPos.x, endPos.y, endPos.z, -1, cache.ped, 0)
+                local _, hit, hitPos, _, _ = GetShapeTestResult(rayHandle)
+                if hit then
+                    -- Adjust marker Z position with F (down) and G (up)
+                    if IsControlPressed(0, 23) then -- F
+                        markerOffsetZ = markerOffsetZ - 0.1
+                    elseif IsControlPressed(0, 47) then -- G
+                        markerOffsetZ = markerOffsetZ + 0.1
+                    end
+                    local markerPos = vector3(hitPos.x, hitPos.y, hitPos.z + markerOffsetZ)
+                    DrawMarker(25, markerPos.x, markerPos.y, markerPos.z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.5, 0.5, 0.5, 255, 0, 0, 100, false, true, 2, nil, nil, false)
+                    -- Check for mouse clicks
+                    if IsDisabledControlJustPressed(0, 24) then -- Left click
+                        local x, y, z = qbx.math.round(markerPos.x, 2), qbx.math.round(markerPos.y, 2), qbx.math.round(markerPos.z, 2)
+                        local data = string.format('vec3(%s, %s, %s)', x, y, z)
+                        lib.setClipboard(data)
+                        exports.qbx_core:Notify('Vector3 copied to clipboard', 'success')
+                    end
+                    if IsDisabledControlJustPressed(0, 25) then -- Right click
+                        local x, y, z = qbx.math.round(markerPos.x, 2), qbx.math.round(markerPos.y, 2), qbx.math.round(markerPos.z, 2)
+                        local h = qbx.math.round(camRot.z, 2)
+                        local data = string.format('vec4(%s, %s, %s, %s)', x, y, z, h)
+                        lib.setClipboard(data)
+                        exports.qbx_core:Notify('Vector4 copied to clipboard', 'success')
+                    end
+                end
+                -- Check for exit
+                if IsControlJustPressed(0, 26) then -- C key
+                    coordinateCapture = false
+                end
+            end
         end
 
-        DestroyCam(noclipCam, false)
-        noclipCam = nil
-        RenderScriptCams(false, false, 3000, true, false)
-        FreezeEntityPosition(ent, false)
-        SetEntityCollision(ent, true, true)
-        ResetEntityAlpha(ent)
-        SetPedCanRagdoll(cache.ped, true)
-        SetEntityVisible(ent, not invisible, false)
-        ClearPedTasksImmediately(cache.ped)
-        if inVehicle then
-            FreezeEntityPosition(cache.ped, false)
-            SetEntityCollision(cache.ped, true, true)
-            ResetEntityAlpha(cache.ped)
-            SetEntityVisible(cache.ped, true, false)
-            SetPedIntoVehicle(cache.ped, ent, -1)
+        -- Cleanup only if not in coordinate capture mode
+        if not coordinateCapture then
+            DestroyCam(noclipCam, false)
+            noclipCam = nil
+            RenderScriptCams(false, false, 3000, true, false)
+            FreezeEntityPosition(ent, false)
+            SetEntityCollision(ent, true, true)
+            ResetEntityAlpha(ent)
+            SetPedCanRagdoll(cache.ped, true)
+            SetEntityVisible(ent, not invisible, false)
+            ClearPedTasksImmediately(cache.ped)
+            if inVehicle then
+                FreezeEntityPosition(cache.ped, false)
+                SetEntityCollision(cache.ped, true, true)
+                ResetEntityAlpha(cache.ped)
+                SetEntityVisible(cache.ped, true, false)
+                SetPedIntoVehicle(cache.ped, ent, -1)
+            end
         end
     end)
 end

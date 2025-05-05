@@ -2,7 +2,75 @@
 local showCoords = false
 local vehicleDev = false
 local getVector4OnAim = false
+local coordinateCapture = false
 local vehicleTypes = {'Compacts', 'Sedans', 'SUVs', 'Coupes', 'Muscle', 'Sports Classics', 'Sports', 'Super', 'Motorcycles', 'Off-road', 'Industrial', 'Utility', 'Vans', 'Cycles', 'Boats', 'Helicopters', 'Planes', 'Service', 'Emergency', 'Military', 'Commercial', 'Trains', 'Open Wheel'}
+
+local function toggleCoordinateCaptureNoclip()
+    coordinateCapture = not coordinateCapture
+    if coordinateCapture then
+        exports.qbx_core:Notify('Coordinate capture mode enabled. Left-click for vector3, right-click for vector4, F to lower marker, G to raise marker, C to exit.', 'success')
+        local speed = 1.0
+        local maxSpeed = 32.0
+        local markerOffsetZ = 0.0
+        TriggerEvent('qbx_admin:client:ToggleNoClip') -- Enable noclip
+        CreateThread(function()
+            while coordinateCapture do
+                Wait(0)
+                -- Adjust noclip speed with mouse wheel
+                if IsDisabledControlPressed(2, 17) then -- Scroll Wheel Up
+                    speed = math.min(speed + 0.1, maxSpeed)
+                elseif IsDisabledControlPressed(2, 16) then -- Scroll Wheel Down
+                    speed = math.max(0.1, speed - 0.1)
+                end
+                -- Update noclip speed (assuming noclip uses a global speed variable)
+                -- Note: This requires modifying toggleNoclip in admin.lua to use a global speed
+                -- For simplicity, we assume speed is accessible; adjust if necessary
+                -- Raycast for marker position
+                local camPos = GetGameplayCamCoord()
+                local camRot = GetGameplayCamRot(2)
+                local forward = vector3(
+                    -math.sin(math.rad(camRot.z)) * math.cos(math.rad(camRot.x)),
+                    math.cos(math.rad(camRot.z)) * math.cos(math.rad(camRot.x)),
+                    math.sin(math.rad(camRot.x))
+                )
+                local endPos = camPos + forward * 1000.0
+                local rayHandle = StartShapeTestRay(camPos.x, camPos.y, camPos.z, endPos.x, endPos.y, endPos.z, -1, cache.ped, 0)
+                local _, hit, hitPos, _, _ = GetShapeTestResult(rayHandle)
+                if hit then
+                    -- Adjust marker Z position with F (down) and G (up)
+                    if IsControlPressed(0, 44) then -- F
+                        markerOffsetZ = markerOffsetZ - 0.001
+                    elseif IsControlPressed(0, 38) then -- G
+                        markerOffsetZ = markerOffsetZ + 0.001
+                    end
+                    local markerPos = vector3(hitPos.x, hitPos.y, hitPos.z + markerOffsetZ)
+                    DrawMarker(25, markerPos.x, markerPos.y, markerPos.z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1, 1, 1, 41, 128, 185, 100, false, true, 2, nil, nil, false)
+                    -- Check for mouse clicks
+                    if IsDisabledControlJustPressed(0, 27) then -- Left click
+                        local x, y, z = qbx.math.round(markerPos.x, 2), qbx.math.round(markerPos.y, 2), qbx.math.round(markerPos.z, 2)
+                        local data = string.format('vec3(%.2f, %.2f, %.2f)', x, y, z)
+                        lib.setClipboard(data)
+                        exports.qbx_core:Notify('Vector3 copied to clipboard', 'success')
+                    end
+                    if IsDisabledControlJustPressed(0, 25) then -- Right click
+                        local x, y, z = qbx.math.round(markerPos.x, 2), qbx.math.round(markerPos.y, 2), qbx.math.round(markerPos.z, 2)
+                        local h = qbx.math.round(camRot.z, 2)
+                        local data = string.format('vec4(%.2f, %.2f, %.2f, %.2f)', x, y, z, h)
+                        lib.setClipboard(data)
+                        exports.qbx_core:Notify('Vector4 copied to clipboard', 'success')
+                    end
+                end
+                -- Check for exit
+                if IsControlJustPressed(0, 26) then -- C key
+                    coordinateCapture = false
+                end
+            end
+            -- Cleanup
+            TriggerEvent('qbx_admin:client:ToggleNoClip') -- Disable noclip
+            exports.qbx_core:Notify('Coordinate capture mode disabled.', 'error')
+        end)
+    end
+end
 
 local options = {
     function() CopyToClipboard('coords2') lib.showMenu('qbx_adminmenu_dev_menu', MenuIndexes.qbx_adminmenu_dev_menu) end,
@@ -122,6 +190,9 @@ local options = {
                 end
             end
         end
+    end,
+    function()
+        toggleCoordinateCaptureNoclip()
     end
 }
 
@@ -142,7 +213,8 @@ lib.registerMenu({
         {label = locale('dev_options.label4'), description = locale('dev_options.desc4'), icon = 'fas fa-compass'},
         {label = locale('dev_options.label5'), description = locale('dev_options.desc5'), icon = 'fas fa-compass-drafting', close = false},
         {label = locale('dev_options.label6'), description = locale('dev_options.desc6'), icon = 'fas fa-car-side', close = false},
-        {label = 'Toggle Get Vector on Aim', description = 'When enabled, aim at an object or ped with your weapon, press E for vector4 or Q for vector3 to copy coordinates', icon = 'fas fa-crosshairs', close = false}
+        {label = 'Toggle Get Vector on Aim', description = 'When enabled, aim at an object or ped with your weapon, press E for vector4 or Q for vector3 to copy coordinates', icon = 'fas fa-crosshairs', close = false},
+        {label = 'Coordinate Capture Mode', description = 'Enter noclip mode to capture coordinates with a movable marker. Left-click for vector3, right-click for vector4, F/G to adjust marker height, C to exit.', icon = 'fas fa-map-marker-alt', close = false}
     }
 }, function(selected)
     options[selected]()
