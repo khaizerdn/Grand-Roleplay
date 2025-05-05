@@ -75,6 +75,11 @@ Config.Elevator = {
             label = "3rd Floor",
             description = ""
         },
+        {
+            coords = vec4(-458.35, -338.74, 91.01, 81.8),
+            label = "Roof Top",
+            description = ""
+        },
         jobrequiered = false,
         jobs = nil,
     }
