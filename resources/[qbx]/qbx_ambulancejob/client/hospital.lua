@@ -245,6 +245,96 @@ else
     end)
 end
 
+if not config.useTarget then
+    CreateThread(function()
+        -- Table to store all marker positions
+        local markers = {}
+
+        -- Populate the markers table with check-in and bed coordinates
+        for hospitalName, hospital in pairs(sharedConfig.locations.hospitals) do
+            if hospital.checkIn then
+                -- Handle single vector3 or array of vector3 for check-in points
+                if type(hospital.checkIn) == 'vector3' then
+                    markers[#markers + 1] = hospital.checkIn
+                elseif type(hospital.checkIn) == 'table' then
+                    for _, coord in ipairs(hospital.checkIn) do
+                        markers[#markers + 1] = coord
+                    end
+                end
+            end
+
+            -- Add coordinates for each bed
+            for _, bed in ipairs(hospital.beds) do
+                markers[#markers + 1] = bed.coords.xyz
+            end
+        end
+
+        -- Add job-related coordinates from sharedConfig.locations
+        -- Duty locations
+        for _, coord in ipairs(sharedConfig.locations.duty) do
+            markers[#markers + 1] = coord
+        end
+
+        -- Vehicle garage locations
+        for _, coord in ipairs(sharedConfig.locations.vehicle) do
+            markers[#markers + 1] = coord.xyz
+        end
+
+        -- Helicopter garage locations
+        for _, coord in ipairs(sharedConfig.locations.helicopter) do
+            markers[#markers + 1] = coord.xyz
+        end
+
+        -- Armory locations
+        for _, armory in ipairs(sharedConfig.locations.armory) do
+            for _, coord in ipairs(armory.locations) do
+                markers[#markers + 1] = coord
+            end
+        end
+
+        -- Stash locations
+        for _, stash in ipairs(sharedConfig.locations.stash) do
+            markers[#markers + 1] = stash.location
+        end
+
+        -- Roof elevator locations
+        for _, coord in ipairs(sharedConfig.locations.roof) do
+            markers[#markers + 1] = coord
+        end
+
+        -- Main elevator locations
+        for _, coord in ipairs(sharedConfig.locations.main) do
+            markers[#markers + 1] = coord
+        end
+
+        -- Continuously draw markers when player is nearby
+        while true do
+            local playerPos = GetEntityCoords(PlayerPedId())
+            for _, markerPos in ipairs(markers) do
+                local dist = #(playerPos - markerPos)
+                if dist < 20.0 then
+                    DrawMarker(
+                        25,              -- Marker type: vertical arrow
+                        markerPos.x, markerPos.y, markerPos.z, -- Position
+                        0.0, 0.0, 0.0,   -- Direction (not used for this type)
+                        0.0, 0.0, 0.0,   -- Rotation (not used)
+                        1.0, 1.0, 1.0,   -- Scale
+                        41, 128, 185,     -- RGB color (light blue)
+                        200,             -- Alpha (transparency)
+                        false,            -- Bob up and down
+                        false,           -- Face camera
+                        2,               -- Texture dict (default)
+                        false,           -- Rotate
+                        nil, nil,        -- Texture (none)
+                        false            -- Draw on entities
+                    )
+                end
+            end
+            Wait(0) -- Run every frame
+        end
+    end)
+end
+
 ---Plays animation to get out of bed and resets variables
 local function leaveBed()
     lib.requestAnimDict('switch@franklin@bed', 10000)
