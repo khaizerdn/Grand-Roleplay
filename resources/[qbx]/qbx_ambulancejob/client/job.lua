@@ -45,15 +45,12 @@ local function showGarageMenu(vehicles, coords)
     end
 
     lib.registerContext({
-        id = 'ambul spaventId = 'qbx_ambulancejob:server:spawnVehicle', false, data.vehicleName, data.coords)
+        id = 'ambulance_garage_context_menu',
+        title = locale('menu.amb_vehicles'),
+        options = optionsMenu
+    })
 
-    local veh = lib.waitFor(function()
-        if NetworkDoesEntityExistWithNetworkId(netId) then
-            return NetToVeh(netId)
-        end
-    end)
-
-    SetVehicleEngineOn(veh, true, true, true)
+    lib.showContext('ambulance_garage_context_menu')
 
     local settings = config.vehicleSettings[data.vehicleName]
     if not settings then return end
