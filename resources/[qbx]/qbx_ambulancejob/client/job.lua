@@ -49,8 +49,14 @@ local function showGarageMenu(vehicles, coords)
         title = locale('menu.amb_vehicles'),
         options = optionsMenu
     })
+    
+    local veh = lib.waitFor(function()
+        if NetworkDoesEntityExistWithNetworkId(netId) then
+            return NetToVeh(netId)
+        end
+    end)
 
-    lib.showContext('ambulance_garage_context_menu')
+    SetVehicleEngineOn(veh, true, true, true)
 
     local settings = config.vehicleSettings[data.vehicleName]
     if not settings then return end
