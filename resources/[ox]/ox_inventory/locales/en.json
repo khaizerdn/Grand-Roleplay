@@ -38,7 +38,7 @@
   "have_purchased": "You have purchased a %s",
   "can_not_afford": "You can not afford a %s",
   "purchase_license": "Purchase a %s license",
-  "interact_prompt": "Press [%s] to browse.",
+  "interact_prompt": "Press [%s] to browse",
   "weapon_unregistered": "%s is not registered to anyone",
   "weapon_registered": "%s (%s) is registered to %s",
   "weapon_broken": "This weapon is broken",

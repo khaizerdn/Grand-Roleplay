@@ -374,10 +374,10 @@ Inventory.Stashes = setmetatable(lib.load('data.stashes'), {
                         stash.zoneId = Utils.CreateBoxZone(stash.target, {
                             {
                                 icon = stash.target.icon or 'fas fa-warehouse',
-                                label = stash.target.label or locale('open_stash'),
+                                label = ('%s %s.'):format(locale('interact_prompt', GetControlInstructionalButton(0, 38, true):sub(3)), stash.label or locale('open_stash')), -- Use stash.label for display
                                 groups = stash.groups,
                                 onSelect = function()
-                                    exports.ox_inventory:openInventory('stash', stash.name)
+                                    exports.ox_inventory:openInventory('stash', stash.name) -- Use stash.name for inventory
                                 end,
                                 iconColor = stash.target.iconColor,
                             },
@@ -389,9 +389,12 @@ Inventory.Stashes = setmetatable(lib.load('data.stashes'), {
                         coords = stash.coords,
                         distance = 16,
                         inv = 'stash',
-                        invId = stash.name,
+                        invId = stash.name, -- Use stash.name for inventory
                         marker = markerColour,
-                        prompt = textPrompts.stash,
+                        prompt = {
+                            options = { icon = 'fa-box' },
+                            message = ('%s %s.'):format(locale('interact_prompt', GetControlInstructionalButton(0, 38, true):sub(3)), stash.label or locale('open_stash')) -- Use stash.label for display
+                        },
                         nearby = Utils.nearbyMarker
                     })
                 end
