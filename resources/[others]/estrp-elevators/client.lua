@@ -92,6 +92,52 @@ Citizen.CreateThread(function()
     end
 end)
 
+-- Draw markers for elevator locations
+Citizen.CreateThread(function()
+    while true do
+        local playerPos = GetEntityCoords(PlayerPedId())
+        local PlayerData = QBCore.Functions.GetPlayerData()
+        for _, i in pairs(Config.Elevator) do
+            for k, v in pairs(i) do
+                if type(k) == "number" then
+                    local allowed = true
+                    if i.jobrequiered then
+                        allowed = false
+                        for _, job in pairs(i.jobs) do
+                            if job == PlayerData.job.name then
+                                allowed = true
+                                break
+                            end
+                        end
+                    end
+                    if allowed then
+                        local markerPos = v.coords.xyz
+                        local dist = #(playerPos - markerPos)
+                        if dist < 20.0 then
+                            DrawMarker(
+                                25,              -- Marker type: vertical arrow
+                                markerPos.x, markerPos.y, markerPos.z, -- Position
+                                0.0, 0.0, 0.0,   -- Direction (not used for this type)
+                                0.0, 0.0, 0.0,   -- Rotation (not used)
+                                1.0, 1.0, 1.0,   -- Scale
+                                0, 0, 0,    -- RGB color (light blue)
+                                100,             -- Alpha (transparency)
+                                false,           -- Bob up and down
+                                false,           -- Face camera
+                                2,               -- Texture dict (default)
+                                false,           -- Rotate
+                                nil, nil,        -- Texture (none)
+                                false            -- Draw on entities
+                            )
+                        end
+                    end
+                end
+            end
+        end
+        Citizen.Wait(0) -- Run every frame
+    end
+end)
+
 RegisterNetEvent('estrp-elevators:elevator')
 AddEventHandler('estrp-elevators:elevator', function(coords)
     local playerPed = PlayerPedId()
