@@ -617,27 +617,29 @@ if not config.useTarget then
             markers[#markers + 1] = coord
         end
 
-        -- Continuously draw markers when player is nearby
+        -- Continuously draw markers when player is nearby and is police
         while true do
-            local playerPos = GetEntityCoords(PlayerPedId())
-            for _, markerPos in ipairs(markers) do
-                local dist = #(playerPos - markerPos)
-                if dist < 20.0 then
-                    DrawMarker(
-                        25,              -- Marker type: vertical arrow
-                        markerPos.x, markerPos.y, markerPos.z, -- Position
-                        0.0, 0.0, 0.0,   -- Direction (not used for this type)
-                        0.0, 0.0, 0.0,   -- Rotation (not used)
-                        1.0, 1.0, 1.0,   -- Scale
-                        0, 0, 0,    -- RGB color (light blue)
-                        100,             -- Alpha (transparency)
-                        false,           -- Bob up and down
-                        false,           -- Face camera
-                        2,               -- Texture dict (default)
-                        false,           -- Rotate
-                        nil, nil,        -- Texture (none)
-                        false            -- Draw on entities
-                    )
+            if QBX.PlayerData.job.type == 'leo' then
+                local playerPos = GetEntityCoords(PlayerPedId())
+                for _, markerPos in ipairs(markers) do
+                    local dist = #(playerPos - markerPos)
+                    if dist < 20.0 then
+                        DrawMarker(
+                            25,              -- Marker type: vertical arrow
+                            markerPos.x, markerPos.y, markerPos.z, -- Position
+                            0.0, 0.0, 0.0,   -- Direction (not used for this type)
+                            0.0, 0.0, 0.0,   -- Rotation (not used)
+                            1.0, 1.0, 1.0,   -- Scale
+                            0, 0, 0,         -- RGB color (light blue)
+                            100,             -- Alpha (transparency)
+                            false,           -- Bob up and down
+                            false,           -- Face camera
+                            2,               -- Texture dict (default)
+                            false,           -- Rotate
+                            nil, nil,        -- Texture (none)
+                            false            -- Draw on entities
+                        )
+                    end
                 end
             end
             Wait(0) -- Run every frame
