@@ -629,8 +629,8 @@ if not config.useTarget then
                         0.0, 0.0, 0.0,   -- Direction (not used for this type)
                         0.0, 0.0, 0.0,   -- Rotation (not used)
                         1.0, 1.0, 1.0,   -- Scale
-                        41, 128, 185,    -- RGB color (light blue)
-                        200,             -- Alpha (transparency)
+                        0, 0, 0,    -- RGB color (light blue)
+                        100,             -- Alpha (transparency)
                         false,           -- Bob up and down
                         false,           -- Face camera
                         2,               -- Texture dict (default)
