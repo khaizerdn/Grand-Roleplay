@@ -311,7 +311,7 @@ local textPrompts = {
             locale('interact_prompt', GetControlInstructionalButton(0, 38, true):sub(3)))
     },
     stash = {
-        options = { icon = 'fa-warehouse' },
+        options = { icon = 'fa-box' },
         message = ('**%s**  \n%s'):format(locale('open_stash'),
             locale('interact_prompt', GetControlInstructionalButton(0, 38, true):sub(3)))
     }
