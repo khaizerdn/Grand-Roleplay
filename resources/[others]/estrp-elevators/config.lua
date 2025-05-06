@@ -3,7 +3,7 @@ Config = {}
 Config.TextUI = true
 
 Config.Elevator = {
-    ['Mount Zonah - Main Entrance'] = {
+    ['Where would you like to go?'] = {
         {
             coords = vec4(-493.5371, -327.1317, 42.3207, 169.59),
             label = "2nd Floor",
@@ -17,7 +17,7 @@ Config.Elevator = {
         jobrequiered = false,
         jobs = nil,
     },
-    ['Mount Zonah - Entrance 2'] = {
+    ['Where would you like to go?'] = {
         {
             coords = vec4(-490.5120, -327.4417, 42.3207, 169.59),
             label = "2nd Floor",
@@ -31,7 +31,7 @@ Config.Elevator = {
         jobrequiered = false,
         jobs = nil,
     },
-    ['Mount Zonah - Entrance 3'] = {
+    ['Where would you like to go?'] = {
         {
             coords = vec4(-487.4854, -328.0276, 42.3207, 169.59),
             label = "2nd Floor",
@@ -45,7 +45,7 @@ Config.Elevator = {
         jobrequiered = false,
         jobs = nil,
     },
-    ['Mount Zonah - Public Parking'] = {
+    ['Where would you like to go?'] = {
         {
             coords = vec4(-436.1484, -359.9038, 34.9098, 350.57),
             label = "1st Floor",
@@ -59,7 +59,7 @@ Config.Elevator = {
         jobrequiered = false,
         jobs = nil,
     },
-    ['Mount Zonah - Private Wing'] = {
+    ['Where would you like to go?'] = {
         {
             coords = vec4(-452.4372, -288.4666, 34.8946, 109.63),
             label = "1st Floor",
@@ -78,6 +78,20 @@ Config.Elevator = {
         {
             coords = vec4(-458.35, -338.74, 91.01, 81.8),
             label = "Roof Top",
+            description = ""
+        },
+        jobrequiered = false,
+        jobs = nil,
+    },
+    ['Where would you like to go?'] = {
+        {
+            coords = vec4(-556.29, -184.91, 47.66, 218.4),
+            label = "City Hall",
+            description = ""
+        },
+        {
+            coords = vec4(-572.1, -130.61, 37.86, 290.91),
+            label = "Rockford Hills PD",
             description = ""
         },
         jobrequiered = false,

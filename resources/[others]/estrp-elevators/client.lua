@@ -39,7 +39,7 @@ Citizen.CreateThread(function()
                         end
                         if allowed then
                             if not show and Config.TextUI then
-                                ShowTextUI('Press [E] to use elevator.')
+                                ShowTextUI('Press [E] to move to another location.')
                                 show = true
                             end
                             if IsControlJustPressed(0, 38) and IsPedOnFoot(ped) then
@@ -98,7 +98,7 @@ AddEventHandler('estrp-elevators:elevator', function(coords)
     DoScreenFadeOut(500)
     lib.progressBar({
         duration = 3500,
-        label = 'Elevator starts to move',
+        label = 'Loading...',
         useWhileDead = false,
         canCancel = false,
         disable = {
