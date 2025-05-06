@@ -581,3 +581,66 @@ CreateThread(function()
         })
     end
 end)
+
+if not config.useTarget then
+    CreateThread(function()
+        -- Table to store all marker positions
+        local markers = {}
+
+        -- Add duty locations
+        for _, coord in ipairs(sharedConfig.locations.duty) do
+            markers[#markers + 1] = coord.xyz
+        end
+
+        -- Add vehicle garage locations
+        for _, coord in ipairs(sharedConfig.locations.vehicle) do
+            markers[#markers + 1] = coord.xyz
+        end
+
+        -- Add helicopter garage locations
+        for _, coord in ipairs(sharedConfig.locations.helicopter) do
+            markers[#markers + 1] = coord.xyz
+        end
+
+        -- Add impound locations
+        for _, coord in ipairs(sharedConfig.locations.impound) do
+            markers[#markers + 1] = coord
+        end
+
+        -- Add fingerprint locations
+        for _, coord in ipairs(sharedConfig.locations.fingerprint) do
+            markers[#markers + 1] = coord
+        end
+
+        -- Add trash locations
+        for _, coord in ipairs(sharedConfig.locations.trash) do
+            markers[#markers + 1] = coord
+        end
+
+        -- Continuously draw markers when player is nearby
+        while true do
+            local playerPos = GetEntityCoords(PlayerPedId())
+            for _, markerPos in ipairs(markers) do
+                local dist = #(playerPos - markerPos)
+                if dist < 20.0 then
+                    DrawMarker(
+                        25,              -- Marker type: vertical arrow
+                        markerPos.x, markerPos.y, markerPos.z, -- Position
+                        0.0, 0.0, 0.0,   -- Direction (not used for this type)
+                        0.0, 0.0, 0.0,   -- Rotation (not used)
+                        1.0, 1.0, 1.0,   -- Scale
+                        41, 128, 185,    -- RGB color (light blue)
+                        200,             -- Alpha (transparency)
+                        false,           -- Bob up and down
+                        false,           -- Face camera
+                        2,               -- Texture dict (default)
+                        false,           -- Rotate
+                        nil, nil,        -- Texture (none)
+                        false            -- Draw on entities
+                    )
+                end
+            end
+            Wait(0) -- Run every frame
+        end
+    end)
+end
