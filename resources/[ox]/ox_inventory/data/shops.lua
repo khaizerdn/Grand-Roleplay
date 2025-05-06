@@ -138,7 +138,7 @@ return {
 	},
 
 	PoliceArmoury = {
-		name = 'Police Armoury',
+		name = 'armoury',
 		groups = shared.police,
 		blip = {
 			id = 110, colour = 84, scale = 0.8
@@ -151,9 +151,9 @@ return {
 			{ name = 'WEAPON_CARBINERIFLE', price = 1000, metadata = { registered = true, serial = 'POL' }, license = 'weapon', grade = 3 },
 			{ name = 'WEAPON_STUNGUN', price = 500, metadata = { registered = true, serial = 'POL'} }
 		}, locations = {
-			vec3(452.41, -980.05, 30.69)
+			vec3(-546.60, -118.52, 36.93)
 		}, targets = {
-			{ loc = vec3(454.05, -980.03, 29.69), length = 0.5, width = 3.0, heading = 92.38, minZ = 30.5, maxZ = 32.0, distance = 1.5, ped = `mp_m_securoguard_01`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' }
+			{ loc = vec3(-544.87, -117.88, 37.86), length = 0.5, width = 3.0, heading = 112.79, minZ = 30.5, maxZ = 32.0, distance = 1.5, ped = `mp_m_securoguard_01`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' }
 		}
 	},
 
