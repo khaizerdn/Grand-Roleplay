@@ -49,49 +49,6 @@ local function showGarageMenu(vehicles, coords)
         title = locale('menu.amb_vehicles'),
         options = optionsMenu
     })
-    
-    local veh = lib.waitFor(function()
-        if NetworkDoesEntityExistWithNetworkId(netId) then
-            return NetToVeh(netId)
-        end
-    end)
-
-    SetVehicleEngineOn(veh, true, true, true)
-
-    local settings = config.vehicleSettings[data.vehicleName]
-    if not settings then return end
-
-    if settings.extras then
-        qbx.setVehicleExtras(veh, settings.extras)
-    end
-
-    if settings.livery then
-        SetVehicleLivery(veh, settings.livery)
-    end
-end
-
----Show the garage spawn menu
----@param vehicles AuthorizedVehicles
----@param coords vector4
-local function showGarageMenu(vehicles, coords)
-    local authorizedVehicles = vehicles[QBX.PlayerData.job.grade.level]
-    local optionsMenu = {}
-    for veh, label in pairs(authorizedVehicles) do
-        optionsMenu[#optionsMenu + 1] = {
-            title = label,
-            onSelect = takeOutVehicle,
-            args = {
-                vehicleName = veh,
-                coords = coords,
-            }
-        }
-    end
-
-    lib.registerContext({
-        id = 'ambulance_garage_context_menu',
-        title = locale('menu.amb_vehicles'),
-        options = optionsMenu
-    })
 
     lib.showContext('ambulance_garage_context_menu')
 end
@@ -306,8 +263,8 @@ local function createGarage(vehicles, coords)
             if QBX.PlayerData.job.type == 'ems' and QBX.PlayerData.job.onduty and IsControlJustPressed(0, 38) then
                 if cache.vehicle then
                     DeleteEntity(cache.vehicle)
-                else
-                    showGarageMenu(vehicles, coords)
+            else
+                showGarageMenu(vehicles, coords)
                 end
             end
         end,
@@ -326,8 +283,8 @@ CreateThread(function()
 end)
 
 ---Sets up duty toggle, stash, armory, and elevator interactions using either target or zones.
-local function setupInteractionZones()
-    if config.useTarget then
+if config.useTarget then
+    CreateThread(function()
         for i = 1, #sharedConfig.locations.duty do
             exports.ox_target:addBoxZone({
                 name = 'duty' .. i,
@@ -433,7 +390,9 @@ local function setupInteractionZones()
                 }
             }
         })
-    else
+    end)
+else
+    CreateThread(function()
         for i = 1, #sharedConfig.locations.duty do
             lib.zones.box({
                 coords = sharedConfig.locations.duty[i],
@@ -441,7 +400,7 @@ local function setupInteractionZones()
                 rotation = -20,
                 debug = config.debugPoly,
                 onEnter = function()
-                    if not QBX.PlayerData or not QBX.PlayerData.job or QBX.PlayerData.job.type ~= 'ems' then return end
+                    if QBX.PlayerData.job.type ~= 'ems' then return end
                     local label = QBX.PlayerData.job.onduty and locale('text.onduty_button') or locale('text.offduty_button')
                     lib.showTextUI(label)
                 end,
@@ -450,7 +409,7 @@ local function setupInteractionZones()
                     if text == locale('text.onduty_button') or text == locale('text.offduty_button') then lib.hideTextUI() end
                 end,
                 inside = function()
-                    if not QBX.PlayerData or not QBX.PlayerData.job or QBX.PlayerData.job.type ~= 'ems' then return end
+                    if QBX.PlayerData.job.type ~= 'ems' then return end
                     OnKeyPress(toggleDuty)
                 end,
             })
@@ -463,15 +422,15 @@ local function setupInteractionZones()
                 rotation = -20,
                 debug = config.debugPoly,
                 onEnter = function()
-                    if not QBX.PlayerData or not QBX.PlayerData.job or QBX.PlayerData.job.type ~= 'ems' or not QBX.PlayerData.job.onduty then return end
+                    if QBX.PlayerData.job.type ~= 'ems' or not QBX.PlayerData.job.onduty then return end
                     lib.showTextUI(locale('text.pstash_button'))
-                end,
+                    end,
                 onExit = function()
                     local _, text = lib.isTextUIOpen()
                     if text == locale('text.pstash_button') then lib.hideTextUI() end
                 end,
                 inside = function()
-                    if not QBX.PlayerData or not QBX.PlayerData.job or QBX.PlayerData.job.type ~= 'ems' then return end
+                    if QBX.PlayerData.job.type ~= 'ems' then return end
                     OnKeyPress(function()
                         openStash(i)
                     end)
@@ -487,15 +446,15 @@ local function setupInteractionZones()
                     rotation = -20,
                     debug = config.debugPoly,
                     onEnter = function()
-                        if not QBX.PlayerData or not QBX.PlayerData.job or QBX.PlayerData.job.type ~= 'ems' or not QBX.PlayerData.job.onduty then return end
+                        if QBX.PlayerData.job.type ~= 'ems' or not QBX.PlayerData.job.onduty then return end
                         lib.showTextUI(locale('text.armory_button'))
-                    end,
+                        end,
                     onExit = function()
                         local _, text = lib.isTextUIOpen()
                         if text == locale('text.armory_button') then lib.hideTextUI() end
                     end,
                     inside = function()
-                        if not QBX.PlayerData or not QBX.PlayerData.job or QBX.PlayerData.job.type ~= 'ems' then return end
+                        if QBX.PlayerData.job.type ~= 'ems' then return end
                         OnKeyPress(function()
                             openArmory(i, ii)
                         end)
@@ -510,7 +469,6 @@ local function setupInteractionZones()
             rotation = -20,
             debug = config.debugPoly,
             onEnter = function()
-                if not QBX.PlayerData or not QBX.PlayerData.job then return end
                 local label = QBX.PlayerData.job.onduty and locale('text.elevator_main') or locale('error.not_ems')
                 lib.showTextUI(label)
             end,
@@ -529,7 +487,6 @@ local function setupInteractionZones()
             rotation = -20,
             debug = config.debugPoly,
             onEnter = function()
-                if not QBX.PlayerData or not QBX.PlayerData.job then return end
                 local label = QBX.PlayerData.job.onduty and locale('text.elevator_roof') or locale('error.not_ems')
                 lib.showTextUI(label)
             end,
@@ -541,9 +498,5 @@ local function setupInteractionZones()
                 OnKeyPress(teleportToRoofElevator)
             end,
         })
-    end
+    end)
 end
-
-RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function()
-    setupInteractionZones()
-end)

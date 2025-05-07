@@ -54,7 +54,7 @@
         "status": "Health Status"
     },
     "text": {
-    "pstash_button": "Press [E] to access inventory.",
+    "pstash_button": "Press [E] to access storage.",
     "pstash": "Personal stash",
     "onduty_button": "Press [E] to go on duty.",
     "offduty_button": "Press [E] to go off duty.",

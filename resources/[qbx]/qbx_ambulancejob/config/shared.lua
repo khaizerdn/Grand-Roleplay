@@ -4,7 +4,7 @@ return {
 
     locations = { -- Various interaction points
         duty = {
-            vec3(-441.34, -318.44, 33.92),
+            vec3(-440.18, -313.95, 33.93),
         },
         vehicle = {
             vec4(-454.36, -340.08, 33.39, -6.94),
@@ -31,10 +31,10 @@ return {
             }
         },
         roof = {
-            vec3(0 , 0 , 0),
+            vec3(0 , 0 , 0), -- use estrp_elevator
         },
         main = {
-            vec3(0, 0, 0),
+            vec3(0, 0, 0), -- use estrp_elevator
         },
         stash = {
             {

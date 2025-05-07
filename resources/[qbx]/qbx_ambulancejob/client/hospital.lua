@@ -29,14 +29,14 @@ local function setBedCam()
     lib.playAnim(cache.ped, InBedDict, InBedAnim, 8.0, 1.0, -1, 1, 0, false, false, false)
     SetEntityHeading(cache.ped, bedOccupyingData.coords.w)
 
-    -- cam = CreateCam('DEFAULT_SCRIPTED_CAMERA', true)
-    -- SetCamActive(cam, true)
-    -- RenderScriptCams(true, false, 1, true, true)
-    -- AttachCamToPedBone(cam, cache.ped, 31085, 0, 1.0, 1.0, true)
-    -- SetCamFov(cam, 90.0)
-    -- local heading = GetEntityHeading(cache.ped)
-    -- heading = (heading > 180) and heading - 180 or heading + 180
-    -- SetCamRot(cam, -45.0, 0.0, heading, 2)
+    cam = CreateCam('DEFAULT_SCRIPTED_CAMERA', true)
+    SetCamActive(cam, true)
+    RenderScriptCams(true, false, 1, true, true)
+    AttachCamToPedBone(cam, cache.ped, 31085, 0, 1.0, 1.0, true)
+    SetCamFov(cam, 90.0)
+    local heading = GetEntityHeading(cache.ped)
+    heading = (heading > 180) and heading - 180 or heading + 180
+    SetCamRot(cam, -45.0, 0.0, heading, 2)
 
     DoScreenFadeIn(1000)
 
@@ -71,7 +71,9 @@ local function putPlayerInBed(hospitalName, bedIndex, isRevive, skipOpenCheck)
             CanLeaveBed = true
         end
     end)
-    TriggerServerEvent('qbx_ambulancejob:server:playerEnteredBed', hospitalName, bedIndex)
+    if isRevive then
+        TriggerServerEvent('qbx_ambulancejob:server:playerEnteredBed', hospitalName, bedIndex)
+    end
 end
 
 RegisterNetEvent('qbx_ambulancejob:client:putPlayerInBed', function(hospitalName, bedIndex)
@@ -245,96 +247,6 @@ else
     end)
 end
 
-if not config.useTarget then
-    CreateThread(function()
-        -- Table to store all marker positions
-        local markers = {}
-
-        -- Populate the markers table with check-in and bed coordinates
-        for hospitalName, hospital in pairs(sharedConfig.locations.hospitals) do
-            if hospital.checkIn then
-                -- Handle single vector3 or array of vector3 for check-in points
-                if type(hospital.checkIn) == 'vector3' then
-                    markers[#markers + 1] = hospital.checkIn
-                elseif type(hospital.checkIn) == 'table' then
-                    for _, coord in ipairs(hospital.checkIn) do
-                        markers[#markers + 1] = coord
-                    end
-                end
-            end
-
-            -- Add coordinates for each bed
-            for _, bed in ipairs(hospital.beds) do
-                markers[#markers + 1] = bed.coords.xyz
-            end
-        end
-
-        -- Add job-related coordinates from sharedConfig.locations
-        -- Duty locations
-        for _, coord in ipairs(sharedConfig.locations.duty) do
-            markers[#markers + 1] = coord
-        end
-
-        -- Vehicle garage locations
-        for _, coord in ipairs(sharedConfig.locations.vehicle) do
-            markers[#markers + 1] = coord.xyz
-        end
-
-        -- Helicopter garage locations
-        for _, coord in ipairs(sharedConfig.locations.helicopter) do
-            markers[#markers + 1] = coord.xyz
-        end
-
-        -- Armory locations
-        for _, armory in ipairs(sharedConfig.locations.armory) do
-            for _, coord in ipairs(armory.locations) do
-                markers[#markers + 1] = coord
-            end
-        end
-
-        -- Stash locations
-        for _, stash in ipairs(sharedConfig.locations.stash) do
-            markers[#markers + 1] = stash.location
-        end
-
-        -- Roof elevator locations
-        for _, coord in ipairs(sharedConfig.locations.roof) do
-            markers[#markers + 1] = coord
-        end
-
-        -- Main elevator locations
-        for _, coord in ipairs(sharedConfig.locations.main) do
-            markers[#markers + 1] = coord
-        end
-
-        -- Continuously draw markers when player is nearby
-        while true do
-            local playerPos = GetEntityCoords(PlayerPedId())
-            for _, markerPos in ipairs(markers) do
-                local dist = #(playerPos - markerPos)
-                if dist < 20.0 then
-                    DrawMarker(
-                        25,              -- Marker type: vertical arrow
-                        markerPos.x, markerPos.y, markerPos.z, -- Position
-                        0.0, 0.0, 0.0,   -- Direction (not used for this type)
-                        0.0, 0.0, 0.0,   -- Rotation (not used)
-                        1.0, 1.0, 1.0,   -- Scale
-                        0, 0, 0,     -- RGB color (light blue)
-                        100,             -- Alpha (transparency)
-                        false,            -- Bob up and down
-                        false,           -- Face camera
-                        2,               -- Texture dict (default)
-                        false,           -- Rotate
-                        nil, nil,        -- Texture (none)
-                        false            -- Draw on entities
-                    )
-                end
-            end
-            Wait(0) -- Run every frame
-        end
-    end)
-end
-
 ---Plays animation to get out of bed and resets variables
 local function leaveBed()
     lib.requestAnimDict('switch@franklin@bed', 10000)
@@ -356,6 +268,7 @@ local function leaveBed()
     bedOccupyingData = nil
     IsInHospitalBed = false
     exports.qbx_medical:EnableDamageEffects()
+    exports.qbx_medical:AllowRespawn()
 
     if QBX.PlayerData.metadata.injail <= 0 then return end
     TriggerEvent('prison:client:Enter', QBX.PlayerData.metadata.injail)
@@ -367,6 +280,9 @@ CreateThread(function()
         if IsInHospitalBed and CanLeaveBed then
             lib.showTextUI(locale('text.bed_out'))
             while IsInHospitalBed and CanLeaveBed do
+                if not IsEntityPlayingAnim(cache.ped, InBedDict, InBedAnim, 3) then
+                    lib.playAnim(cache.ped, InBedDict, InBedAnim, 8.0, 1.0, -1, 1, 0, false, 0, false)
+                end
                 OnKeyPress(leaveBed)
                 Wait(0)
             end
