@@ -22,7 +22,7 @@ return {
             vec4(-565.90, -120.70, 32.69, 24.02),
         },
         stash = { -- Not currently used, use ox_inventory stashes
-            -- vec3(-548.21, -113.04, 37.03),
+            -- vec3(453.075, -980.124, 30.889),
         },
         impound = {
             vec3(-571.30, -122.72, 32.69)
@@ -34,21 +34,15 @@ return {
             -- vec3(462.23, -981.12, 30.68),
         },
         trash = {
-            -- vec3(-569.27, -126.58, 36.86),
+            -- vec3(439.0907, -976.746, 30.776), -- Not working
         },
         fingerprint = {
-            vec3(-563.18, -126.68, 37.44),
+            vec3(-562.93, -126.80, 37.62),
         },
-        evidence = { -- Not currently used, use ox_inventory stash system
+        evidence = { -- Not currently used, use ox_inventory evidence system
         },
         stations = {
             {label = 'Rockford Hills PoliceStation', coords = vec3(-560.71, -133.88, 37.18)},
-            -- {label = 'Mission Row Police Station', coords = vec3(434.0, -983.0, 30.7)},
-            -- {label = 'Sandy Shores Police Station', coords = vec3(1853.4, 3684.5, 34.3)},
-            -- {label = 'Vinewood Police Station', coords = vec3(637.1, 1.6, 81.8)},
-            -- {label = 'Vespucci Police Station', coords = vec3(-1092.6, -808.1, 19.3)},
-            -- {label = 'Davis Police Station', coords = vec3(368.0, -1618.8, 29.3)},
-            -- {label = 'Paleto Bay Police Station', coords = vec3(-448.4, 6011.8, 31.7)},
         },
     },
 
