@@ -469,7 +469,7 @@ else
             rotation = -20,
             debug = config.debugPoly,
             onEnter = function()
-                local label = QBX.PlayerData.job.onduty and locale('text.elevator_main') or locale('error.not_ems')
+                local label = QBX.PlayerData.job and QBX.PlayerData.job.onduty and locale('text.elevator_main') or locale('error.not_ems')
                 lib.showTextUI(label)
             end,
             onExit = function()
@@ -487,7 +487,7 @@ else
             rotation = -20,
             debug = config.debugPoly,
             onEnter = function()
-                local label = QBX.PlayerData.job.onduty and locale('text.elevator_roof') or locale('error.not_ems')
+                local label = QBX.PlayerData.job and QBX.PlayerData.job.onduty and locale('text.elevator_roof') or locale('error.not_ems')
                 lib.showTextUI(label)
             end,
             onExit = function()
