@@ -158,7 +158,7 @@ return {
 	},
 
 	Medicine = {
-		name = 'Pharmacy',
+		name = 'pharmacy',
 		-- groups = {
 		-- 	['ambulance'] = 0
 		-- },
@@ -168,7 +168,7 @@ return {
 			-- { name = 'firstaid', price = 26 },
 			{ name = 'bandage', price = 5 }
 		}, locations = {
-			vec3(308.12, -595.47, 43.29)
+			vec3(-437.92, -324.83, 34.91)
 		}, targets = {
 			{ loc = vec3(308.58, -596.44, 42.29), length = 0.5, width = 3.0, heading = 18.02, minZ = 30.5, maxZ = 32.0, distance = 1.5, ped = `s_m_m_doctor_01`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' }
 		}
