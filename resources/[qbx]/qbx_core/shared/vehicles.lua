@@ -1,5 +1,16 @@
 ---@type table<string, Vehicle>
 return {
+    -- Modded Cars
+    gtr = {
+        name = 'Nissan GTR',
+        brand = 'Nissan',
+        model = 'gtr',
+        price = 1000000000000000,
+        category = 'super',
+        type = 'automobile',
+        hash = `gtr`,
+    },
+    -- End of Modded Cars
     adder = {
         name = 'Adder',
         brand = 'Truffade',
