@@ -1,8 +1,35 @@
 ---@type table<string, Vehicle>
 return {
     -- Modded Cars
+    ldcrus = {
+        name = 'Urus',
+        brand = 'Lamborghini',
+        model = 'ldcrus',
+        price = 1000000000000000,
+        category = 'super',
+        type = 'automobile',
+        hash = `ldcrus`,
+    },
+    gxx5 = {
+        name = 'X5',
+        brand = 'BMW',
+        model = 'gxx5',
+        price = 1000000000000000,
+        category = 'super',
+        type = 'automobile',
+        hash = `gxx5`,
+    },
+    fk8 = {
+        name = 'Civic Type-R FK8',
+        brand = 'Honda',
+        model = 'fk8',
+        price = 1000000000000000,
+        category = 'super',
+        type = 'automobile',
+        hash = `fk8`,
+    },
     gtr = {
-        name = 'Nissan GTR',
+        name = '2017 GTR',
         brand = 'Nissan',
         model = 'gtr',
         price = 1000000000000000,
