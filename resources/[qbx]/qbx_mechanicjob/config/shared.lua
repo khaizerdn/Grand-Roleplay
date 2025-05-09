@@ -48,12 +48,12 @@ return {
     },
     plates = {
         {
-            coords = vec4(-340.95, -128.24, 39, 160.0),
+            coords = vec4(-343.06, -113.61, 38.41, 69.68),
             boxData = {
-                heading = 340,
+                heading = 69.68,
                 length = 5,
                 width = 2.5,
-                debugPoly = false
+                debugPoly = true
             },
             AttachedVehicle = nil,
         },
@@ -69,9 +69,9 @@ return {
         },
     },
     locations = {
-        exit = vec3(-339.04, -135.53, 39.00),
-        duty = vec3(-323.63, -131.01, 39.02),
-        stash = vec3(-321.96, -127.62, 39.02),
-        vehicle = vec4(-370.51, -107.88, 38.35, 72.56),
+        exit = vec3(-369.32, -118.48, 38.7),
+        duty = vec3(-339.45, -155.55, 44.59),
+        stash = vec3(-337.11, -160.88, 44.59),
+        vehicle = vec4(-357.49, -159.54, 38.82, 31.2),
     }
 }

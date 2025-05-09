@@ -285,8 +285,8 @@ CreateThread(function()
     -- Garage
     lib.zones.box({
         coords = sharedConfig.locations.vehicle.xyz,
-        size = vec3(15, 5, 6),
-        rotation = 340.0,
+        size = vec3(7, 9, 6),
+        rotation = 31.2,
         debug = config.debugPoly,
         onEnter = function()
             if QBX.PlayerData.job.type ~= 'mechanic' or not QBX.PlayerData.job.onduty then return end

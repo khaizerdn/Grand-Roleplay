@@ -475,6 +475,11 @@ return {
         weight = 100,
     },
 
+    ['aluminum'] = {
+        label = 'Aluminum',
+        weight = 100,
+    },
+
     ['glass'] = {
         label = 'Glass',
         weight = 100,
