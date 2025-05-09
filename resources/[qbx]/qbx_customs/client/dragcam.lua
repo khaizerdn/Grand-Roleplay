@@ -202,7 +202,7 @@ end
 local function startDragCam(entity, radiusOptions)
     running = true
     gEntity = entity
-    gRadius = radiusOptions?.initial or 5.0
+    gRadius = radiusOptions?.initial or 2.5
     gRadiusMin = radiusOptions?.min or 2.5
     gRadiusMax = radiusOptions?.max or 10.0
     scrollIncrements = radiusOptions?.scrollIncrements or 0.5
