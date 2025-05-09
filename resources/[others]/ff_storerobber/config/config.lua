@@ -47,11 +47,15 @@ Config.PedPools = {
     weapon = {
         `s_m_y_ammucity_01`,         -- Ammu-Nation clerk
         `mp_m_weapexp_01`          -- Security male
+    },
+    blackmarket = {
+        `g_m_importexport_01`
     }
 }
 
 -- All the different store location data
 Config.Locations = {
+    -- use ox_inventory for shops access
     -- General Shops
     {
         ped = vec4(2676.38, 3279.9, 55.25, 331.74),
@@ -353,6 +357,16 @@ Config.Locations = {
         },
         robbable = false,
         pedPool = "weapon"
+    },
+    {
+        ped = vec4(92.71, 3755.45, 40.77, 171.05),
+        safe = vec4(1395.28, 3613.23, 33.98, 201.5),
+        network = {
+            coords = vec3(1394.25, 3611.49, 35.01),
+            radius = 0.6
+        },
+        robbable = false,
+        pedPool = "blackmarket"
     },
 }
 
