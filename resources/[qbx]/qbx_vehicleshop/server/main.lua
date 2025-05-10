@@ -46,6 +46,11 @@ RegisterNetEvent('qbx_vehicleshop:server:testDrive', function(vehicle)
         plate = plate
     })
 
+    local vehicle = NetworkGetEntityFromNetworkId(netId)
+    if vehicle and DoesEntityExist(vehicle) then
+        exports['khaizerdn-vehiclekeys']:GiveKey(src, vehicle, true) -- Give temporary key
+    end
+
     testDrives[src] = {
         netId = netId,
         endBehavior = testDrive.endBehavior,
@@ -104,6 +109,18 @@ AddStateBagChangeHandler('isInTestDrive', nil, function(bagName, _, value)
         end
     end
     testDrives[plySrc] = nil
+
+    -- Remove temporary key
+    local rawPlate = GetVehicleNumberPlateText(vehicle)
+    local plate = string.upper(string.gsub(rawPlate, "%s+", "")) -- Normalize plate
+    local items = exports.ox_inventory:Search(plySrc, 'slots', 'vehicle_key', { plate = plate })
+
+    for _, item in pairs(items) do
+        if item.metadata and item.metadata.temporary then
+            exports.ox_inventory:RemoveItem(plySrc, 'vehicle_key', 1, item.metadata)
+            break -- assume only one temp key per plate
+        end
+    end
 end)
 
 AddEventHandler('onResourceStop', function (resourceName)

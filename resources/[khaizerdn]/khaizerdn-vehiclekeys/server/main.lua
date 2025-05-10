@@ -7,7 +7,7 @@ local function getVehicleName(model)
 end
 
 -- Export to give a key item to a player
-exports('GiveKey', function(playerId, vehicle)
+exports('GiveKey', function(playerId, vehicle, temporary)
     local rawPlate = GetVehicleNumberPlateText(vehicle)
     local plate = string.upper(string.gsub(rawPlate, "%s+", "")) -- Normalize plate (no spaces, uppercase)
     local model = GetEntityModel(vehicle)
@@ -15,7 +15,8 @@ exports('GiveKey', function(playerId, vehicle)
     local metadata = {
         plate = plate,
         model = model,
-        label = ("Key for %s (%s)"):format(vehicleName, rawPlate)
+        label = ("Key for %s (%s)"):format(vehicleName, rawPlate),
+        temporary = temporary or false
     }
     exports.ox_inventory:AddItem(playerId, 'vehicle_key', 1, metadata)
 end)
