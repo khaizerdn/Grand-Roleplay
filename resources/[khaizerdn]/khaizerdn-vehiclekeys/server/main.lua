@@ -15,7 +15,8 @@ exports('GiveKey', function(playerId, vehicle, temporary)
     local metadata = {
         plate = plate,
         model = model,
-        label = ("Key for %s (%s)"):format(vehicleName, rawPlate),
+        label = "Key",
+        description = rawPlate,
         temporary = temporary or false
     }
     exports.ox_inventory:AddItem(playerId, 'vehicle_key', 1, metadata)
