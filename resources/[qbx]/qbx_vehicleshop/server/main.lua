@@ -400,7 +400,6 @@ RegisterServerEvent('qbx_vehicleshop:server:replaceKey', function(props, price)
         local metadata = {
             plate = plate,
             model = model,
-            label = 'Key',
             description = rawPlate,
             temporary = false
         }
