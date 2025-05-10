@@ -112,7 +112,7 @@ return {
     },
 
     giveVehicleKeys = function(src, plate, vehicle)
-        return exports.qbx_vehiclekeys:GiveKeys(src, vehicle)
+        return exports['khaizerdn-vehiclekeys']:GiveKey(source, vehicle)
     end,
 
     getSocietyAccount = function(accountName)

@@ -155,20 +155,13 @@ lib.onCache('seat', function(seat)
             local netId = NetworkGetNetworkIdFromEntity(vehicle)
             local hasKey = lib.callback.await('vehiclekeys:server:hasKey', false, netId)
             if not hasKey then
-                -- Disable engine start controls
-                DisableControlAction(0, 71, true) -- INPUT_VEH_ACCELERATE (used to start engine)
                 SetVehicleEngineOn(vehicle, false, true, true)
                 if IsControlJustPressed(0, 71) then
                     exports.qbx_core:Notify('You need the key to start the vehicle', 'error')
                 end
-            else
-                -- Re-enable engine controls if key is present
-                DisableControlAction(0, 71, false)
             end
             Wait(0)
         end
-        -- Re-enable controls when leaving driver seat
-        DisableControlAction(0, 71, false)
     end)
 end)
 
