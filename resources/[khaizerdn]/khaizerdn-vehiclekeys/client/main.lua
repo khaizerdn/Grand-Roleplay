@@ -120,6 +120,7 @@ toggleLockBind = lib.addKeybind({
 RegisterNetEvent('vehiclekeys:client:toggleLock', function(success, newState, netId)
     if success and netId then
         local vehicle = NetworkGetEntityFromNetworkId(netId)
+        qbx.playAudio({ audioName = 'Remote_Control_Fob', audioRef = 'PI_Menu_Sounds', source = vehicle })
         if vehicle and DoesEntityExist(vehicle) then
             lib.playAnim(PlayerPedId(), 'anim@mp_player_intmenu@key_fob@', 'fob_click', 8.0, 8.0, 1600, 49, 0, false, false, false)
             SetVehicleLights(vehicle, 2)
