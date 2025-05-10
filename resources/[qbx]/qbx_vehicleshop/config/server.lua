@@ -13,7 +13,8 @@ return {
     ---@param plate string Vehicle Plate
     ---@param vehicle number Vehicle Entity ID
     giveKeys = function(src, plate, vehicle)
-        exports.qbx_vehiclekeys:GiveKeys(src, vehicle)
+        exports['khaizerdn-vehiclekeys']:GiveKey(playerId, vehicle)
+        -- exports.qbx_vehiclekeys:GiveKeys(src, vehicle)
     end,
 
     ---@param society string Society name

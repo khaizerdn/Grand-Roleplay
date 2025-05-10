@@ -144,10 +144,16 @@ RegisterNetEvent('qbx_vehicleshop:server:buyShowroomVehicle', function(vehicle)
 
     exports.qbx_core:Notify(src, locale('success.purchased'), 'success')
 
-    SpawnVehicle(src, {
+    local netId = SpawnVehicle(src, {
         coords = coords,
         vehicleId = vehicleId
     })
+    
+    -- Give key to the buyer
+    local vehicleEntity = NetworkGetEntityFromNetworkId(netId)
+    if vehicleEntity and DoesEntityExist(vehicleEntity) then
+        exports['khaizerdn-vehiclekeys']:GiveKey(src, vehicleEntity)
+    end
 end)
 
 ---@param src number
@@ -210,10 +216,16 @@ RegisterNetEvent('qbx_vehicleshop:server:sellShowroomVehicle', function(vehicle,
         citizenid = cid,
     })
 
-    SpawnVehicle(playerId, {
+    local netId = SpawnVehicle(playerId, {
         coords = coords,
         vehicleId = vehicleId
     })
+
+    -- Give key to the buyer
+    local vehicleEntity = NetworkGetEntityFromNetworkId(netId)
+    if vehicleEntity and DoesEntityExist(vehicleEntity) then
+        exports['khaizerdn-vehiclekeys']:GiveKey(playerId, vehicleEntity)
+    end
 end)
 
 -- Transfer vehicle to player in passenger seat
