@@ -37,6 +37,25 @@ return {
 
     ---@type table<string, GarageConfig>
     garages = {
+
+        public_shared_garage = {
+            label = 'Public Shared Garage',
+            vehicleType = VehicleType.CAR,
+            shared = true,
+            allowUnowned = true, -- New flag to indicate unowned vehicles can be stored
+            accessPoints = {
+                {
+                    blip = {
+                        name = 'Public Shared Garage',
+                        sprite = 357,
+                        color = 3,
+                    },
+                    coords = vec4(1414.57, 1118.32, 114.84, 273.54), -- Replace with actual coordinates
+                    spawn = vec4(1414.57, 1118.32, 114.84, 273.54), -- Replace with actual spawn coordinates
+                }
+            },
+        },
+
         -- Public Garages
         motelgarage = {
             label = 'Motel Parking',

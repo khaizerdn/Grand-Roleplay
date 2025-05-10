@@ -131,9 +131,13 @@ end
 ---@param playerVehicle PlayerVehicle
 ---@return VehicleType
 local function getVehicleType(playerVehicle)
-    if VEHICLES[playerVehicle.modelName].category == 'helicopters' or VEHICLES[playerVehicle.modelName].category == 'planes' then
+    if not playerVehicle or not playerVehicle.modelName or not VEHICLES[playerVehicle.modelName] then
+        return VehicleType.CAR -- Default to CAR if model is invalid or unknown
+    end
+    local category = VEHICLES[playerVehicle.modelName].category
+    if category == 'helicopters' or category == 'planes' then
         return VehicleType.AIR
-    elseif VEHICLES[playerVehicle.modelName].category == 'boats' then
+    elseif category == 'boats' then
         return VehicleType.SEA
     else
         return VehicleType.CAR
@@ -165,19 +169,41 @@ end)
 ---@param source number
 ---@param vehicleId string
 ---@param garageName string
+---@param netId number
 ---@return boolean
-local function isParkable(source, vehicleId, garageName)
+local function isParkable(source, vehicleId, garageName, netId)
     local garageType = GetGarageType(garageName)
     --- DEPOTS are only for retrieving, not storing
     if garageType == GarageType.DEPOT then return false end
-    if not vehicleId then return false end
     local player = exports.qbx_core:GetPlayer(source)
     local garage = Garages[garageName]
     if not getCanAccessGarage(player, garage) then
         return false
     end
     ---@type PlayerVehicle
-    local playerVehicle = exports.qbx_vehicles:GetPlayerVehicle(vehicleId)
+    local playerVehicle = vehicleId and exports.qbx_vehicles:GetPlayerVehicle(vehicleId)
+    if garage.allowUnowned then
+        -- Allow any vehicle (owned or unowned) of the correct type
+        local vehicle = NetworkGetEntityFromNetworkId(netId)
+        local modelHash = GetEntityModel(vehicle)
+        local modelName = playerVehicle and playerVehicle.modelName
+        if not modelName then
+            -- Find model name by hash in VEHICLES table
+            for name, vehicleData in pairs(VEHICLES) do
+                if vehicleData.hash == modelHash then
+                    modelName = name
+                    break
+                end
+            end
+        end
+        if not modelName then
+            return false -- Invalid or unknown model
+        end
+        return getVehicleType({ modelName = modelName }) == garage.vehicleType
+    end
+    if not playerVehicle then
+        return false
+    end
     if getVehicleType(playerVehicle) ~= garage.vehicleType then
         return false
     end
@@ -192,7 +218,7 @@ end
 lib.callback.register('qbx_garages:server:isParkable', function(source, garage, netId)
     local vehicle = NetworkGetEntityFromNetworkId(netId)
     local vehicleId = Entity(vehicle).state.vehicleid or exports.qbx_vehicles:GetVehicleIdByPlate(GetVehicleNumberPlateText(vehicle))
-    return isParkable(source, vehicleId, garage)
+    return isParkable(source, vehicleId, garage, netId)
 end)
 
 ---@param source number
@@ -203,19 +229,61 @@ lib.callback.register('qbx_garages:server:parkVehicle', function(source, netId, 
     assert(Garages[garage] ~= nil, string.format('Garage %s not found. Did you register this garage?', garage))
     local vehicle = NetworkGetEntityFromNetworkId(netId)
     local vehicleId = Entity(vehicle).state.vehicleid or exports.qbx_vehicles:GetVehicleIdByPlate(GetVehicleNumberPlateText(vehicle))
-    local owned = isParkable(source, vehicleId, garage) --Check ownership
-    if not owned then
-        exports.qbx_core:Notify(source, locale('error.not_owned'), 'error')
+    local garageConfig = Garages[garage]
+    
+    local isParkableResult = isParkable(source, vehicleId, garage, netId)
+    if not isParkableResult then
+        exports.qbx_core:Notify(source, locale('error.not_correct_type'), 'error')
         return
     end
 
-    exports.qbx_vehicles:SaveVehicle(vehicle, {
-        garage = garage,
-        state = VehicleState.GARAGED,
-        props = props
-    })
+    if garageConfig.allowUnowned and not vehicleId then
+        -- For unowned vehicles, create a new vehicle entry
+        local modelHash = GetEntityModel(vehicle)
+        local modelName
+        for name, vehicleData in pairs(VEHICLES) do
+            if vehicleData.hash == modelHash then
+                modelName = name
+                break
+            end
+        end
+        if not modelName then
+            exports.qbx_core:Notify(source, locale('error.not_correct_type'), 'error')
+            return
+        end
+
+        -- Create vehicle in player_vehicles with nil citizenid
+        local newVehicleId, errorResult = exports.qbx_vehicles:CreatePlayerVehicle({
+            model = modelName,
+            citizenid = nil,
+            garage = garage,
+            props = props
+        })
+
+        if not newVehicleId then
+            exports.qbx_core:Notify(source, 'Failed to save vehicle: ' .. (errorResult and errorResult.message or 'Unknown error'), 'error')
+            return
+        end
+
+        -- Set vehicleId on entity for consistency
+        Entity(vehicle).state:set('vehicleid', newVehicleId, false)
+    else
+        -- For owned vehicles, check ownership and save
+        local owned = isParkable(source, vehicleId, garage, netId)
+        if not owned then
+            exports.qbx_core:Notify(source, locale('error.not_owned'), 'error')
+            return
+        end
+
+        exports.qbx_vehicles:SaveVehicle(vehicle, {
+            garage = garage,
+            state = VehicleState.GARAGED,
+            props = props
+        })
+    end
 
     exports.qbx_core:DeleteVehicle(vehicle)
+    exports.qbx_core:Notify(source, locale('success.vehicle_parked'), 'primary', 4500)
 end)
 
 AddEventHandler('onResourceStart', function(resource)
