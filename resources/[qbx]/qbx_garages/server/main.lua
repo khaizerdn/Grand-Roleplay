@@ -283,7 +283,6 @@ lib.callback.register('qbx_garages:server:parkVehicle', function(source, netId, 
     end
 
     exports.qbx_core:DeleteVehicle(vehicle)
-    exports.qbx_core:Notify(source, locale('success.vehicle_parked'), 'primary', 4500)
 end)
 
 AddEventHandler('onResourceStart', function(resource)
