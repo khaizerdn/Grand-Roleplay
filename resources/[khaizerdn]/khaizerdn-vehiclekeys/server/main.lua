@@ -63,3 +63,56 @@ lib.callback.register('vehiclekeys:server:hasKey', function(source, netId)
     local count = exports.ox_inventory:Search(source, 'count', 'vehicle_key', {plate = plate})
     return count > 0
 end)
+
+lib.callback.register('vehiclekeys:server:hasKeyPlateOnly', function(source, plate)
+    local count = exports.ox_inventory:Search(source, 'count', 'vehicle_key', { plate = plate })
+    return count > 0
+end)
+
+local function sendPlayerKeys(playerId)
+    local keys = exports.ox_inventory:Search(playerId, 'slots', 'vehicle_key')
+    local plates = {}
+    for _, item in ipairs(keys) do
+        if item.metadata and item.metadata.plate then
+            plates[#plates+1] = item.metadata.plate
+        end
+    end
+    TriggerClientEvent('vehiclekeys:client:updateOwnedPlates', playerId, plates)
+end
+
+AddEventHandler('onResourceStart', function(resource)
+    if resource ~= GetCurrentResourceName() then return end
+
+    for _, playerId in ipairs(GetPlayers()) do
+        local pid = tonumber(playerId)
+        if pid then
+            exports['khaizerdn-vehiclekeys']:UpdatePlayerKeys(pid)
+        end
+    end
+end)
+
+-- On player join or manually trigger it when needed
+AddEventHandler('playerJoining', function()
+    local src = source
+    sendPlayerKeys(src)
+end)
+
+RegisterNetEvent('vehiclekeys:server:syncOwnedKeys', function()
+    local src = source
+    exports['khaizerdn-vehiclekeys']:UpdatePlayerKeys(src)
+end)
+
+AddEventHandler('ox_inventory:itemAdded', function(source, inventory, slot, item)
+    if item.name == 'vehicle_key' then
+        exports['khaizerdn-vehiclekeys']:UpdatePlayerKeys(source)
+    end
+end)
+
+AddEventHandler('ox_inventory:itemRemoved', function(source, inventory, slot, item)
+    if item.name == 'vehicle_key' then
+        exports['khaizerdn-vehiclekeys']:UpdatePlayerKeys(source)
+    end
+end)
+
+-- Export or event you can call from elsewhere (e.g., after giving/removing key)
+exports('UpdatePlayerKeys', sendPlayerKeys)

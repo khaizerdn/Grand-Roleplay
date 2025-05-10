@@ -1,23 +1,69 @@
 local config = require 'shared.config'
+local ownedPlates = {}
 
--- Keybind for toggling vehicle lock
-local toggleLockBind
+local function getVehicleWithinRange(coords, maxDistance)
+    local vehicles = GetGamePool('CVehicle')
+    local closestVehicle = nil
+    local closestDistance = maxDistance
+
+    for _, veh in ipairs(vehicles) do
+        local vehCoords = GetEntityCoords(veh)
+        local dist = #(vehCoords - coords)
+        if dist <= closestDistance then
+            closestVehicle = veh
+            closestDistance = dist
+        end
+    end
+
+    return closestVehicle
+end
+
+RegisterNetEvent('vehiclekeys:client:updateOwnedPlates', function(plates)
+    ownedPlates = {}
+    for _, plate in ipairs(plates) do
+        ownedPlates[plate] = true
+    end
+end)
+
+local function hasKeyForPlate(plate)
+    return ownedPlates[plate] == true
+end
+
+local function findOwnedVehicleNearby(coords, maxDistance)
+    local vehicles = GetGamePool('CVehicle')
+    for _, veh in ipairs(vehicles) do
+        local dist = #(GetEntityCoords(veh) - coords)
+        if dist <= maxDistance then
+            local plate = string.upper(string.gsub(GetVehicleNumberPlateText(veh), "%s+", ""))
+            if hasKeyForPlate(plate) then
+                return veh
+            end
+        end
+    end
+    return nil
+end
+
 toggleLockBind = lib.addKeybind({
     name = 'togglevehiclelock',
     description = 'Toggle vehicle lock',
     defaultKey = 'L',
     onPressed = function()
         toggleLockBind:disable(true)
+
         local playerPed = PlayerPedId()
         local playerCoords = GetEntityCoords(playerPed)
-        local vehicle = lib.getClosestVehicle(playerCoords, config.vehicleMaximumLockingDistance, true)
+        local vehicle = findOwnedVehicleNearby(playerCoords, config.vehicleMaximumLockingDistance)
+
         if vehicle then
             local netId = NetworkGetNetworkIdFromEntity(vehicle)
-            local lockStatus = GetVehicleDoorLockStatus(vehicle) -- 1 = unlocked, 2 = locked
-            local action = lockStatus == 2 and 'unlock' or 'lock' -- Unlock if locked, lock if unlocked
+            local lockStatus = GetVehicleDoorLockStatus(vehicle)
+            local action = lockStatus == 2 and 'unlock' or 'lock'
             TriggerServerEvent('vehiclekeys:server:attemptToggleLock', netId, action)
+        else
+            exports.qbx_core:Notify('No owned vehicle nearby', 'error')
         end
-        Wait(1000) -- Cooldown to prevent spamming
+
+        Wait(1000)
         toggleLockBind:disable(false)
     end
 })
@@ -25,17 +71,14 @@ toggleLockBind = lib.addKeybind({
 -- Handle toggle lock response from server
 RegisterNetEvent('vehiclekeys:client:toggleLock', function(success, newState)
     if success then
-        local vehicle = lib.getClosestVehicle(GetEntityCoords(PlayerPedId()), config.vehicleMaximumLockingDistance, true)
+        local vehicle = findOwnedVehicleNearby(GetEntityCoords(PlayerPedId()), config.vehicleMaximumLockingDistance)
         if vehicle then
-            -- Play key fob animation
             lib.playAnim(PlayerPedId(), 'anim@mp_player_intmenu@key_fob@', 'fob_click', 8.0, 8.0, 1600, 49, 0, false, false, false)
-            -- Flash vehicle lights
             SetVehicleLights(vehicle, 2)
             Wait(250)
             SetVehicleLights(vehicle, 1)
             Wait(200)
             SetVehicleLights(vehicle, 0)
-            -- Notify player
             local message = newState == 2 and 'Vehicle locked' or 'Vehicle unlocked'
             exports.qbx_core:Notify(message)
         end
@@ -78,4 +121,15 @@ lib.onCache('seat', function(seat)
         -- Re-enable controls when leaving driver seat
         DisableControlAction(0, 71, false)
     end)
+end)
+
+
+-- Ask server to send owned plates again
+RegisterNetEvent('vehiclekeys:client:requestKeySync', function()
+    TriggerServerEvent('vehiclekeys:server:syncOwnedKeys')
+end)
+
+-- Automatically request keys when resource starts
+CreateThread(function()
+    TriggerEvent('vehiclekeys:client:requestKeySync')
 end)
