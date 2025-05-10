@@ -13,7 +13,9 @@ toggleLockBind = lib.addKeybind({
         local vehicle = lib.getClosestVehicle(playerCoords, config.vehicleMaximumLockingDistance, true)
         if vehicle then
             local netId = NetworkGetNetworkIdFromEntity(vehicle)
-            TriggerServerEvent('vehiclekeys:server:attemptToggleLock', netId)
+            local lockStatus = GetVehicleDoorLockStatus(vehicle) -- 1 = unlocked, 2 = locked
+            local action = lockStatus == 2 and 'unlock' or 'lock' -- Unlock if locked, lock if unlocked
+            TriggerServerEvent('vehiclekeys:server:attemptToggleLock', netId, action)
         end
         Wait(1000) -- Cooldown to prevent spamming
         toggleLockBind:disable(false)

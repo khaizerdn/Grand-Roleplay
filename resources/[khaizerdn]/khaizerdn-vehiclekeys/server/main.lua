@@ -21,7 +21,7 @@ exports('GiveKey', function(playerId, vehicle)
 end)
 
 -- Server event to toggle vehicle lock
-RegisterNetEvent('vehiclekeys:server:attemptToggleLock', function(netId)
+RegisterNetEvent('vehiclekeys:server:attemptToggleLock', function(netId, action)
     local src = source
     local vehicle = NetworkGetEntityFromNetworkId(netId)
     if not vehicle or GetEntityType(vehicle) ~= 2 then return end -- Ensure it's a vehicle
@@ -29,8 +29,7 @@ RegisterNetEvent('vehiclekeys:server:attemptToggleLock', function(netId)
     local plate = string.upper(string.gsub(rawPlate, "%s+", "")) -- Normalize plate
     local count = exports.ox_inventory:Search(src, 'count', 'vehicle_key', {plate = plate})
     if count > 0 then
-        local currentState = Entity(vehicle).state.doorslockstate or 1
-        local newState = currentState == 1 and 2 or 1 -- Toggle: 1 (unlocked) to 2 (locked) or vice versa
+        local newState = action == 'lock' and 2 or 1 -- 2 = locked, 1 = unlocked
         Entity(vehicle).state:set('doorslockstate', newState, true)
         TriggerClientEvent('vehiclekeys:client:toggleLock', src, true, newState)
     else
