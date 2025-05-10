@@ -4,6 +4,7 @@ return {
         maximumPayments = 24, -- maximum payments allowed
         enable = true, -- Enables the financing system. Turning this off does not affect already financed vehicles
         zone = vec3(-29.53, -1103.67, 26.42), -- Where the finance menu is located
+        keyReplacementPrice = 150,
     },
 
     enableFreeUseBuy = true, -- Allows players to buy from NPC shops

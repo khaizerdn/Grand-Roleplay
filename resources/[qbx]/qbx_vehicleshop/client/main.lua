@@ -76,6 +76,44 @@ local function showVehicleFinanceMenu(data)
     lib.showContext('vehicleFinance')
 end
 
+local function showReplaceKeyMenu()
+    
+    local vehicles = lib.callback.await('qbx_vehicleshop:server:getOwnedVehicles', false)
+    local options = {}
+
+    if not vehicles or #vehicles == 0 then
+        return exports.qbx_core:Notify('You do not own any vehicles.', 'error')
+    end
+
+    for _, v in pairs(vehicles) do
+        local plate = v.props.plate:upper()
+        local vehicle = VEHICLES[v.modelName]
+
+        options[#options + 1] = {
+            title = ('%s %s'):format(vehicle.brand, vehicle.name),
+            description = ('Plate: %s - Buy Duplicate Key For $%d'):format(plate, sharedConfig.finance.keyReplacementPrice),
+            icon = 'fa-solid fa-key',
+            arrow = true,
+            onSelect = function()
+                local confirmed = confirmationCheck()
+                if confirmed == 'confirm' then
+                    TriggerServerEvent('qbx_vehicleshop:server:replaceKey', v.props, sharedConfig.finance.keyReplacementPrice)
+                else
+                    lib.showContext('ownedVehicles')
+                end
+            end
+        }
+    end
+
+    lib.registerContext({
+        id = 'ownedVehicles',
+        title = 'Your Owned Vehicles',
+        options = options
+    })
+
+    lib.showContext('ownedVehicles')
+end
+
 --- Gets the owned vehicles based on financing then opens a menu
 local function showFinancedVehiclesMenu()
     local vehicles = lib.callback.await('qbx_vehicleshop:server:GetFinancedVehicles')
@@ -648,8 +686,16 @@ CreateThread(function()
                         onSelect = function()
                             showFinancedVehiclesMenu()
                         end
+                    },
+                    {
+                        name = 'replaceVehicleKey',
+                        icon = 'fas fa-key',
+                        label = 'New Vehicle Key',
+                        onSelect = function()
+                            showReplaceKeyMenu()
+                        end
                     }
-                }
+                }                
             })
         else
             lib.zones.box({

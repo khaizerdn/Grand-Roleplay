@@ -359,3 +359,59 @@ lib.addCommand('transfervehicle', {
         end
     end, GetEntityModel(vehicle), sellAmount)
 end)
+
+---@param source number
+---@return PlayerVehicle[]?
+lib.callback.register('qbx_vehicleshop:server:getOwnedVehicles', function(source)
+    local player = exports.qbx_core:GetPlayer(source)
+    if not player then return end
+
+    local citizenid = player.PlayerData.citizenid
+    local vehicles = MySQL.query.await('SELECT * FROM player_vehicles WHERE citizenid = ?', { citizenid })
+    if not vehicles or #vehicles == 0 then return end
+
+    local result = {}
+    for _, v in pairs(vehicles) do
+        local props = json.decode(v.mods or '{}')
+        result[#result + 1] = {
+            modelName = v.vehicle,
+            props = props
+        }
+    end
+
+    return result
+end)
+
+RegisterServerEvent('qbx_vehicleshop:server:replaceKey', function(props, price)
+    local src = source
+    local Player = exports.qbx_core:GetPlayer(src)
+    if not Player then return end
+
+    if not props or not props.plate or not props.model then
+        TriggerClientEvent('QBCore:Notify', src, 'Invalid vehicle data.', 'error')
+        return
+    end
+
+    if Player.Functions.RemoveMoney('cash', price, 'vehicle-key-replace') then
+        local rawPlate = props.plate
+        local plate = string.upper(string.gsub(rawPlate, "%s+", "")) -- Normalize plate
+        local model = props.model
+
+        local metadata = {
+            plate = plate,
+            model = model,
+            label = 'Key',
+            description = rawPlate,
+            temporary = false
+        }
+
+        local success = exports.ox_inventory:AddItem(src, 'vehicle_key', 1, metadata)
+        if success then
+            TriggerClientEvent('QBCore:Notify', src, ('You received a key for %s (%s)'):format(rawPlate), 'success')
+        else
+            TriggerClientEvent('QBCore:Notify', src, 'Failed to add key item.', 'error')
+        end
+    else
+        TriggerClientEvent('QBCore:Notify', src, 'Not enough cash', 'error')
+    end
+end)
