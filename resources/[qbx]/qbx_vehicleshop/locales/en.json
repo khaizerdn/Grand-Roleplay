@@ -71,7 +71,12 @@
         "submit_ID": "Server ID (#)",
         "keypress_showFinanceMenu": "Press [E] to open finance menu.",
         "keypress_vehicleViewMenu": "Press [E] to open vehicle menu.",
-        "target_showFinanceMenu": "Open Finance Menu"
+        "target_showFinanceMenu": "Open Finance Menu",
+        "open_finance_menu": "Open Finance Menu",
+        "desc_open_finance": "Manage your financed vehicles and payments.",
+        "desc_replace_key": "Purchase a duplicate key for your owned vehicles.",
+        "finance_or_key_header": "Vehicle Finance & Keys",
+        "replace_key": "Buy Duplicate Key"
     },
     "general": {
         "testdrive_timer": "Test Drive Time Remaining: ",

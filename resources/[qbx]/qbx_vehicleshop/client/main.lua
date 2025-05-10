@@ -431,6 +431,35 @@ local function openVehicleSellMenu(targetVehicle)
     lib.showContext('vehicleMenu')
 end
 
+local function showFinanceOrKeyMenu()
+    local options = {
+        {
+            title = locale('menus.open_finance_menu'),
+            icon = 'fa-solid fa-dollar-sign',
+            description = locale('menus.desc_open_finance'),
+            onSelect = function()
+                showFinancedVehiclesMenu()
+            end
+        },
+        {
+            title = locale('menus.replace_key'),
+            icon = 'fa-solid fa-key',
+            description = locale('menus.desc_replace_key'),
+            onSelect = function()
+                showReplaceKeyMenu()
+            end
+        }
+    }
+
+    lib.registerContext({
+        id = 'financeOrKeyMenu',
+        title = locale('menus.finance_or_key_header'),
+        options = options
+    })
+
+    lib.showContext('financeOrKeyMenu')
+end
+
 ---@param shopName string
 ---@param entity number vehicle
 ---@param targetVehicle number
@@ -708,13 +737,13 @@ CreateThread(function()
                 end,
                 inside = function()
                     if IsControlJustPressed(0, 38) then
-                        showFinancedVehiclesMenu()
+                        showFinanceOrKeyMenu()
                     end
                 end,
                 onExit = function()
                     lib.hideTextUI()
                 end
-            })
+            })            
         end
     end
 

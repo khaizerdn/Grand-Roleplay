@@ -1,5 +1,5 @@
 return {
-    useTarget = true,
+    useTarget = false,
     debugPoly = false,
     requestModelTimeout = 5000, -- load model timeout for oxlib
 }
