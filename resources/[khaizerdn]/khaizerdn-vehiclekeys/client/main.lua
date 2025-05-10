@@ -28,7 +28,7 @@ RegisterNetEvent('vehiclekeys:client:toggleLock', function(success, newState)
         local vehicle = lib.getClosestVehicle(GetEntityCoords(PlayerPedId()), config.vehicleMaximumLockingDistance, true)
         if vehicle then
             -- Play key fob animation
-            lib.playAnim(PlayerPedId(), 'anim@mp_player_intmenu@key_fob@', 'fob_click', 8.0, 8.0, -1, 49, 0, false, false, false)
+            lib.playAnim(PlayerPedId(), 'anim@mp_player_intmenu@key_fob@', 'fob_click', 8.0, 8.0, 1600, 49, 0, false, false, false)
             -- Flash vehicle lights
             SetVehicleLights(vehicle, 2)
             Wait(250)
