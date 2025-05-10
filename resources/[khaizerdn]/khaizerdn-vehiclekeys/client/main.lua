@@ -49,30 +49,78 @@ toggleLockBind = lib.addKeybind({
     defaultKey = 'L',
     onPressed = function()
         toggleLockBind:disable(true)
-
+    
         local playerPed = PlayerPedId()
         local playerCoords = GetEntityCoords(playerPed)
-        local vehicle = findOwnedVehicleNearby(playerCoords, config.vehicleMaximumLockingDistance)
-
-        if vehicle then
+    
+        -- Don't continue if the player has no keys at all
+        if not ownedPlates or next(ownedPlates) == nil then
+            exports.qbx_core:Notify('You don\'t have any vehicle keys', 'error')
+            toggleLockBind:disable(false)
+            return
+        end
+    
+        local vehicles = GetGamePool('CVehicle')
+        local validVehicles = {}
+    
+        for _, veh in ipairs(vehicles) do
+            local dist = #(GetEntityCoords(veh) - playerCoords)
+            if dist <= config.vehicleMaximumLockingDistance then
+                local plate = string.upper(string.gsub(GetVehicleNumberPlateText(veh), "%s+", ""))
+                if ownedPlates[plate] then
+                    validVehicles[#validVehicles + 1] = {
+                        vehicle = veh,
+                        plate = plate,
+                        distance = dist,
+                        label = GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(veh))) .. ' - ' .. plate
+                    }
+                end
+            end
+        end
+    
+        if #validVehicles == 0 then
+            exports.qbx_core:Notify('No nearby vehicles match your keys', 'error')
+        elseif #validVehicles == 1 then
+            local vehicle = validVehicles[1].vehicle
             local netId = NetworkGetNetworkIdFromEntity(vehicle)
             local lockStatus = GetVehicleDoorLockStatus(vehicle)
             local action = lockStatus == 2 and 'unlock' or 'lock'
             TriggerServerEvent('vehiclekeys:server:attemptToggleLock', netId, action)
         else
-            exports.qbx_core:Notify('No owned vehicle nearby', 'error')
+            local options = {}
+            for _, data in ipairs(validVehicles) do
+                options[#options + 1] = {
+                    title = data.label,
+                    description = ("Distance: %.1fm"):format(data.distance),
+                    icon = 'car',
+                    onSelect = function()
+                        local netId = NetworkGetNetworkIdFromEntity(data.vehicle)
+                        local lockStatus = GetVehicleDoorLockStatus(data.vehicle)
+                        local action = lockStatus == 2 and 'unlock' or 'lock'
+                        TriggerServerEvent('vehiclekeys:server:attemptToggleLock', netId, action)
+                    end
+                }
+            end
+    
+            lib.registerContext({
+                id = 'vehicle_key_menu',
+                title = 'Select a Vehicle to Lock/Unlock',
+                options = options
+            })
+    
+            lib.showContext('vehicle_key_menu')
         end
-
+    
         Wait(1000)
         toggleLockBind:disable(false)
-    end
+    end       
 })
 
 -- Handle toggle lock response from server
-RegisterNetEvent('vehiclekeys:client:toggleLock', function(success, newState)
-    if success then
-        local vehicle = findOwnedVehicleNearby(GetEntityCoords(PlayerPedId()), config.vehicleMaximumLockingDistance)
-        if vehicle then
+RegisterNetEvent('vehiclekeys:client:toggleLock', function(success, newState, netId)
+    if success and netId then
+        local vehicle = NetworkGetEntityFromNetworkId(netId)
+        if vehicle and DoesEntityExist(vehicle) then
             lib.playAnim(PlayerPedId(), 'anim@mp_player_intmenu@key_fob@', 'fob_click', 8.0, 8.0, 1600, 49, 0, false, false, false)
             SetVehicleLights(vehicle, 2)
             Wait(250)
@@ -132,4 +180,19 @@ end)
 -- Automatically request keys when resource starts
 CreateThread(function()
     TriggerEvent('vehiclekeys:client:requestKeySync')
+end)
+
+RegisterNetEvent('ox_inventory:updateInventory', function(changes)
+    local hasKeyChange = false
+
+    for _, item in pairs(changes) do
+        if item == false or (type(item) == 'table' and item.name == 'vehicle_key') then
+            hasKeyChange = true
+            break
+        end
+    end
+
+    if hasKeyChange then
+        TriggerServerEvent('vehiclekeys:server:refreshKeys')
+    end
 end)

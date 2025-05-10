@@ -32,7 +32,7 @@ RegisterNetEvent('vehiclekeys:server:attemptToggleLock', function(netId, action)
     if count > 0 then
         local newState = action == 'lock' and 2 or 1 -- 2 = locked, 1 = unlocked
         Entity(vehicle).state:set('doorslockstate', newState, true)
-        TriggerClientEvent('vehiclekeys:client:toggleLock', src, true, newState)
+        TriggerClientEvent('vehiclekeys:client:toggleLock', src, true, newState, netId)
     else
         TriggerClientEvent('vehiclekeys:client:toggleLock', src, false)
     end
@@ -102,17 +102,27 @@ RegisterNetEvent('vehiclekeys:server:syncOwnedKeys', function()
     exports['khaizerdn-vehiclekeys']:UpdatePlayerKeys(src)
 end)
 
-AddEventHandler('ox_inventory:itemAdded', function(source, inventory, slot, item)
-    if item.name == 'vehicle_key' then
+local function isPlayer(source)
+    return type(source) == 'number' and GetPlayerPed(source) ~= 0
+end
+
+local function tryUpdateKeySync(source, item)
+    if isPlayer(source) and item.name == 'vehicle_key' then
+        exports['khaizerdn-vehiclekeys']:UpdatePlayerKeys(source)
+    end
+end
+
+AddEventHandler('ox_inventory:updateInventory', function(source, inventory)
+    if inventory and inventory.type == 'player' then
         exports['khaizerdn-vehiclekeys']:UpdatePlayerKeys(source)
     end
 end)
 
-AddEventHandler('ox_inventory:itemRemoved', function(source, inventory, slot, item)
-    if item.name == 'vehicle_key' then
-        exports['khaizerdn-vehiclekeys']:UpdatePlayerKeys(source)
-    end
+RegisterNetEvent('vehiclekeys:server:refreshKeys', function()
+    local src = source
+    exports['khaizerdn-vehiclekeys']:UpdatePlayerKeys(src)
 end)
+
 
 -- Export or event you can call from elsewhere (e.g., after giving/removing key)
 exports('UpdatePlayerKeys', sendPlayerKeys)
