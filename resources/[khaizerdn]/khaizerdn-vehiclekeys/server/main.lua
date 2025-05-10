@@ -15,7 +15,6 @@ exports('GiveKey', function(playerId, vehicle, temporary)
     local metadata = {
         plate = plate,
         model = model,
-        label = "Key",
         description = rawPlate,
         temporary = temporary or false
     }
