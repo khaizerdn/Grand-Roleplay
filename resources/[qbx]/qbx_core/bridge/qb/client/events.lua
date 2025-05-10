@@ -9,7 +9,7 @@ end)
 RegisterNetEvent('QBCore:Client:VehicleInfo', function(info)
     local vehicle = NetworkGetEntityFromNetworkId(info.netId)
     local plate = qbx.getVehiclePlate(vehicle)
-    local hasKeys = config.hasKeys(plate, vehicle)
+    -- local hasKeys = config.hasKeys(plate, vehicle) -- Now using khaizerdn-vehiclekeys instead of qbx_vehiclekeys
 
     local data = {
         vehicle = vehicle,
@@ -18,7 +18,7 @@ RegisterNetEvent('QBCore:Client:VehicleInfo', function(info)
         plate = plate,
         driver = GetPedInVehicleSeat(vehicle, -1),
         inseat = GetPedInVehicleSeat(vehicle, info.seat),
-        haskeys = hasKeys
+        -- haskeys = hasKeys
     }
 
     TriggerEvent('QBCore:Client:'..info.event..'Vehicle', data)
