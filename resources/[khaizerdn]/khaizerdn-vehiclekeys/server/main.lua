@@ -71,12 +71,20 @@ end)
 
 local function sendPlayerKeys(playerId)
     local keys = exports.ox_inventory:Search(playerId, 'slots', 'vehicle_key')
+    
+    -- Ensure keys is a valid table
+    if type(keys) ~= "table" then
+        keys = {} -- Initialize keys as an empty table if not a table
+    end
+    
     local plates = {}
     for _, item in ipairs(keys) do
         if item.metadata and item.metadata.plate then
-            plates[#plates+1] = item.metadata.plate
+            plates[#plates + 1] = item.metadata.plate
         end
     end
+    
+    -- Safely trigger the event to update plates
     TriggerClientEvent('vehiclekeys:client:updateOwnedPlates', playerId, plates)
 end
 
