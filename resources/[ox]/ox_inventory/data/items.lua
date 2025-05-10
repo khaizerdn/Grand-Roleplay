@@ -644,4 +644,11 @@ return {
         label = 'Laptop',
         weight = 1000,
     },
+
+    ['vehicle_key'] = {
+        label = 'Vehicle Key',
+        weight = 0,
+        stack = true,
+        consume = 0,
+    },
 }
