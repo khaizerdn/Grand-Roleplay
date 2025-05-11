@@ -104,6 +104,33 @@ return {
         consume = 0
     },
 
+    ['ziplockbag_1'] = {
+        label = 'Ziplock Bag (S)',
+        description = 'Small',
+        weight = 1,
+        stack = false,
+        close = false,
+        consume = 0
+    },
+
+    ['ziplockbag_2'] = {
+        label = 'Ziplock Bag (M)',
+        description = 'Medium',
+        weight = 1,
+        stack = false,
+        close = false,
+        consume = 0
+    },
+
+    ['ziplockbag_3'] = {
+        label = 'Ziplock Bag (L)',
+        description = 'Large',
+        weight = 1,
+        stack = false,
+        close = false,
+        consume = 0
+    },    
+
     ['panties'] = {
         label = 'Knickers',
         weight = 10,
@@ -285,125 +312,125 @@ return {
         weight = 1500,
     },
 
-    ['crack_baggy'] = {
-        label = 'Crack Baggy',
-        weight = 100,
-    },
+    -- ['crack_baggy'] = {
+    --     label = 'Crack Baggy',
+    --     weight = 100,
+    -- },
 
-    ['cokebaggy'] = {
-        label = 'Bag of Coke',
-        weight = 100,
-    },
+    -- ['cokebaggy'] = {
+    --     label = 'Bag of Coke',
+    --     weight = 100,
+    -- },
 
-    ['coke_brick'] = {
-        label = 'Coke Brick',
-        weight = 2000,
-    },
+    -- ['coke_brick'] = {
+    --     label = 'Coke Brick',
+    --     weight = 2000,
+    -- },
 
-    ['coke_small_brick'] = {
-        label = 'Coke Package',
-        weight = 1000,
-    },
+    -- ['coke_small_brick'] = {
+    --     label = 'Coke Package',
+    --     weight = 1000,
+    -- },
 
-    ['xtcbaggy'] = {
-        label = 'Bag of Ecstasy',
-        weight = 100,
-    },
+    -- ['xtcbaggy'] = {
+    --     label = 'Bag of Ecstasy',
+    --     weight = 100,
+    -- },
 
-    ['meth'] = {
-        label = 'Methamphetamine',
-        weight = 100,
-    },
+    -- ['meth'] = {
+    --     label = 'Methamphetamine',
+    --     weight = 100,
+    -- },
 
-    ['oxy'] = {
-        label = 'Oxycodone',
-        weight = 100,
-    },
+    -- ['oxy'] = {
+    --     label = 'Oxycodone',
+    --     weight = 100,
+    -- },
 
-    ['weed_ak47'] = {
-        label = 'AK47 2g',
-        weight = 200,
-    },
+    -- ['weed_ak47'] = {
+    --     label = 'AK47 2g',
+    --     weight = 200,
+    -- },
 
-    ['weed_ak47_seed'] = {
-        label = 'AK47 Seed',
-        weight = 1,
-    },
+    -- ['weed_ak47_seed'] = {
+    --     label = 'AK47 Seed',
+    --     weight = 1,
+    -- },
 
-    ['weed_skunk'] = {
-        label = 'Skunk 2g',
-        weight = 200,
-    },
+    -- ['weed_skunk'] = {
+    --     label = 'Skunk 2g',
+    --     weight = 200,
+    -- },
 
-    ['weed_skunk_seed'] = {
-        label = 'Skunk Seed',
-        weight = 1,
-    },
+    -- ['weed_skunk_seed'] = {
+    --     label = 'Skunk Seed',
+    --     weight = 1,
+    -- },
 
-    ['weed_amnesia'] = {
-        label = 'Amnesia 2g',
-        weight = 200,
-    },
+    -- ['weed_amnesia'] = {
+    --     label = 'Amnesia 2g',
+    --     weight = 200,
+    -- },
 
-    ['weed_amnesia_seed'] = {
-        label = 'Amnesia Seed',
-        weight = 1,
-    },
+    -- ['weed_amnesia_seed'] = {
+    --     label = 'Amnesia Seed',
+    --     weight = 1,
+    -- },
 
-    ['weed_og-kush'] = {
-        label = 'OGKush 2g',
-        weight = 200,
-    },
+    -- ['weed_og-kush'] = {
+    --     label = 'OGKush 2g',
+    --     weight = 200,
+    -- },
 
-    ['weed_og-kush_seed'] = {
-        label = 'OGKush Seed',
-        weight = 1,
-    },
+    -- ['weed_og-kush_seed'] = {
+    --     label = 'OGKush Seed',
+    --     weight = 1,
+    -- },
 
-    ['weed_white-widow'] = {
-        label = 'OGKush 2g',
-        weight = 200,
-    },
+    -- ['weed_white-widow'] = {
+    --     label = 'OGKush 2g',
+    --     weight = 200,
+    -- },
 
-    ['weed_white-widow_seed'] = {
-        label = 'White Widow Seed',
-        weight = 1,
-    },
+    -- ['weed_white-widow_seed'] = {
+    --     label = 'White Widow Seed',
+    --     weight = 1,
+    -- },
 
-    ['weed_purple-haze'] = {
-        label = 'Purple Haze 2g',
-        weight = 200,
-    },
+    -- ['weed_purple-haze'] = {
+    --     label = 'Purple Haze 2g',
+    --     weight = 200,
+    -- },
 
-    ['weed_purple-haze_seed'] = {
-        label = 'Purple Haze Seed',
-        weight = 1,
-    },
+    -- ['weed_purple-haze_seed'] = {
+    --     label = 'Purple Haze Seed',
+    --     weight = 1,
+    -- },
 
-    ['weed_brick'] = {
-        label = 'Weed Brick',
-        weight = 2000,
-    },
+    -- ['weed_brick'] = {
+    --     label = 'Weed Brick',
+    --     weight = 2000,
+    -- },
 
-    ['weed_nutrition'] = {
-        label = 'Plant Fertilizer',
-        weight = 2000,
-    },
+    -- ['weed_nutrition'] = {
+    --     label = 'Plant Fertilizer',
+    --     weight = 2000,
+    -- },
 
-    ['joint'] = {
-        label = 'Joint',
-        weight = 200,
-    },
+    -- ['joint'] = {
+    --     label = 'Joint',
+    --     weight = 200,
+    -- },
 
-    ['rolling_paper'] = {
-        label = 'Rolling Paper',
-        weight = 0,
-    },
+    -- ['rolling_paper'] = {
+    --     label = 'Rolling Paper',
+    --     weight = 0,
+    -- },
 
-    ['empty_weed_bag'] = {
-        label = 'Empty Weed Bag',
-        weight = 0,
-    },
+    -- ['empty_weed_bag'] = {
+    --     label = 'Empty Weed Bag',
+    --     weight = 0,
+    -- },
 
     ['firstaid'] = {
         label = 'First Aid',
@@ -651,4 +678,66 @@ return {
         stack = true,
         consume = 0,
     },
+
+    -- ALL ABOUT CRAFTING
+
+    -- TOOLS
+    ['herb_grinder'] = {
+        label = 'Herb Grinder',
+        weight = 500, -- 0.5kg
+        stack = false,
+        close = true,
+    },
+
+    ['digital_scale'] = {
+        label = 'Digital Scale',
+        weight = 300, -- 0.3kg
+        stack = false,
+        close = true,
+    },
+
+    ['tray'] = {
+        label = 'Tray',
+        weight = 700, -- 0.7kg
+        stack = false,
+        close = true,
+    },
+
+    -- CRAFTING JOINT
+    ['weed_bud'] = {
+        label = 'Bud of Weed',
+        weight = 100, -- 0.1kg
+        stack = true,
+        close = false,
+    },
+
+    ['weed_bits'] = {
+        label = 'Bits of Weed',
+        weight = 50, -- 0.05kg
+        stack = true,
+        close = false,
+    },
+
+    ['weed_gram'] = {
+        label = 'Gram of Weed',
+        weight = 100, -- 0.1kg
+        stack = true,
+        close = false,
+    },
+
+    ['rolling_paper'] = {
+        label = 'Rolling Paper',
+        weight = 10, -- 0.01kg
+        stack = true,
+        close = false,
+    },
+
+    ['joint'] = {
+        label = 'Joint',
+        weight = 120, -- 0.12kg (includes paper + gram)
+        stack = true,
+        close = false,
+    },
+    -- END OF CRAFTING JOINT
+
 }

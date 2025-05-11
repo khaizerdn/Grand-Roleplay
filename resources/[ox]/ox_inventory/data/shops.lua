@@ -96,7 +96,14 @@ return {
 		blip = {
 			id = 402, colour = 69, scale = 0.8
 		}, inventory = {
-			{ name = 'lockpick', price = 10 }
+			{ name = 'lockpick', price = 25 },
+			{ name = 'tray', price = 5 },
+			{ name = 'digital_scale', price = 30 },
+			{ name = 'herb_grinder', price = 20 },
+			{ name = 'ziplockbag_1', price = 2 },
+			{ name = 'ziplockbag_2', price = 3 },
+			{ name = 'ziplockbag_3', price = 4 },
+			{ name = 'paperbag', price = 1 },
 		}, locations = {
 			vec3(2748.0, 3473.0, 55.67)
 			-- vec3(342.99, -1298.26, 32.51)

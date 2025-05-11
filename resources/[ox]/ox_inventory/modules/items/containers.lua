@@ -57,6 +57,24 @@ setContainerProperties('paperbag', {
 	blacklist = { 'testburger' }
 })
 
+setContainerProperties('ziplockbag_1', {
+	slots = 1,
+	maxWeight = 500,
+	blacklist = { 'testburger' }
+})
+
+setContainerProperties('ziplockbag_2', {
+	slots = 2,
+	maxWeight = 1000,
+	blacklist = { 'testburger' }
+})
+
+setContainerProperties('ziplockbag_3', {
+	slots = 3,
+	maxWeight = 1500,
+	blacklist = { 'testburger' }
+})
+
 setContainerProperties('pizzabox', {
 	slots = 5,
 	maxWeight = 1000,
