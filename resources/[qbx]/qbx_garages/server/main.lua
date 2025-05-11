@@ -215,10 +215,69 @@ local function isParkable(source, vehicleId, garageName, netId)
     return true
 end
 
+-- Add this function to count vehicles in a garage
+---@param garageName string
+---@return integer vehicleCount
+local function getGarageVehicleCount(garageName)
+    local query = 'SELECT COUNT(*) as count FROM player_vehicles WHERE garage = ? AND state IN (?, ?)'
+    local result = MySQL.query.await(query, {garageName, VehicleState.GARAGED, VehicleState.IMPOUNDED})
+    return result[1].count or 0
+end
+
+-- Modify the isParkable callback
 lib.callback.register('qbx_garages:server:isParkable', function(source, garage, netId)
     local vehicle = NetworkGetEntityFromNetworkId(netId)
     local vehicleId = Entity(vehicle).state.vehicleid or exports.qbx_vehicles:GetVehicleIdByPlate(GetVehicleNumberPlateText(vehicle))
-    return isParkable(source, vehicleId, garage, netId)
+    local garageType = GetGarageType(garage)
+    if garageType == GarageType.DEPOT then return false, 'depot' end
+
+    local player = exports.qbx_core:GetPlayer(source)
+    local garageConfig = Garages[garage]
+    if not getCanAccessGarage(player, garageConfig) then
+        return false, 'no_access'
+    end
+
+    if garageConfig.maxVehicles then
+        local vehicleCount = getGarageVehicleCount(garage)
+        if vehicleCount >= garageConfig.maxVehicles then
+            return false, 'garage_full'
+        end
+    end
+
+    local vehicle = NetworkGetEntityFromNetworkId(netId)
+    local modelHash = GetEntityModel(vehicle)
+    local modelName
+    for name, vehicleData in pairs(VEHICLES) do
+        if vehicleData.hash == modelHash then
+            modelName = name
+            break
+        end
+    end
+    if not modelName then
+        return false, 'invalid_model'
+    end
+    local vehicleType = getVehicleType({ modelName = modelName })
+    if vehicleType ~= garageConfig.vehicleType then
+        return false, 'wrong_type'
+    end
+
+    if garageConfig.allowUnowned then
+        return true, nil
+    end
+
+    local playerVehicle = vehicleId and exports.qbx_vehicles:GetPlayerVehicle(vehicleId)
+    if not playerVehicle then
+        return false, 'not_owned'
+    end
+    if getVehicleType(playerVehicle) ~= garageConfig.vehicleType then
+        return false, 'wrong_type'
+    end
+    if not garageConfig.shared then
+        if playerVehicle.citizenid ~= player.PlayerData.citizenid then
+            return false, 'not_owned'
+        end
+    end
+    return true, nil
 end)
 
 ---@param source number

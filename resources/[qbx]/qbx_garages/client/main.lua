@@ -237,10 +237,20 @@ end
 ---@param garageName string
 local function parkVehicle(vehicle, garageName)
     if GetVehicleNumberOfPassengers(vehicle) ~= 1 then
-        local isParkable = lib.callback.await('qbx_garages:server:isParkable', false, garageName, NetworkGetNetworkIdFromEntity(vehicle))
+        local isParkable, errorCode = lib.callback.await('qbx_garages:server:isParkable', false, garageName, NetworkGetNetworkIdFromEntity(vehicle))
 
         if not isParkable then
-            exports.qbx_core:Notify(locale('error.not_owned'), 'error', 5000)
+            if errorCode == 'not_owned' then
+                exports.qbx_core:Notify(locale('error.not_owned'), 'error', 5000)
+            elseif errorCode == 'garage_full' then
+                exports.qbx_core:Notify(locale('error.garage_full'), 'error', 5000)
+            elseif errorCode == 'wrong_type' then
+                exports.qbx_core:Notify(locale('error.not_correct_type'), 'error', 5000)
+            elseif errorCode == 'no_access' then
+                exports.qbx_core:Notify(locale('error.no_access'), 'error', 5000)
+            else
+                exports.qbx_core:Notify(locale('error.cannot_park'), 'error', 5000)
+            end
             return
         end
 
