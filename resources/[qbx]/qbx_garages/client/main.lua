@@ -313,7 +313,7 @@ local function createZones(garageName, garage, accessPoint, accessPointIndex)
                 end
                 coordsZone = lib.zones.sphere({
                     coords = accessPoint.coords,
-                    radius = 1,
+                    radius = 1.5,
                     onEnter = function()
                         if accessPoint.dropPoint and cache.vehicle then return end
                         lib.showTextUI((garage.type == GarageType.DEPOT and locale('info.impound_e')) or (cache.vehicle and locale('info.park_e')) or locale('info.car_e'))
