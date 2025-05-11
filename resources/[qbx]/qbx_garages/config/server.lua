@@ -405,17 +405,17 @@ return {
                 }
             },
         },
-        cartel = {
-            label = 'Cartel',
-            vehicleType = VehicleType.CAR,
-            groups = 'cartel',
-            accessPoints = {
-                {
-                    coords = vec4(1407.18, 1118.04, 114.84, 0),
-                    spawn = vec4(1407.18, 1118.04, 114.84, 88.34),
-                }
-            },
-        },
+        -- cartel = {
+        --     label = 'Cartel',
+        --     vehicleType = VehicleType.CAR,
+        --     groups = 'cartel',
+        --     accessPoints = {
+        --         {
+        --             coords = vec4(1407.18, 1118.04, 114.84, 0),
+        --             spawn = vec4(1407.18, 1118.04, 114.84, 88.34),
+        --         }
+        --     },
+        -- },
 
         -- Impound Lots
         impoundlot = {
