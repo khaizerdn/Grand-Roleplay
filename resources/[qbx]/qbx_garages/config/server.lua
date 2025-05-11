@@ -24,34 +24,55 @@ return {
     ---@field spawn? vector4 where the vehicle will spawn. Defaults to coords
     ---@field dropPoint? vector3 where a vehicle can be stored, Defaults to spawn or coords
 
-    ---@class GarageConfig
-    ---@field label string -- Label for the garage
-    ---@field type? GarageType -- Optional special type of garage. Currently only used to mark DEPOT garages.
-    ---@field vehicleType VehicleType -- Vehicle type
-    ---@field groups? string | string[] | table<string, number> job/gangs that can access the garage
-    ---@field shared? boolean defaults to false. Shared garages give all players with access to the garage access to all vehicles in it. If shared is off, the garage will only give access to player's vehicles which they own.
-    ---@field states? VehicleState | VehicleState[] if set, only vehicles in the given states will be retrievable from the garage. Defaults to GARAGED.
-    ---@field skipGarageCheck? boolean if true, returns vehicles for retrieval regardless of if that vehicle's garage matches this garage's name
-    ---@field canAccess? fun(source: number): boolean checks access as an additional guard clause. Other filter fields still need to pass in addition to this function.
-    ---@field accessPoints AccessPoint[]
+    --- @class GarageConfig
+    --- @field label string
+    --- @field type? GarageType
+    --- @field vehicleType VehicleType
+    --- @field groups? string | string[] | table<string, number>
+    --- @field shared? boolean
+    --- @field states? VehicleState | VehicleState[]
+    --- @field skipGarageCheck? boolean
+    --- @field canAccess? fun(source: number): boolean
+    --- @field accessPoints AccessPoint[]
+    --- @field maxVehicles? integer -- Maximum number of vehicles that can be stored in this garage
 
     ---@type table<string, GarageConfig>
     garages = {
 
-        public_shared_garage = {
-            label = 'Public Shared Garage',
+        la_fuente_blanca_garage_1 = {
+            label = 'La Fuente Blanca Garage',
             vehicleType = VehicleType.CAR,
             shared = true,
-            allowUnowned = true, -- New flag to indicate unowned vehicles can be stored
+            allowUnowned = true,
+            maxVehicles = 1, -- Added vehicle limit
             accessPoints = {
                 {
                     blip = {
-                        name = 'Public Shared Garage',
+                        name = 'La Fuente Blanca Garage',
                         sprite = 357,
                         color = 3,
                     },
-                    coords = vec4(1414.57, 1118.32, 114.84, 273.54), -- Replace with actual coordinates
-                    spawn = vec4(1414.57, 1118.32, 114.84, 273.54), -- Replace with actual spawn coordinates
+                    coords = vec4(1398.47, 1114.67, 113.84, -135.94),
+                    spawn = vec4(1400.69, 1117.27, 113.86, 47.23),
+                }
+            },
+        },
+
+        la_fuente_blanca_garage_2 = {
+            label = 'La Fuente Blanca Garage',
+            vehicleType = VehicleType.CAR,
+            shared = true,
+            allowUnowned = true,
+            maxVehicles = 1, -- Added vehicle limit
+            accessPoints = {
+                {
+                    blip = {
+                        name = 'La Fuente Blanca Garage',
+                        sprite = 357,
+                        color = 3,
+                    },
+                    coords = vec4(1404.68, 1114.63, 113.84, -143.71),
+                    spawn = vec4(1406.82, 1117.07, 113.86, 50.59),
                 }
             },
         },
