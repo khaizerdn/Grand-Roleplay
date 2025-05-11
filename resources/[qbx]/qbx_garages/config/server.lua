@@ -47,11 +47,11 @@ return {
             maxVehicles = 1, -- Added vehicle limit
             accessPoints = {
                 {
-                    blip = {
-                        name = 'La Fuente Blanca Garage',
-                        sprite = 357,
-                        color = 3,
-                    },
+                    -- blip = {
+                    --     name = 'La Fuente Blanca Garage',
+                    --     sprite = 357,
+                    --     color = 3,
+                    -- },
                     coords = vec4(1398.47, 1114.67, 113.84, -135.94),
                     spawn = vec4(1400.69, 1117.27, 113.86, 47.23),
                 }
@@ -66,11 +66,11 @@ return {
             maxVehicles = 1, -- Added vehicle limit
             accessPoints = {
                 {
-                    blip = {
-                        name = 'La Fuente Blanca Garage',
-                        sprite = 357,
-                        color = 3,
-                    },
+                    -- blip = {
+                    --     name = 'La Fuente Blanca Garage',
+                    --     sprite = 357,
+                    --     color = 3,
+                    -- },
                     coords = vec4(1404.68, 1114.63, 113.84, -143.71),
                     spawn = vec4(1406.82, 1117.07, 113.86, 50.59),
                 }
