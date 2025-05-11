@@ -46,7 +46,7 @@ end
 toggleLockBind = lib.addKeybind({
     name = 'togglevehiclelock',
     description = 'Toggle vehicle lock',
-    defaultKey = 'L',
+    defaultKey = 'G',
     onPressed = function()
         toggleLockBind:disable(true)
     
