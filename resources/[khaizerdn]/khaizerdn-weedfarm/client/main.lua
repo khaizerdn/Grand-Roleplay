@@ -87,8 +87,6 @@ local function spawnPlant(plant)
                             isHarvesting = false
                             lib.playAnim(ped, "amb@world_human_gardener_plant@male@exit", "exit", 2.2, -2.2, 2000)
                             Wait(2700)
-                            ClearPedTasksImmediately(ped)
-                            FreezeEntityPosition(ped, false)
                             lib.hideTextUI()
                             return
                         end

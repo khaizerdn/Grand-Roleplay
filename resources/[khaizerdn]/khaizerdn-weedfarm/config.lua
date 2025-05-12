@@ -1,8 +1,8 @@
 Config = {}
 
-Config.HarvestItem = "weed_plant" -- The item players get
-Config.InitialSpawnChance = 1.0 -- Populate the weed farm. 1.0 = 100% chance all plants will be spawn.
-Config.RespawnSeconds = 10 -- The time it takes for a plant to respawn after being harvested.
+Config.HarvestItem = "cannabis_plant" -- The item players get
+Config.InitialSpawnChance = 0.2 -- Populate the weed farm. 1.0 = 100% chance all plants will be spawn.
+Config.RespawnSeconds = 600 -- The time it takes for a plant to respawn after being harvested.
 Config.PlantModel = `prop_weed_01` -- The model of the plant
 
 Config.Zone = {
