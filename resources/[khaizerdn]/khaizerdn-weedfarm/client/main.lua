@@ -38,6 +38,7 @@ local function spawnPlant(plant)
         debug = false,
         inside = function()
             if IsControlJustReleased(0, 38) and not isHarvesting then
+                lib.hideTextUI()
                 isHarvesting = true
 
                 lib.callback('weedfarm:canCarryItem', false, function(canCarry)
@@ -52,12 +53,10 @@ local function spawnPlant(plant)
                     end
 
                     local ped = PlayerPedId()
-                    ClearPedTasksImmediately(ped)
-                    TaskPlayAnim(ped, "amb@world_human_gardener_plant@male@enter", "enter", 8.0, -8.0, 2700, 0, 0, false, false, false)
+                    lib.playAnim(ped, "amb@world_human_gardener_plant@male@enter", "enter", 6.0, -6.0, 2700)
                     Wait(2700)
-                    TaskPlayAnim(ped, "amb@world_human_gardener_plant@male@base", "base", 8.0, -8.0, 5000, 1, 0, false, false, false)
+                    lib.playAnim(ped, "amb@world_human_gardener_plant@male@base", "base", 6.0, -6.0, 5000)
                     FreezeEntityPosition(ped, true)
-                    SetEntityInvincible(ped, true)
 
                     local startTime = GetGameTimer()
                     local duration = 5000 -- Harvesting duration in ms
@@ -68,7 +67,6 @@ local function spawnPlant(plant)
                         if IsControlJustPressed(0, cancelKey) then
                             ClearPedTasksImmediately(ped)
                             FreezeEntityPosition(ped, false)
-                            SetEntityInvincible(ped, false)
                             lib.notify({
                                 title = 'Weed Farm',
                                 description = 'Harvest canceled.',
@@ -80,9 +78,10 @@ local function spawnPlant(plant)
                     end
 
                     -- Completed harvesting
+                    lib.playAnim(ped, "amb@world_human_gardener_plant@male@exit", "exit", 2.2, -2.2, 2000)
+                    Wait(2700)
                     ClearPedTasksImmediately(ped)
                     FreezeEntityPosition(ped, false)
-                    SetEntityInvincible(ped, false)
                     TriggerServerEvent("weedfarm:harvest", plant.id)
                     lib.hideTextUI()
                     isHarvesting = false
