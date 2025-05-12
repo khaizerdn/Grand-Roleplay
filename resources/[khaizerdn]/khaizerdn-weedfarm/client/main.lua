@@ -1,9 +1,19 @@
 local spawnedEntities = {}
 local plantZones = {}
+local isHarvesting = false
+local cancelKey = 73  -- The 'X' key (you can change this to another key if you want)
+
 
 local function loadModel(model)
     RequestModel(model)
     while not HasModelLoaded(model) do Wait(10) end
+end
+
+local function loadAnimDict(dict)
+    RequestAnimDict(dict)
+    while not HasAnimDictLoaded(dict) do
+        Wait(10)
+    end
 end
 
 local function spawnPlant(plant)
@@ -27,24 +37,56 @@ local function spawnPlant(plant)
         radius = 1.5,
         debug = false,
         inside = function()
-            if IsControlJustReleased(0, 38) then
-                if not isHarvesting then
-                    isHarvesting = true
-                    lib.callback('weedfarm:canCarryItem', false, function(canCarry)
-                        if canCarry then
-                            TriggerServerEvent("weedfarm:harvest", plant.id)
-                            lib.hideTextUI()
-                        else
+            if IsControlJustReleased(0, 38) and not isHarvesting then
+                isHarvesting = true
+
+                lib.callback('weedfarm:canCarryItem', false, function(canCarry)
+                    if not canCarry then
+                        lib.notify({
+                            title = 'Weed Farm',
+                            description = 'Your inventory is full!',
+                            type = 'error'
+                        })
+                        isHarvesting = false
+                        return
+                    end
+
+                    local ped = PlayerPedId()
+                    ClearPedTasksImmediately(ped)
+                    TaskPlayAnim(ped, "amb@world_human_gardener_plant@male@enter", "enter", 8.0, -8.0, 2700, 0, 0, false, false, false)
+                    Wait(2700)
+                    TaskPlayAnim(ped, "amb@world_human_gardener_plant@male@base", "base", 8.0, -8.0, 5000, 1, 0, false, false, false)
+                    FreezeEntityPosition(ped, true)
+                    SetEntityInvincible(ped, true)
+
+                    local startTime = GetGameTimer()
+                    local duration = 5000 -- Harvesting duration in ms
+
+                    while GetGameTimer() - startTime < duration do
+                        Wait(0)
+                        -- Cancel harvesting
+                        if IsControlJustPressed(0, cancelKey) then
+                            ClearPedTasksImmediately(ped)
+                            FreezeEntityPosition(ped, false)
+                            SetEntityInvincible(ped, false)
                             lib.notify({
                                 title = 'Weed Farm',
-                                description = 'Your inventory is full!',
+                                description = 'Harvest canceled.',
                                 type = 'error'
                             })
+                            isHarvesting = false
+                            return
                         end
-                        Wait(500)
-                        isHarvesting = false
-                    end)
-                end
+                    end
+
+                    -- Completed harvesting
+                    ClearPedTasksImmediately(ped)
+                    FreezeEntityPosition(ped, false)
+                    SetEntityInvincible(ped, false)
+                    TriggerServerEvent("weedfarm:harvest", plant.id)
+                    lib.hideTextUI()
+                    isHarvesting = false
+                end)
             end
         end,
         onEnter = function()
@@ -60,13 +102,9 @@ local function spawnPlant(plant)
         end,
     })
 
-    -- Store entity and zone
-    spawnedEntities[plant.id] = {
-        entity = obj
-    }
+    spawnedEntities[plant.id] = { entity = obj }
     plantZones[plant.id] = zone
 end
-
 
 local function isPointInPoly(point, poly)
     local x, y = point.x, point.y
