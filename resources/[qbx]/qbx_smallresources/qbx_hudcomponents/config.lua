@@ -7,6 +7,6 @@ return {
         controls = {37},
 
         -- False disables ammo display
-        displayAmmo = true,
+        displayAmmo = false,
     }
 }
