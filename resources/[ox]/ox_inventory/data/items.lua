@@ -704,6 +704,17 @@ return {
     },
 
     -- CRAFTING JOINT
+    ['weed_seed'] = {
+        label = 'Weed Seed',
+        weight = 100,
+        stack = true,
+        close = true,
+        client = {
+            export = 'qbx_weed.placePlant',
+            target = false
+        }
+    },    
+
     ['weed_bud'] = {
         label = 'Bud of Weed',
         weight = 100, -- 0.1kg
