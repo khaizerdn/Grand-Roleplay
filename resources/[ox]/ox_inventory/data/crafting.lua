@@ -2,39 +2,48 @@ return {
 	{
 		name = 'crafting_joint',
 		items = {
-			-- Stage 1: Break bud into bits
+			-- Stage 1: Pick buds from plant
 			{
-				name = 'weed_bits',
+				name = 'cannabis_bud',
 				ingredients = {
-					weed_bud = 1,
-					herb_grinder = 0.01,  -- tool requirement
+					cannabis_plant = 1,
+				},
+				duration = 60000,
+				count = 120,
+			},
+			-- Stage 2: Break bud into bits
+			{
+				name = 'cannabis_ground',
+				ingredients = {
+					cannabis_bud = 1,
+					herb_grinder = 0.001,  -- tool requirement
 				},
 				duration = 2000,
 				count = 2,
 			},
-
-			-- Stage 2: Weigh bits into grams
+			-- Stage 3: Weigh bits into grams
 			{
-				name = 'weed_gram',
+				name = 'cannabis_gram',
 				ingredients = {
-					weed_bits = 2,
-					digital_scale = 0.01,  -- tool requirement
+					cannabis_ground = 3,
+					digital_scale = 0.001,  -- tool requirement
 				},
-				duration = 2000,
+				duration = 3000,
 				count = 1
 			},
-
-			-- Stage 3: Roll joint
+			-- Stage 4: Roll joint
 			{
 				name = 'joint',
 				ingredients = {
-					weed_gram = 1,
+					cannabis_gram = 1,
 					rolling_paper = 1,
-					tray = 0.01  -- tool requirement
+					tray = 0.001  -- tool requirement
 				},
-				duration = 3000,
+				duration = 5000,
 				count = 1,
 			},
+			-- TOTAL TIME = 15 Minutes and 40 seconds
+			-- TOTAL JOINTS in 1 CANNABIS PLANT = 80
 		},
 		points = {
 			vec3(1392.35, 1134.79, 109.75)

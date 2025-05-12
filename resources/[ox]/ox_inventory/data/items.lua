@@ -255,7 +255,7 @@ return {
     ['radiocell'] = {
         label = 'AAA Cells',
         weight = 1000,
-        stack = true,
+        
         allowArmed = true,
         client = {
             event = 'mm_radio:client:recharge'
@@ -675,7 +675,6 @@ return {
     ['vehicle_key'] = {
         label = 'Vehicle Key',
         weight = 0,
-        stack = true,
         consume = 0,
     },
 
@@ -684,68 +683,53 @@ return {
     -- TOOLS
     ['herb_grinder'] = {
         label = 'Herb Grinder',
-        weight = 500, -- 0.5kg
+        weight = 500, -- 500g (0.5kg)
         stack = false,
-        close = true,
     },
-
+    
     ['digital_scale'] = {
         label = 'Digital Scale',
-        weight = 300, -- 0.3kg
+        weight = 300, -- 300g (0.3kg)
         stack = false,
-        close = true,
     },
-
+    
     ['tray'] = {
         label = 'Tray',
-        weight = 700, -- 0.7kg
+        weight = 700, -- 700g (0.7kg)
         stack = false,
-        close = true,
     },
-
+    
     -- CRAFTING JOINT    
-
-    ['weed_plant'] = {
-        label = 'Weed Plant',
-        weight = 700, -- 0.1kg
+    
+    ['cannabis_plant'] = {
+        label = 'Cannabis (Plant)',
+        weight = 700, -- 700g (0.7kg)
         stack = false,
-        close = false,
     },
-
-    ['weed_bud'] = {
-        label = 'Bud of Weed',
-        weight = 100, -- 0.1kg
-        stack = true,
-        close = false,
+    
+    ['cannabis_bud'] = {
+        label = 'Cannabis (Bud)',
+        weight = 1,
     },
-
-    ['weed_bits'] = {
-        label = 'Bits of Weed',
-        weight = 50, -- 0.05kg
-        stack = true,
-        close = false,
+    
+    ['cannabis_ground'] = {
+        label = 'Cannabis (Ground)',
+        weight = 0.40,
     },
-
-    ['weed_gram'] = {
-        label = 'Gram of Weed',
-        weight = 100, -- 0.1kg
-        stack = true,
-        close = false,
+    
+    ['cannabis_gram'] = {
+        label = 'Cannabis (Gram)',
+        weight = 1,
     },
-
+    
     ['rolling_paper'] = {
         label = 'Rolling Paper',
-        weight = 10, -- 0.01kg
-        stack = true,
-        close = false,
+        weight = 0.1,
     },
-
+    
     ['joint'] = {
         label = 'Joint',
-        weight = 120, -- 0.12kg (includes paper + gram)
-        stack = true,
-        close = false,
-    },
+        weight = 1.1,
+    },    
     -- END OF CRAFTING JOINT
-
 }
