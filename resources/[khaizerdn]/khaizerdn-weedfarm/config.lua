@@ -1,11 +1,12 @@
 Config = {}
 
-Config.HarvestItem = "weed" -- The item players get
-Config.SpawnInterval = 5 * 60 * 1000 -- Time between respawns (ms)
+Config.HarvestItem = "weed_plant" -- The item players get
+Config.RandomHarvestChance = 0.5 -- 1.0 make each plants have the 100% chance to be already harvested
+Config.RespawnSeconds = 1
 Config.PlantModel = `prop_weed_01`
 
 Config.Zone = {
-    center = vec3(2220.0, 5576.0, 54.0),
+    center = vec3(2226.98, 4780.75, 40.21),
     points = {
         vec3(2225.77, 4797.8, 39.95),
         vec3(2235.58, 4796.13, 39.82),
@@ -25,5 +26,6 @@ Config.PlantSpawns = {
     vec3(2228.63, 4786.67, 40.4),
     vec3(2227.3, 4782.32, 40.23),
     vec3(2227.3, 4782.32, 40.23),
-    vec3(2225.0, 4774.48, 40.22)
+    vec3(2225.0, 4774.48, 40.22),
+    vec3(2226.54, 4778.65, 40.21)
 }

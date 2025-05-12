@@ -172,11 +172,8 @@ CreateThread(function()
     EndTextCommandSetBlipName(blip)
 end)
 
-
-
-
-
 RegisterCommand("cleanupplants", function()
     removeOrphanedPlants()
+    TriggerServerEvent("weedfarm:debugResetPlants")
 end)
 
