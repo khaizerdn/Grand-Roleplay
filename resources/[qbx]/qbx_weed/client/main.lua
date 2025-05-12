@@ -207,7 +207,7 @@ exports('placePlant', function(type, item)
         },
     })
     then
-        TriggerServerEvent('qbx_weed:server:placePlant', plyCoords, type, currentProperty)
+        TriggerServerEvent('qbx_weed:server:placePlant', plyCoords, item.name, currentProperty)
         TriggerServerEvent('qbx_weed:server:removeSeed', item.slot, item.name)
     else
         exports.qbx_core:Notify(locale('error.process_canceled'), 'error')
@@ -266,21 +266,15 @@ RegisterNetEvent('qbx_core:client:onSetMetaData', function(meta, oldValue, value
 
     if currentProperty then
         despawnOutsidePlants(oldValue)
-
         Wait(1000)
-
         local plants = lib.callback.await('qbx_weed:server:getPropertyPlants', false, currentProperty)
         propertyPlants[currentProperty] = plants
         spawnPropertyPlants()
     else
         despawnPropertyPlants(oldValue)
-
         Wait(1000)
-
         propertyPlants[oldValue] = nil
-
         Wait(2000) -- Wait for server to send outsidePlants
-
         spawnOutsidePlants()
     end
 end)

@@ -134,14 +134,7 @@ RegisterNetEvent('qbx_weed:server:harvestPlant', function(property, seedAmount, 
         return
     end
 
-    local weedBag = exports.ox_inventory:Search(player.PlayerData.source, 'count', sharedConfig.items.emptyBag)
     local harvestAmount = math.random(config.randomHarvestAmount.min, config.randomHarvestAmount.max)
-    if weedBag < harvestAmount then
-        exports.qbx_core:Notify(player.PlayerData.source, locale('error.you_dont_have_enough_resealable_bags'), 'error')
-        return
-    end
-
-    if not exports.ox_inventory:RemoveItem(player.PlayerData.source, sharedConfig.items.emptyBag, harvestAmount) then return end
 
     exports.ox_inventory:AddItem(player.PlayerData.source, plantItemName .. '_seed', seedAmount)
     exports.ox_inventory:AddItem(player.PlayerData.source, plantItemName, harvestAmount)
