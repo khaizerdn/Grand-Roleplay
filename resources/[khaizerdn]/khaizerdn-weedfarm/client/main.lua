@@ -1,5 +1,5 @@
 local spawnedEntities = {}
-local isHarvesting = false
+local plantZones = {}
 
 local function loadModel(model)
     RequestModel(model)
@@ -10,25 +10,45 @@ local function spawnPlant(plant)
     loadModel(Config.PlantModel)
     local coords = plant.coords
 
+    -- Delete old zone if it exists
+    if plantZones[plant.id] then
+        plantZones[plant.id]:remove()
+        plantZones[plant.id] = nil
+    end
+
     -- Create plant object
     local obj = CreateObject(Config.PlantModel, coords.x, coords.y, coords.z - 1.0, false, false, false)
     PlaceObjectOnGroundProperly(obj)
     FreezeEntityPosition(obj, true)
 
     -- Create the interaction zone
-    local zoneId = "weedplant_" .. plant.id
-    lib.zones.sphere({
+    local zone = lib.zones.sphere({
         coords = coords,
         radius = 1.5,
         debug = false,
         inside = function()
-            if IsControlJustReleased(0, 38) then -- E key press
-                TriggerServerEvent("weedfarm:harvest", plant.id)
-                lib.hideTextUI()
+            if IsControlJustReleased(0, 38) then
+                if not isHarvesting then
+                    isHarvesting = true
+                    lib.callback('weedfarm:canCarryItem', false, function(canCarry)
+                        if canCarry then
+                            TriggerServerEvent("weedfarm:harvest", plant.id)
+                            lib.hideTextUI()
+                        else
+                            lib.notify({
+                                title = 'Weed Farm',
+                                description = 'Your inventory is full!',
+                                type = 'error'
+                            })
+                        end
+                        Wait(500)
+                        isHarvesting = false
+                    end)
+                end
             end
         end,
         onEnter = function()
-            if DoesEntityExist(obj) then -- Check if the weed prop exists
+            if DoesEntityExist(obj) then
                 lib.showTextUI('[E] Harvest Weed', {
                     icon = 'leaf',
                     position = 'left-center'
@@ -39,13 +59,14 @@ local function spawnPlant(plant)
             lib.hideTextUI()
         end,
     })
-    
-    -- Store the entity and zone for later removal
+
+    -- Store entity and zone
     spawnedEntities[plant.id] = {
-        entity = obj,
-        zoneId = zoneId
+        entity = obj
     }
+    plantZones[plant.id] = zone
 end
+
 
 local function isPointInPoly(point, poly)
     local x, y = point.x, point.y

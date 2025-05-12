@@ -1,9 +1,9 @@
 Config = {}
 
 Config.HarvestItem = "weed_plant" -- The item players get
-Config.RandomHarvestChance = 0.5 -- 1.0 make each plants have the 100% chance to be already harvested
-Config.RespawnSeconds = 1
-Config.PlantModel = `prop_weed_01`
+Config.InitialSpawnChance = 0.0 -- Populate the weed farm. 1.0 = 100% chance all plants will be spawn.
+Config.RespawnSeconds = 10 -- The time it takes for a plant to respawn after being harvested.
+Config.PlantModel = `prop_weed_01` -- The model of the plant
 
 Config.Zone = {
     center = vec3(2226.98, 4780.75, 40.21),
@@ -25,7 +25,12 @@ Config.PlantSpawns = {
     vec3(2230.0, 4791.18, 40.35),
     vec3(2228.63, 4786.67, 40.4),
     vec3(2227.3, 4782.32, 40.23),
-    vec3(2227.3, 4782.32, 40.23),
     vec3(2225.0, 4774.48, 40.22),
-    vec3(2226.54, 4778.65, 40.21)
+    vec3(2226.54, 4778.65, 40.21),
+    vec3(2232.78, 4792.79, 40.24),
+    vec3(2231.43, 4788.39, 40.34),
+    vec3(2230.23, 4784.3, 40.24),
+    vec3(2229.01, 4780.24, 40.12),
+    vec3(2227.69, 4776.01, 40.2),
+    vec3(2226.48, 4771.89, 40.24)
 }

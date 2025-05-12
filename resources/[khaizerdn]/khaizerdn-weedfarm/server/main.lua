@@ -1,14 +1,18 @@
 local QBCore = exports['qb-core']:GetCoreObject()
 local activePlants = {}
 
+lib.callback.register('weedfarm:canCarryItem', function(source)
+    return exports.ox_inventory:CanCarryItem(source, Config.HarvestItem, 1)
+end)
+
 -- Function to spawn all plants
 local function spawnPlants()
     activePlants = {}
     for i, coords in ipairs(Config.PlantSpawns) do
-        local isHarvested = math.random() < Config.RandomHarvestChance
+        local shouldSpawn = math.random() < Config.InitialSpawnChance
         local respawnTime = nil
 
-        if isHarvested then
+        if not shouldSpawn then
             local randomDelay = math.random(1, Config.RespawnSeconds)
             respawnTime = os.time() + randomDelay
         end
@@ -16,7 +20,7 @@ local function spawnPlants()
         activePlants[i] = {
             id = i,
             coords = coords,
-            harvested = isHarvested,
+            harvested = not shouldSpawn,
             respawnTime = respawnTime
         }
     end
