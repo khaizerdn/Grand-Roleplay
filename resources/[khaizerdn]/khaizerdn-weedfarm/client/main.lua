@@ -24,6 +24,7 @@ local function spawnPlant(plant)
         inside = function()
             if IsControlJustReleased(0, 38) then -- E key press
                 TriggerServerEvent("weedfarm:harvest", plant.id)
+                lib.hideTextUI()
             end
         end,
         onEnter = function()
@@ -46,6 +47,69 @@ local function spawnPlant(plant)
     }
 end
 
+local function isPointInPoly(point, poly)
+    local x, y = point.x, point.y
+    local inside = false
+    for i = 1, #poly do
+        local j = i % #poly + 1
+        local xi, yi = poly[i].x, poly[i].y
+        local xj, yj = poly[j].x, poly[j].y
+
+        if ((yi > y) ~= (yj > y)) and
+           (x < (xj - xi) * (y - yi) / (yj - yi + 0.00001) + xi) then
+            inside = not inside
+        end
+    end
+    return inside
+end
+
+local function tryDeleteEntity(entity)
+    if not DoesEntityExist(entity) then return end
+
+    -- Request control
+    NetworkRequestControlOfEntity(entity)
+    local timeout = GetGameTimer() + 2000
+    while not NetworkHasControlOfEntity(entity) and GetGameTimer() < timeout do
+        Wait(10)
+        NetworkRequestControlOfEntity(entity)
+    end
+
+    -- Force ownership and delete
+    if NetworkHasControlOfEntity(entity) then
+        SetEntityAsMissionEntity(entity, true, true) -- this is the key line
+        DeleteEntity(entity)
+        if DoesEntityExist(entity) then
+            print("[Cleanup] Failed to delete entity even with control.")
+        else
+            print("[Cleanup] Successfully deleted entity.")
+        end
+    else
+        print("[Cleanup] Could not gain control of entity.")
+    end
+end
+
+local function removeOrphanedPlants()
+    local modelHash = Config.PlantModel
+    local zonePoly = Config.Zone.points
+    local handle, obj = FindFirstObject()
+    local success
+    local removedCount = 0
+
+    repeat
+        if DoesEntityExist(obj) and GetEntityModel(obj) == modelHash then
+            local coords = GetEntityCoords(obj)
+            if isPointInPoly(coords, zonePoly) then
+                tryDeleteEntity(obj)
+                removedCount = removedCount + 1
+            end
+        end
+        success, obj = FindNextObject(handle)
+    until not success
+
+    EndFindObject(handle)
+    print("[Cleanup] Total removed: " .. removedCount)
+end
+
 -- Update plants when server tells client to spawn
 RegisterNetEvent("weedfarm:updatePlants", function(plants)
     -- Cleanup existing plants
@@ -55,6 +119,8 @@ RegisterNetEvent("weedfarm:updatePlants", function(plants)
         end
     end
     spawnedEntities = {}
+
+    removeOrphanedPlants()
 
     -- Spawn new plants
     for _, plant in pairs(plants) do
@@ -105,3 +171,12 @@ CreateThread(function()
     AddTextComponentString("Weed Farm")
     EndTextCommandSetBlipName(blip)
 end)
+
+
+
+
+
+RegisterCommand("cleanupplants", function()
+    removeOrphanedPlants()
+end)
+
