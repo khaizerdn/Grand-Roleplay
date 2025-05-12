@@ -184,9 +184,11 @@ local options = {
 
                     if IsControlJustPressed(0, 23) then -- F
                         local model = GetEntityModel(entity)
-                        lib.setClipboard(tostring(model))
-                        exports.qbx_core:Notify('Model ID copied to clipboard: ' .. model, 'success')
-                    end
+                        local archetypeName = GetEntityArchetypeName(entity)
+                        local data = string.format('Model Hash: %s | Archetype: %s', model, archetypeName)
+                        lib.setClipboard(data)
+                        exports.qbx_core:Notify('Copied to clipboard: ' .. data, 'success')
+                    end                    
                 end
             end
         end
