@@ -34,7 +34,7 @@ local function spawnPlant(plant)
     -- Create the interaction zone
     local zone = lib.zones.sphere({
         coords = coords,
-        radius = 1.5,
+        radius = 0.7,
         debug = false,
         inside = function()
             if IsControlJustReleased(0, 38) and not isHarvesting then
@@ -53,26 +53,43 @@ local function spawnPlant(plant)
                     end
 
                     local ped = PlayerPedId()
+
+                    -- Immediately check for cancel key before any animation starts
+                    if IsControlJustPressed(0, cancelKey) then
+                        lib.notify({
+                            title = 'Weed Farm',
+                            description = 'Harvest canceled.',
+                            type = 'error'
+                        })
+                        isHarvesting = false
+                        return
+                    end
+
+                    -- Play the enter animation
                     lib.playAnim(ped, "amb@world_human_gardener_plant@male@enter", "enter", 6.0, -6.0, 2700)
                     Wait(2700)
                     lib.playAnim(ped, "amb@world_human_gardener_plant@male@base", "base", 6.0, -6.0, 5000)
-                    FreezeEntityPosition(ped, true)
 
+                    -- Track time to allow cancel checking continuously
                     local startTime = GetGameTimer()
-                    local duration = 5000 -- Harvesting duration in ms
+                    local duration = 5000 -- Duration of harvesting animation in ms
 
                     while GetGameTimer() - startTime < duration do
-                        Wait(0)
-                        -- Cancel harvesting
+                        Wait(0) -- Ensure continuous checking for cancel key
+
+                        -- Check if cancel key is pressed during the harvest process
                         if IsControlJustPressed(0, cancelKey) then
-                            ClearPedTasksImmediately(ped)
-                            FreezeEntityPosition(ped, false)
                             lib.notify({
                                 title = 'Weed Farm',
                                 description = 'Harvest canceled.',
                                 type = 'error'
                             })
                             isHarvesting = false
+                            lib.playAnim(ped, "amb@world_human_gardener_plant@male@exit", "exit", 2.2, -2.2, 2000)
+                            Wait(2700)
+                            ClearPedTasksImmediately(ped)
+                            FreezeEntityPosition(ped, false)
+                            lib.hideTextUI()
                             return
                         end
                     end
@@ -80,8 +97,6 @@ local function spawnPlant(plant)
                     -- Completed harvesting
                     lib.playAnim(ped, "amb@world_human_gardener_plant@male@exit", "exit", 2.2, -2.2, 2000)
                     Wait(2700)
-                    ClearPedTasksImmediately(ped)
-                    FreezeEntityPosition(ped, false)
                     TriggerServerEvent("weedfarm:harvest", plant.id)
                     lib.hideTextUI()
                     isHarvesting = false
@@ -104,6 +119,7 @@ local function spawnPlant(plant)
     spawnedEntities[plant.id] = { entity = obj }
     plantZones[plant.id] = zone
 end
+
 
 local function isPointInPoly(point, poly)
     local x, y = point.x, point.y
