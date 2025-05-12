@@ -4,7 +4,7 @@ local activePlants = {}
 -- Function to spawn all plants
 local function spawnPlants()
     activePlants = {}
-    for i, coords in ipairs(Config.Zone.points) do
+    for i, coords in ipairs(Config.PlantSpawns) do
         activePlants[i] = {
             id = i,
             coords = coords,

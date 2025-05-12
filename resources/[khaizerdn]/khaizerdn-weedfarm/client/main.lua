@@ -75,6 +75,22 @@ RegisterNetEvent("weedfarm:removePlant", function(id)
     end
 end)
 
+CreateThread(function()
+    lib.zones.poly({
+        points = Config.Zone.points,
+        thickness = 20.0,
+        debug = false,
+        inside = function()
+        end,        
+        onEnter = function()
+            print("Entered weed farm")
+        end,
+        onExit = function()
+            print("Exited weed farm")
+        end
+    })
+end)
+
 -- Request synced plants when player loads in
 CreateThread(function()
     TriggerServerEvent("weedfarm:requestPlants")
