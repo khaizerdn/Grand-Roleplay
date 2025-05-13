@@ -51,25 +51,25 @@ local function setContainerProperties(itemName, properties)
 	}
 end
 
-setContainerProperties('paperbag', {
+setContainerProperties('container_paperbag', {
 	slots = 5,
 	maxWeight = 1000,
 	blacklist = { 'testburger' }
 })
 
-setContainerProperties('ziplockbag_1', {
+setContainerProperties('container_ziplockbag1', {
 	slots = 1,
 	maxWeight = 500,
 	blacklist = { 'testburger' }
 })
 
-setContainerProperties('ziplockbag_2', {
+setContainerProperties('container_ziplockbag2', {
 	slots = 2,
 	maxWeight = 1000,
 	blacklist = { 'testburger' }
 })
 
-setContainerProperties('ziplockbag_3', {
+setContainerProperties('container_ziplockbag3', {
 	slots = 3,
 	maxWeight = 1500,
 	blacklist = { 'testburger' }

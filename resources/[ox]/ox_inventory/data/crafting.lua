@@ -16,7 +16,7 @@ return {
 				name = 'cannabis_ground',
 				ingredients = {
 					cannabis_bud = 1,
-					herb_grinder = 0.001,  -- tool requirement
+					tool_herbgrinder = 0.001,  -- tool requirement
 				},
 				duration = 2000,
 				count = 2,
@@ -26,7 +26,7 @@ return {
 				name = 'cannabis_gram',
 				ingredients = {
 					cannabis_ground = 3,
-					digital_scale = 0.001,  -- tool requirement
+					tool_digitalscale = 0.001,  -- tool requirement
 				},
 				duration = 3000,
 				count = 1
@@ -36,8 +36,8 @@ return {
 				name = 'joint',
 				ingredients = {
 					cannabis_gram = 1,
-					rolling_paper = 1,
-					tray = 0.001  -- tool requirement
+					tool_rollingpaper = 1,
+					tool_tray = 0.001  -- tool requirement
 				},
 				duration = 5000,
 				count = 1,

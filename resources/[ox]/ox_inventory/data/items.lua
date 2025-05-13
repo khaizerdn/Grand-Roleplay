@@ -96,7 +96,7 @@ return {
         label = 'Garbage',
     },
 
-    ['paperbag'] = {
+    ['container_paperbag'] = {
         label = 'Paper Bag',
         weight = 1,
         stack = false,
@@ -104,7 +104,7 @@ return {
         consume = 0
     },
 
-    ['ziplockbag_1'] = {
+    ['container_ziplockbag1'] = {
         label = 'Ziplock Bag (S)',
         description = 'Small',
         weight = 1,
@@ -113,7 +113,7 @@ return {
         consume = 0
     },
 
-    ['ziplockbag_2'] = {
+    ['container_ziplockbag2'] = {
         label = 'Ziplock Bag (M)',
         description = 'Medium',
         weight = 1,
@@ -122,7 +122,7 @@ return {
         consume = 0
     },
 
-    ['ziplockbag_3'] = {
+    ['container_ziplockbag3'] = {
         label = 'Ziplock Bag (L)',
         description = 'Large',
         weight = 1,
@@ -311,126 +311,6 @@ return {
         label = 'Golden Chain',
         weight = 1500,
     },
-
-    -- ['crack_baggy'] = {
-    --     label = 'Crack Baggy',
-    --     weight = 100,
-    -- },
-
-    -- ['cokebaggy'] = {
-    --     label = 'Bag of Coke',
-    --     weight = 100,
-    -- },
-
-    -- ['coke_brick'] = {
-    --     label = 'Coke Brick',
-    --     weight = 2000,
-    -- },
-
-    -- ['coke_small_brick'] = {
-    --     label = 'Coke Package',
-    --     weight = 1000,
-    -- },
-
-    -- ['xtcbaggy'] = {
-    --     label = 'Bag of Ecstasy',
-    --     weight = 100,
-    -- },
-
-    -- ['meth'] = {
-    --     label = 'Methamphetamine',
-    --     weight = 100,
-    -- },
-
-    -- ['oxy'] = {
-    --     label = 'Oxycodone',
-    --     weight = 100,
-    -- },
-
-    -- ['weed_ak47'] = {
-    --     label = 'AK47 2g',
-    --     weight = 200,
-    -- },
-
-    -- ['weed_ak47_seed'] = {
-    --     label = 'AK47 Seed',
-    --     weight = 1,
-    -- },
-
-    -- ['weed_skunk'] = {
-    --     label = 'Skunk 2g',
-    --     weight = 200,
-    -- },
-
-    -- ['weed_skunk_seed'] = {
-    --     label = 'Skunk Seed',
-    --     weight = 1,
-    -- },
-
-    -- ['weed_amnesia'] = {
-    --     label = 'Amnesia 2g',
-    --     weight = 200,
-    -- },
-
-    -- ['weed_amnesia_seed'] = {
-    --     label = 'Amnesia Seed',
-    --     weight = 1,
-    -- },
-
-    -- ['weed_og-kush'] = {
-    --     label = 'OGKush 2g',
-    --     weight = 200,
-    -- },
-
-    -- ['weed_og-kush_seed'] = {
-    --     label = 'OGKush Seed',
-    --     weight = 1,
-    -- },
-
-    -- ['weed_white-widow'] = {
-    --     label = 'OGKush 2g',
-    --     weight = 200,
-    -- },
-
-    -- ['weed_white-widow_seed'] = {
-    --     label = 'White Widow Seed',
-    --     weight = 1,
-    -- },
-
-    -- ['weed_purple-haze'] = {
-    --     label = 'Purple Haze 2g',
-    --     weight = 200,
-    -- },
-
-    -- ['weed_purple-haze_seed'] = {
-    --     label = 'Purple Haze Seed',
-    --     weight = 1,
-    -- },
-
-    -- ['weed_brick'] = {
-    --     label = 'Weed Brick',
-    --     weight = 2000,
-    -- },
-
-    -- ['weed_nutrition'] = {
-    --     label = 'Plant Fertilizer',
-    --     weight = 2000,
-    -- },
-
-    -- ['joint'] = {
-    --     label = 'Joint',
-    --     weight = 200,
-    -- },
-
-    -- ['rolling_paper'] = {
-    --     label = 'Rolling Paper',
-    --     weight = 0,
-    -- },
-
-    -- ['empty_weed_bag'] = {
-    --     label = 'Empty Weed Bag',
-    --     weight = 0,
-    -- },
 
     ['firstaid'] = {
         label = 'First Aid',
@@ -681,19 +561,19 @@ return {
     -- ALL ABOUT CRAFTING
 
     -- TOOLS
-    ['herb_grinder'] = {
+    ['tool_herbgrinder'] = {
         label = 'Herb Grinder',
         weight = 500, -- 500g (0.5kg)
         stack = false,
     },
     
-    ['digital_scale'] = {
+    ['tool_digitalscale'] = {
         label = 'Digital Scale',
         weight = 300, -- 300g (0.3kg)
         stack = false,
     },
     
-    ['tray'] = {
+    ['tool_tray'] = {
         label = 'Tray',
         weight = 700, -- 700g (0.7kg)
         stack = false,
@@ -722,7 +602,7 @@ return {
         weight = 1,
     },
     
-    ['rolling_paper'] = {
+    ['tool_rollingpaper'] = {
         label = 'Rolling Paper',
         weight = 0.1,
     },
