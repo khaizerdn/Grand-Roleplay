@@ -4,8 +4,8 @@ return {
 		blip = {
 			id = 59, colour = 69, scale = 0.8
 		}, inventory = {
-			{ name = 'burger', price = 10 },
-			{ name = 'water', price = 10 }
+			{ name = 'burger', price = 4 },
+			{ name = 'water', price = 1 }
 		}, locations = {
 			vec3(25.69, -1345.51, 29.5),
 			vec3(-3040.93, 585.16, 7.91),
@@ -34,8 +34,8 @@ return {
 		blip = {
 			id = 59, colour = 69, scale = 0.8
 		}, inventory = {
-			{ name = 'burger', price = 10 },
-			{ name = 'water', price = 10 }
+			{ name = 'burger', price = 4 },
+			{ name = 'water', price = 1 }
 		}, locations = {
 			vec3(-47.3, -1756.75, 29.42),
 			vec3(-707.32, -914.77, 19.22),
@@ -57,8 +57,8 @@ return {
 		blip = {
 			id = 93, colour = 69, scale = 0.8
 		}, inventory = {
-			{ name = 'water', price = 10 },
-			{ name = 'burger', price = 15 },
+			{ name = 'water', price = 1 },
+			{ name = 'burger', price = 4 },
 		}, locations = {
 			vec3(1135.808, -982.281, 46.415),
 			vec3(-1222.915, -906.983, 12.326),
@@ -82,8 +82,8 @@ return {
 		blip = {
 			id = 93, colour = 69, scale = 0.8
 		}, inventory = {
-			{ name = 'water', price = 10 },
-			{ name = 'burger', price = 15 },
+			{ name = 'water', price = 1 },
+			{ name = 'burger', price = 4 },
 		}, locations = {
 			vec3(-1393.18, -606.39, 30.32)
 		}, targets = {
@@ -96,7 +96,6 @@ return {
 		blip = {
 			id = 402, colour = 69, scale = 0.8
 		}, inventory = {
-			{ name = 'lockpick', price = 25 },
 			{ name = 'tool_tray', price = 5 },
 			{ name = 'tool_digitalscale', price = 30 },
 			{ name = 'tool_herbgrinder', price = 20 },
@@ -118,10 +117,10 @@ return {
 		blip = {
 			id = 110, colour = 69, scale = 0.8
 		}, inventory = {
-			{ name = 'ammo-9', price = 5, },
-			{ name = 'WEAPON_KNIFE', price = 200 },
-			{ name = 'WEAPON_BAT', price = 100 },
-			{ name = 'WEAPON_PISTOL', price = 1000, metadata = { registered = true }, license = 'weapon' }
+			{ name = 'ammo-9', price = 3, },
+			{ name = 'WEAPON_KNIFE', price = 100 },
+			{ name = 'WEAPON_BAT', price = 80 },
+			{ name = 'WEAPON_PISTOL', price = 600, metadata = { registered = true }, license = 'weapon' }
 		}, locations = {
 			vec3(-662.180, -934.961, 21.829),
 			vec3(810.25, -2157.60, 29.62),
@@ -146,7 +145,7 @@ return {
 	},
 
 	PoliceArmoury = {
-		name = 'armoury',
+		name = 'Armoury',
 		groups = shared.police,
 		blip = {
 			id = 110, colour = 84, scale = 0.8
@@ -155,9 +154,9 @@ return {
 			{ name = 'ammo-rifle', price = 5, },
 			{ name = 'WEAPON_FLASHLIGHT', price = 200 },
 			{ name = 'WEAPON_NIGHTSTICK', price = 100 },
-			{ name = 'WEAPON_PISTOL', price = 500, metadata = { registered = true, serial = 'POL' }, license = 'weapon' },
+			{ name = 'WEAPON_PISTOL', price = 600, metadata = { registered = true, serial = 'POL' }, license = 'weapon' },
 			{ name = 'WEAPON_CARBINERIFLE', price = 1000, metadata = { registered = true, serial = 'POL' }, license = 'weapon', grade = 3 },
-			{ name = 'WEAPON_STUNGUN', price = 500, metadata = { registered = true, serial = 'POL'} }
+			{ name = 'WEAPON_STUNGUN', price = 200, metadata = { registered = true, serial = 'POL'} }
 		}, locations = {
 			vec3(-546.60, -118.52, 36.93)
 		}, targets = {
@@ -166,7 +165,7 @@ return {
 	},
 
 	Medicine = {
-		name = 'pharmacy',
+		name = 'Pharmacy',
 		-- groups = {
 		-- 	['ambulance'] = 0
 		-- },
@@ -174,7 +173,7 @@ return {
 			id = 403, colour = 69, scale = 0.8
 		}, inventory = {
 			-- { name = 'firstaid', price = 26 },
-			{ name = 'bandage', price = 5 }
+			{ name = 'bandage', price = 7 }
 		}, locations = {
 			vec3(-437.92, -324.83, 34.91)
 		}, targets = {
@@ -182,16 +181,18 @@ return {
 		}
 	},
 
-	BlackMarketArms = {
+	BlackMarketArms = { -- Use ff_storerobbery for ped spawning
 		name = 'Black Market',
 		inventory = {
-			{ name = 'WEAPON_DAGGER', price = 5000, metadata = { registered = false	}, currency = 'black_money' },
-			{ name = 'WEAPON_CERAMICPISTOL', price = 50000, metadata = { registered = false }, currency = 'black_money' },
-			{ name = 'at_suppressor_light', price = 50000, currency = 'black_money' },
-			{ name = 'ammo-rifle', price = 1000, currency = 'black_money' },
-			{ name = 'ammo-rifle2', price = 1000, currency = 'black_money' }
+			{ name = 'WEAPON_KNIFE', price = 50 },
+			{ name = 'WEAPON_BAT', price = 40 },
+			{ name = 'WEAPON_PISTOL', price = 300, metadata = { registered = false	}},
+			{ name = 'WEAPON_ASSAULTRIFLE', price = 500, metadata = { registered = false }},
+			{ name = 'ammo-9', price = 1},
+			{ name = 'ammo-rifle2', price = 2},
+			{ name = 'bandage', price = 4 }
 		}, locations = {
-			vec3(309.42, -913.78, 56.46)
+			vec3(92.71, 3753.67, 40.77)
 		}, targets = {
 			{ loc = vec3(309.42, -913.78, 55.46), length = 0.5, width = 3.0, heading = 90.23, minZ = 30.5, maxZ = 32.0, distance = 6, ped = `g_m_y_armgoon_02`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' }
 		}
@@ -200,8 +201,8 @@ return {
 	VendingMachineDrinks = {
 		name = 'Vending Machine',
 		inventory = {
-			{ name = 'water', price = 10 },
-			{ name = 'cola', price = 10 },
+			{ name = 'water', price = 1 },
+			{ name = 'cola', price = 2 },
 		},
 		model = {
 			`prop_vend_soda_02`, `prop_vend_fridge01`, `prop_vend_water_01`, `prop_vend_soda_01`
