@@ -67,7 +67,7 @@ CreateThread(function()
                                                 icon = "fa-solid fa-elevator",
                                                 iconColor = "white",
                                                 arrow = false,
-                                                event = 'estrp-elevators:elevator',
+                                                event = 'khaizerdn_teleport:elevator',
                                                 args = otherLoc.coords
                                             }
                                         end
@@ -77,11 +77,11 @@ CreateThread(function()
                                 -- Show the context menu if options exist
                                 if #options > 0 then
                                     lib.registerContext({
-                                        id = 'estrp-elevators_' .. currentElevator.name,
+                                        id = 'khaizerdn_teleport_' .. currentElevator.name,
                                         title = currentElevator.name,
                                         options = options
                                     })
-                                    lib.showContext('estrp-elevators_' .. currentElevator.name)
+                                    lib.showContext('khaizerdn_teleport_' .. currentElevator.name)
                                 end
                             end
                         end
@@ -93,7 +93,7 @@ CreateThread(function()
 end)
 
 -- Elevator teleport handler
-RegisterNetEvent('estrp-elevators:elevator', function(coords)
+RegisterNetEvent('khaizerdn_teleport:elevator', function(coords)
     local ped = PlayerPedId()
     DoScreenFadeOut(500)
     while not IsScreenFadedOut() do Wait(10) end
