@@ -234,7 +234,7 @@ CreateThread(function()
     TriggerServerEvent("weedfarm:requestPlants")
 
     -- Create blip for weed farm location
-    local blip = AddBlipForCoord(Config.Zone.center)
+    local blip = AddBlipForCoord(Config.Zone.blip)
     SetBlipSprite(blip, 496)
     SetBlipColour(blip, 2)
     SetBlipScale(blip, 0.8)
