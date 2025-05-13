@@ -77,217 +77,22 @@ return {
             },
         },
 
-        -- Public Garages
-        motelgarage = {
-            label = 'Motel Parking',
+        burtongarage = {
+            label = 'Burton Public Garage',
             vehicleType = VehicleType.CAR,
             accessPoints = {
                 {
                     blip = {
-                        name = 'Public Parking',
+                        name = 'Burton Public Garage',
                         sprite = 357,
                         color = 3,
                     },
-                    coords = vec4(275.58, -344.74, 45.17, 70.0),
-                    spawn = vec4(271.26, -342.32, 44.7, 159.97),
+                    coords = vec4(-310.8, -58.39, 54.42, 67.74),
+                    spawn = vec4(-317.96, -57.17, 53.82, 161.75),
                 }
             },
         },
-        sapcounsel = {
-            label = 'San Andreas Parking',
-            vehicleType = VehicleType.CAR,
-            accessPoints = {
-                {
-                    blip = {
-                        name = 'Public Parking',
-                        sprite = 357,
-                        color = 3,
-                    },
-                    coords = vec4(-330.67, -781.12, 33.96, 40.46),
-                    spawn = vec4(-337.11, -775.34, 33.56, 132.09),
-                }
-            },
-        },
-        spanishave = {
-            label = 'Spanish Ave Parking',
-            vehicleType = VehicleType.CAR,
-            accessPoints = {
-                {
-                    blip = {
-                        name = 'Public Parking',
-                        sprite = 357,
-                        color = 3,
-                    },
-                    coords = vec4(-1160.46, -741.04, 19.95, 41.26),
-                    spawn = vec4(-1165.38, -747.65, 18.94, 40.45),
-                }
-            },
-        },
-        caears24 = {
-            label = 'Caears 24 Parking',
-            vehicleType = VehicleType.CAR,
-            accessPoints = {
-                {
-                    blip = {
-                        name = 'Public Parking',
-                        sprite = 357,
-                        color = 3,
-                    },
-                    coords = vec4(68.08, 13.15, 69.21, 160.44),
-                    spawn = vec4(72.61, 11.72, 68.47, 157.59),
-                },
-            },
-        },
-        littleseoul = {
-            label = 'Little Seoul Parking',
-            vehicleType = VehicleType.CAR,
-            accessPoints = {
-                {
-                    blip = {
-                        name = 'Public Parking',
-                        sprite = 357,
-                        color = 3,
-                    },
-                    coords = vec4(-463.51, -808.2, 30.54, 0.0),
-                    spawn = vec4(-472.24, -813.61, 30.3, 179.88),
-                }
-            },
-        },
-        lagunapi = {
-            label = 'Laguna Parking',
-            vehicleType = VehicleType.CAR,
-            accessPoints = {
-                {
-                    blip = {
-                        name = 'Public Parking',
-                        sprite = 357,
-                        color = 3,
-                    },
-                    coords = vec4(363.85, 297.97, 103.5, 341.39),
-                    spawn = vec4(367.41, 297.02, 103.2, 341.08),
-                }
-            },
-        },
-        airportp = {
-            label = 'Airport Parking',
-            vehicleType = VehicleType.CAR,
-            accessPoints = {
-                {
-                    blip = {
-                        name = 'Public Parking',
-                        sprite = 357,
-                        color = 3,
-                    },
-                    coords = vec4(-796.07, -2023.26, 9.17, 55.18),
-                    spawn = vec4(-793.35, -2020.62, 8.51, 58.42),
-                }
-            },
-        },
-        beachp = {
-            label = 'Beach Parking',
-            vehicleType = VehicleType.CAR,
-            accessPoints = {
-                {
-                    blip = {
-                        name = 'Public Parking',
-                        sprite = 357,
-                        color = 3,
-                    },
-                    coords = vec4(-1184.21, -1509.65, 4.65, 303.72),
-                    spawn = vec4(-1184.4, -1501.88, 4.39, 214.7),
-                }
-            },
-        },
-        themotorhotel = {
-            label = 'The Motor Hotel Parking',
-            vehicleType = VehicleType.CAR,
-            accessPoints = {
-                {
-                    blip = {
-                        name = 'Public Parking',
-                        sprite = 357,
-                        color = 3,
-                    },
-                    coords = vec4(1137.77, 2663.54, 37.9, 0.0),
-                    spawn = vec4(1137.56, 2674.19, 38.17, 359.95),
-                }
-            },
-        },
-        liqourparking = {
-            label = 'Liqour Parking',
-            vehicleType = VehicleType.CAR,
-            accessPoints = {
-                {
-                    blip = {
-                        name = 'Public Parking',
-                        sprite = 357,
-                        color = 3,
-                    },
-                    coords = vec4(960.68, 3609.32, 32.98, 268.97),
-                    spawn = vec4(960.48, 3605.71, 32.98, 87.09),
-                }
-            },
-        },
-        shoreparking = {
-            label = 'Shore Parking',
-            vehicleType = VehicleType.CAR,
-            accessPoints = {
-                {
-                    blip = {
-                        name = 'Public Parking',
-                        sprite = 357,
-                        color = 3,
-                    },
-                    coords = vec4(1726.9, 3710.38, 34.26, 22.54),
-                    spawn = vec4(1728.65, 3714.85, 34.18, 21.26),
-                }
-            },
-        },
-        haanparking = {
-            label = 'Bell Farms Parking',
-            vehicleType = VehicleType.CAR,
-            accessPoints = {
-                {
-                    blip = {
-                        name = 'Public Parking',
-                        sprite = 357,
-                        color = 3,
-                    },
-                    coords = vec4(78.34, 6418.74, 31.28, 0),
-                    spawn = vec4(70.71, 6425.16, 30.92, 68.5),
-                }
-            },
-        },
-        dumbogarage = {
-            label = 'Dumbo Private Parking',
-            vehicleType = VehicleType.CAR,
-            accessPoints = {
-                {
-                    blip = {
-                        name = 'Public Parking',
-                        sprite = 357,
-                        color = 3,
-                    },
-                    coords = vec4(157.26, -3240.00, 7.00, 0),
-                    spawn = vec4(165.32, -3236.10, 5.93, 268.5),
-                }
-            },
-        },
-        pillboxgarage = {
-            label = 'Pillbox Garage Parking',
-            vehicleType = VehicleType.CAR,
-            accessPoints = {
-                {
-                    blip = {
-                        name = 'Public Parking',
-                        sprite = 357,
-                        color = 3,
-                    },
-                    coords = vec4(218.66, -804.08, 30.75, 65.69),
-                    spawn = vec4(229.33, -805.01, 30.54, 156.79),
-                }
-            },
-        },
+
         intairport = {
             label = 'Airport Hangar',
             vehicleType = VehicleType.AIR,
@@ -392,52 +197,6 @@ return {
             },
         },
 
-        -- Gang Garages
-        ballas = {
-            label = 'Ballas',
-            vehicleType = VehicleType.CAR,
-            groups = 'ballas',
-            accessPoints = {
-                {
-                    coords = vec4(98.50, -1954.49, 20.84, 0),
-                    spawn = vec4(98.50, -1954.49, 20.75, 335.73),
-                }
-            },
-        },
-        families = {
-            label = 'La Familia',
-            vehicleType = VehicleType.CAR,
-            groups = 'families',
-            accessPoints = {
-                {
-                    coords = vec4(-811.65, 187.49, 72.48, 0),
-                    spawn = vec4(-818.43, 184.97, 72.28, 107.85),
-                }
-            },
-        },
-        lostmc = {
-            label = 'Lost MC',
-            vehicleType = VehicleType.CAR,
-            groups = 'lostmc',
-            accessPoints = {
-                {
-                    coords = vec4(957.25, -129.63, 74.39, 0),
-                    spawn = vec4(957.25, -129.63, 74.39, 199.21),
-                }
-            },
-        },
-        -- cartel = {
-        --     label = 'Cartel',
-        --     vehicleType = VehicleType.CAR,
-        --     groups = 'cartel',
-        --     accessPoints = {
-        --         {
-        --             coords = vec4(1407.18, 1118.04, 114.84, 0),
-        --             spawn = vec4(1407.18, 1118.04, 114.84, 88.34),
-        --         }
-        --     },
-        -- },
-
         -- Impound Lots
         impoundlot = {
             label = 'Impound Lot',
@@ -452,8 +211,8 @@ return {
                         sprite = 68,
                         color = 3,
                     },
-                    coords = vec4(400.45, -1630.87, 29.29, 228.88),
-                    spawn = vec4(407.2, -1645.58, 29.31, 228.28),
+                    coords = vec4(-354.94, -75.68, 45.66, 168.55),
+                    spawn = vec4(-360.63, -75.85, 45.06, 71.6),
                 }
             },
         },

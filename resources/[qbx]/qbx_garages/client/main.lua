@@ -343,12 +343,12 @@ local function createZones(garageName, garage, accessPoint, accessPointIndex)
                     coordsZone:remove()
                 end
             end,
-            inside = function()
-                if accessPoint.dropPoint then
-                    config.drawDropOffMarker(accessPoint.dropPoint)
-                end
-                config.drawGarageMarker(accessPoint.coords.xyz)
-            end,
+            -- inside = function()
+            --     if accessPoint.dropPoint then
+            --         config.drawDropOffMarker(accessPoint.dropPoint)
+            --     end
+            --     config.drawGarageMarker(accessPoint.coords.xyz)
+            -- end,
             debug = config.debugPoly,
         })
     end)
