@@ -98,6 +98,7 @@ return {
 		}, inventory = {
 			{ name = 'tool_tray', price = 5 },
 			{ name = 'tool_digitalscale', price = 30 },
+			{ name = 'tool_laptop', price = 1000 },
 			{ name = 'tool_herbgrinder', price = 20 },
 			{ name = 'tool_rollingpaper', price = 1 },
 			{ name = 'container_ziplockbag1', price = 2 },
@@ -190,11 +191,12 @@ return {
 			{ name = 'WEAPON_ASSAULTRIFLE', price = 500, metadata = { registered = false }},
 			{ name = 'ammo-9', price = 1},
 			{ name = 'ammo-rifle2', price = 2},
-			{ name = 'bandage', price = 4 }
+			{ name = 'bandage', price = 4 },
+			{ name = 'tool_laptop', price = 500 }
 		}, locations = {
-			vec3(92.71, 3753.67, 40.77)
+			vec3(1402.84, 1139.97, 109.75)
 		}, targets = {
-			{ loc = vec3(309.42, -913.78, 55.46), length = 0.5, width = 3.0, heading = 90.23, minZ = 30.5, maxZ = 32.0, distance = 6, ped = `g_m_y_armgoon_02`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' }
+			{ loc = vec3(1402.84, 1139.97, 109.75), length = 0.5, width = 3.0, heading = 90.23, minZ = 30.5, maxZ = 32.0, distance = 6, ped = `g_m_y_armgoon_02`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' }
 		}
 	},
 
