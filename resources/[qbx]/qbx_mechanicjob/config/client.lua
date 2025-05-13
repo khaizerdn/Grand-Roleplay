@@ -1,6 +1,6 @@
 return {
     useTarget = false,
-    debugPoly = true,
+    debugPoly = false,
     targets = {},
     partLabels = {
         engine = locale('labels.engine'),
