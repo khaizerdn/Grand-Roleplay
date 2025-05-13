@@ -547,9 +547,10 @@ return {
         weight = 200,
     },
 
-    ['laptop'] = {
+    ['tool_laptop'] = {
         label = 'Laptop',
-        weight = 1000,
+        weight = 2000,
+        stack = false,
     },
 
     ['vehicle_key'] = {
