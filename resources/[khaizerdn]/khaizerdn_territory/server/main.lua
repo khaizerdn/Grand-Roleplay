@@ -1,19 +1,14 @@
 local Config = require 'config'
 
-local blipData = nil
+local blipName = nil
 
 RegisterNetEvent("hack:requestBlipSync", function()
-    TriggerClientEvent("hack:syncBlip", source, blipData)
+    TriggerClientEvent("hack:syncBlip", source, blipName)
 end)
 
-RegisterNetEvent("hack:setBlipData", function(data)
-    if not data or not data.name or not data.sprite or not data.color then return end
+RegisterNetEvent("hack:setBlipName", function(name)
+    if type(name) ~= "string" or name == "" then return end
 
-    blipData = {
-        name = tostring(data.name),
-        sprite = tonumber(data.sprite),
-        color = tonumber(data.color)
-    }
-
-    TriggerClientEvent("hack:syncBlip", -1, blipData)
+    blipName = name
+    TriggerClientEvent("hack:syncBlip", -1, blipName)
 end)

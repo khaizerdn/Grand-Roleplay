@@ -4,26 +4,26 @@ local blip
 local isHacked = false
 
 -- Draw or update blip
-local function updateBlip(blipData)
+local function updateBlip(name)
     if blip then RemoveBlip(blip) end
 
     blip = AddBlipForCoord(Config.Blip.coords)
-    SetBlipSprite(blip, blipData.sprite)
-    SetBlipColour(blip, blipData.color)
+    SetBlipSprite(blip, Config.Blip.default.sprite)
+    SetBlipColour(blip, Config.Blip.default.color)
     SetBlipScale(blip, 0.9)
     SetBlipAsShortRange(blip, true)
     BeginTextCommandSetBlipName("STRING")
-    AddTextComponentString(blipData.name)
+    AddTextComponentString(name or Config.Blip.default.name)
     EndTextCommandSetBlipName(blip)
 end
 
--- Sync blip from server
-RegisterNetEvent('hack:syncBlip', function(data)
-    isHacked = data ~= nil
+-- Sync blip name from server
+RegisterNetEvent('hack:syncBlip', function(name)
+    isHacked = name ~= nil
     if isHacked then
-        updateBlip(data)
+        updateBlip(name)
     else
-        updateBlip(Config.Blip.default)
+        updateBlip(Config.Blip.default.name)
     end
 end)
 
@@ -47,21 +47,15 @@ CreateThread(function()
                 ClearPedTasks(ped)
 
                 if success then
-                    local input = lib.inputDialog("Set Blip Style", {
-                        {type = "input", label = "Blip Name", default = "Server Uplink"},
-                        {type = "number", label = "Sprite ID", default = 521},
-                        {type = "number", label = "Color ID", default = 2}
+                    local input = lib.inputDialog("Set Blip Name", {
+                        {type = "input", label = "Blip Name", default = "Server Uplink"}
                     })
 
-                    if input then
-                        TriggerServerEvent("hack:setBlipData", {
-                            name = input[1],
-                            sprite = tonumber(input[2]) or 1,
-                            color = tonumber(input[3]) or 0
-                        })
-                        lib.notify({ title = "Hack", description = "Access Granted. Blip Updated.", type = "success" })
+                    if input and input[1] and input[1] ~= "" then
+                        TriggerServerEvent("hack:setBlipName", input[1])
+                        lib.notify({ title = "Hack", description = "Blip name updated!", type = "success" })
                     else
-                        lib.notify({ title = "Hack", description = "Canceled blip configuration.", type = "inform" })
+                        lib.notify({ title = "Hack", description = "Invalid or canceled blip name.", type = "inform" })
                     end
                 else
                     lib.notify({ title = "Hack", description = "Hack failed!", type = "error" })
