@@ -3,10 +3,10 @@ local Config = require 'config'
 local blips = {}
 local zones = {}
 
--- Draw or update blip by id
-local function updateBlip(id, name)
-    if blips[id] then RemoveBlip(blips[id]) end
-    local territory = Config.Territories[id]
+-- Draw or update blip by group name
+local function updateBlip(group_name, name)
+    if blips[group_name] then RemoveBlip(blips[group_name]) end
+    local territory = Config.Territories[group_name]
     if not territory then return end
 
     local label = name or territory.blip.default.name
@@ -19,12 +19,12 @@ local function updateBlip(id, name)
     AddTextComponentString(label)
     EndTextCommandSetBlipName(blip)
 
-    blips[id] = blip
+    blips[group_name] = blip
 end
 
 RegisterNetEvent('hack:syncBlips', function(data)
-    for id, name in pairs(data) do
-        updateBlip(id, name)
+    for group_name, name in pairs(data) do
+        updateBlip(group_name, name)
     end
 end)
 
@@ -40,9 +40,9 @@ RegisterNetEvent("hack:cooldownBlocked", function(seconds)
     })
 end)
 
-RegisterNetEvent("hack:cooldownPassed", function(id)
-    print("Received hack:cooldownPassed for id: " .. id)
-    print("Starting minigame for terminal: " .. id)
+RegisterNetEvent("hack:cooldownPassed", function(group_name)
+    print("Received hack:cooldownPassed for group_name: " .. group_name)
+    print("Starting minigame for terminal: " .. group_name)
     local ped = PlayerPedId()
     local animDict = 'anim@heists@prison_heiststation@cop_reactions'
     local anim = 'cop_b_idle'
@@ -65,8 +65,8 @@ RegisterNetEvent("hack:cooldownPassed", function(id)
         })
 
         if input and input[1] and input[1] ~= "" then
-            print("Sending hack:setBlipName for " .. id .. " with name: " .. input[1])
-            TriggerServerEvent("hack:setBlipName", id, input[1])
+            print("Sending hack:setBlipName for " .. group_name .. " with name: " .. input[1])
+            TriggerServerEvent("hack:setBlipName", group_name, input[1])
         else
             print("Blip name input canceled or invalid")
             lib.notify({ title = "Hack", description = "Invalid or canceled blip name.", type = "inform" })
@@ -79,26 +79,26 @@ end)
 
 -- Create zones for each territory
 CreateThread(function()
-    for id, territory in pairs(Config.Territories) do
-        zones[id] = lib.zones.sphere({
+    for group_name, territory in pairs(Config.Territories) do
+        zones[group_name] = lib.zones.sphere({
             coords = territory.hackLocation,
             radius = Config.HackRadius,
             debug = false,
             inside = function()
                 if IsControlJustReleased(0, 38) then
-                    print("E key pressed in zone for " .. id)
-                    TriggerServerEvent("hack:checkCooldown", id)
+                    print("E key pressed in zone for " .. group_name)
+                    TriggerServerEvent("hack:checkCooldown", group_name)
                 end
             end,
             onEnter = function()
-                print("Entered zone for " .. id)
+                print("Entered zone for " .. group_name)
                 lib.showTextUI('[E] Hack Terminal', {
                     icon = 'laptop',
                     position = 'left-center'
                 })
             end,
             onExit = function()
-                print("Exited zone for " .. id)
+                print("Exited zone for " .. group_name)
                 lib.hideTextUI()
             end
         })
