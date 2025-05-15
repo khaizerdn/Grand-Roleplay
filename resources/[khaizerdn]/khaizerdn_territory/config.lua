@@ -8,7 +8,7 @@ Config.HackCooldown = 600
 -- Initial/default blip state
 Config.Territories = {
     lafuenteblanca = {
-        cooldownSeconds = 10,
+        cooldownSeconds = 14400,
         hackLocation = vec3(1393.25, 1160.15, 114.33),
         blip = {
             coords = vec3(1382.03, 1147.64, 114.33),

@@ -72,7 +72,7 @@ RegisterNetEvent('hack:setBlipName', function(group_name, blip_name)
     })
 
     local embed = {{
-        title = '🔓 Territory Captured',
+        title = 'Territory Captured',
         description = ('**ID:** %s\n**Name:** %s\n**CID:** %s\n**License:** %s'):format(group_name, blip_name, Player.PlayerData.citizenid, Player.PlayerData.license),
         color = 16753920,
         footer = { text = os.date('Logged %Y-%m-%d %H:%M:%S') }

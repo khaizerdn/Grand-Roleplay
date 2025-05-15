@@ -70,13 +70,13 @@ CreateThread(function()
                                     if input and input[1] and input[1] ~= "" then
                                         TriggerServerEvent('hack:setBlipName', group_name, input[1])
                                         lib.notify({
-                                            title = 'Hack Successful!',
+                                            title = 'Territory Captured',
                                             description = 'Territory has been captured!',
                                             type = 'success'
                                         })
                                     else
                                         lib.notify({
-                                            title = 'Hack',
+                                            title = 'Invalid',
                                             description = 'Invalid or canceled blip name.',
                                             type = 'inform'
                                         })
@@ -84,16 +84,16 @@ CreateThread(function()
                                 else
                                     ClearPedTasks(ped) -- Stop animation on failure
                                     lib.notify({
-                                        title = 'Hack',
-                                        description = 'Hack failed!',
+                                        title = 'Hack Failed',
+                                        description = 'You can do it. Try again!',
                                         type = 'error'
                                     })
                                 end
                             else
                                 ClearPedTasks(ped) -- Stop animation on cancel
                                 lib.notify({
-                                    title = 'Hack',
-                                    description = 'Hack canceled.',
+                                    title = 'Hack Canceled',
+                                    description = 'You cancel hacking.',
                                     type = 'error'
                                 })
                             end
@@ -102,8 +102,8 @@ CreateThread(function()
                             local mins = math.floor((result.remaining % 3600) / 60)
                             local secs = result.remaining % 60
                             lib.notify({
-                                title = 'Cooldown',
-                                description = ('This terminal is on cooldown.\nTime left: %02dh %02dm %02ds'):format(hours, mins, secs),
+                                title = 'In Cooldown',
+                                description = ('Time left: %02dh %02dm %02ds'):format(hours, mins, secs),
                                 type = 'error'
                             })
                         end
@@ -111,7 +111,7 @@ CreateThread(function()
                 end
             end,
             onEnter = function()
-                lib.showTextUI('[E] Hack Terminal', {
+                lib.showTextUI('Press [E] to hack terminal.', {
                     icon = 'laptop',
                     position = 'left-center'
                 })
