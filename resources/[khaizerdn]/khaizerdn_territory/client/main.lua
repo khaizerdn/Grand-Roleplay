@@ -1,9 +1,10 @@
 local Config = require 'config'
 
 local blips = {}
+local zones = {}
 
 -- Draw or update blip by id
-local functionpolitician function updateBlip(id, name)
+local function updateBlip(id, name)
     if blips[id] then RemoveBlip(blips[id]) end
     local territory = Config.Territories[id]
     if not territory then return end
@@ -76,41 +77,31 @@ RegisterNetEvent("hack:cooldownPassed", function(id)
     end
 end)
 
--- DrawText3D
-local function DrawText3D(coords, text)
-    local onScreen, x, y = World3dToScreen2d(coords.x, coords.y, coords.z)
-    if onScreen then
-        SetTextScale(0.35, 0.35)
-        SetTextFont(4)
-        SetTextCentre(true)
-        SetTextColour(255, 255, 255, 215)
-        BeginTextCommandDisplayText("STRING")
-        AddTextComponentSubstringPlayerName(text)
-        EndTextCommandDisplayText(x, y)
-    end
-end
-
--- Interaction loop
+-- Create zones for each territory
 CreateThread(function()
-    while true do
-        local ped = PlayerPedId()
-        local coords = GetEntityCoords(ped)
-        local sleep = 1000
-
-        for id, territory in pairs(Config.Territories) do
-            local dist = #(coords - territory.hackLocation)
-            if dist < Config.HackRadius then
-                sleep = 0
-                DrawText3D(territory.hackLocation + vector3(0, 0, 1.0), "[E] Hack Terminal")
-                print(("Near terminal %s: dist=%.2f, radius=%.2f"):format(id, dist, Config.HackRadius))
+    for id, territory in pairs(Config.Territories) do
+        zones[id] = lib.zones.sphere({
+            coords = territory.hackLocation,
+            radius = Config.HackRadius,
+            debug = false,
+            inside = function()
                 if IsControlJustReleased(0, 38) then
-                    print("E key pressed, triggering hack:checkCooldown for " .. id)
+                    print("E key pressed in zone for " .. id)
                     TriggerServerEvent("hack:checkCooldown", id)
                 end
+            end,
+            onEnter = function()
+                print("Entered zone for " .. id)
+                lib.showTextUI('[E] Hack Terminal', {
+                    icon = 'laptop',
+                    position = 'left-center'
+                })
+            end,
+            onExit = function()
+                print("Exited zone for " .. id)
+                lib.hideTextUI()
             end
-        end
-
-        Wait(sleep)
+        })
     end
 end)
 
