@@ -1,81 +1,87 @@
 local Config = require 'config'
 
-local blip
-local isHacked = false
+local blips = {}
 
--- Draw or update blip
-local function updateBlip(name)
-    if blip then RemoveBlip(blip) end
+-- Draw or update blip by id
+local functionpolitician function updateBlip(id, name)
+    if blips[id] then RemoveBlip(blips[id]) end
+    local territory = Config.Territories[id]
+    if not territory then return end
 
-    blip = AddBlipForCoord(Config.Blip.coords)
-    SetBlipSprite(blip, Config.Blip.default.sprite)
-    SetBlipColour(blip, Config.Blip.default.color)
+    local label = name or territory.blip.default.name
+    local blip = AddBlipForCoord(territory.blip.coords)
+    SetBlipSprite(blip, territory.blip.default.sprite)
+    SetBlipColour(blip, territory.blip.default.color)
     SetBlipScale(blip, 0.9)
     SetBlipAsShortRange(blip, true)
     BeginTextCommandSetBlipName("STRING")
-    AddTextComponentString(name or Config.Blip.default.name)
+    AddTextComponentString(label)
     EndTextCommandSetBlipName(blip)
+
+    blips[id] = blip
 end
 
--- Sync blip name from server
-RegisterNetEvent('hack:syncBlip', function(name)
-    isHacked = name ~= nil
-    if isHacked then
-        updateBlip(name)
-    else
-        updateBlip(Config.Blip.default.name)
+RegisterNetEvent('hack:syncBlips', function(data)
+    for id, name in pairs(data) do
+        updateBlip(id, name)
     end
 end)
 
--- Hacking logic
-CreateThread(function()
-    while true do
-        local sleep = 1000
-        local ped = PlayerPedId()
-        local coords = GetEntityCoords(ped)
-        local dist = #(coords - Config.HackLocation)
+RegisterNetEvent("hack:cooldownBlocked", function(seconds)
+    print(("Received hack:cooldownBlocked with %d seconds remaining"):format(seconds))
+    local hours = math.floor(seconds / 3600)
+    local mins = math.floor((seconds % 3600) / 60)
+    local secs = seconds % 60
+    lib.notify({
+        title = "Cooldown",
+        description = ("This terminal is on cooldown.\nTime left: %02dh %02dm %02ds"):format(hours, mins, secs),
+        type = "error"
+    })
+end)
 
-        if dist < Config.HackRadius then
-            sleep = 0
-            DrawText3D(Config.HackLocation + vector3(0, 0, 1.0), "[E] Hack Terminal")
+RegisterNetEvent("hack:cooldownPassed", function(id)
+    print("Received hack:cooldownPassed for id: " .. id)
+    print("Starting minigame for terminal: " .. id)
+    local ped = PlayerPedId()
+    local animDict = 'anim@heists@prison_heiststation@cop_reactions'
+    local anim = 'cop_b_idle'
+    
+    print("Requesting animation dictionary: " .. animDict)
+    lib.requestAnimDict(animDict)
+    TaskPlayAnim(ped, animDict, anim, 2.0, 2.0, -1, 50, 0, false, false, false)
+    print("Animation started")
 
-            if IsControlJustReleased(0, 38) and not isHacked then
-                lib.requestAnimDict('anim@heists@prison_heiststation@cop_reactions')
-                TaskPlayAnim(ped, 'anim@heists@prison_heiststation@cop_reactions', 'cop_b_idle', 2.0, 2.0, -1, 50, 0, false, false, false)
+    print("Starting fallouthacking minigame")
+    local success = exports.fallouthacking:start(6, 8)
+    print("Minigame result: " .. (success and "success" or "failed"))
+    ClearPedTasks(ped)
+    print("Cleared ped tasks")
 
-                local success = exports.fallouthacking:start(6, 8)
-                ClearPedTasks(ped)
+    if success then
+        print("Opening blip name input dialog")
+        local input = lib.inputDialog("Set Blip Name", {
+            {type = "input", label = "Blip Name", default = "Territory Uplink"}
+        })
 
-                if success then
-                    local input = lib.inputDialog("Set Blip Name", {
-                        {type = "input", label = "Blip Name", default = "Server Uplink"}
-                    })
-
-                    if input and input[1] and input[1] ~= "" then
-                        TriggerServerEvent("hack:setBlipName", input[1])
-                        lib.notify({ title = "Hack", description = "Blip name updated!", type = "success" })
-                    else
-                        lib.notify({ title = "Hack", description = "Invalid or canceled blip name.", type = "inform" })
-                    end
-                else
-                    lib.notify({ title = "Hack", description = "Hack failed!", type = "error" })
-                end
-            elseif dist < Config.HackRadius and isHacked then
-                DrawText3D(Config.HackLocation + vector3(0, 0, 1.0), "System Already Hacked")
-            end
+        if input and input[1] and input[1] ~= "" then
+            print("Sending hack:setBlipName for " .. id .. " with name: " .. input[1])
+            TriggerServerEvent("hack:setBlipName", id, input[1])
+        else
+            print("Blip name input canceled or invalid")
+            lib.notify({ title = "Hack", description = "Invalid or canceled blip name.", type = "inform" })
         end
-
-        Wait(sleep)
+    else
+        print("Minigame failed, showing notification")
+        lib.notify({ title = "Hack", description = "Hack failed!", type = "error" })
     end
 end)
 
--- Draw 3D Text UI
-function DrawText3D(coords, text)
+-- DrawText3D
+local function DrawText3D(coords, text)
     local onScreen, x, y = World3dToScreen2d(coords.x, coords.y, coords.z)
     if onScreen then
         SetTextScale(0.35, 0.35)
         SetTextFont(4)
-        SetTextProportional(1)
         SetTextCentre(true)
         SetTextColour(255, 255, 255, 215)
         BeginTextCommandDisplayText("STRING")
@@ -84,7 +90,31 @@ function DrawText3D(coords, text)
     end
 end
 
--- Initial sync request
+-- Interaction loop
+CreateThread(function()
+    while true do
+        local ped = PlayerPedId()
+        local coords = GetEntityCoords(ped)
+        local sleep = 1000
+
+        for id, territory in pairs(Config.Territories) do
+            local dist = #(coords - territory.hackLocation)
+            if dist < Config.HackRadius then
+                sleep = 0
+                DrawText3D(territory.hackLocation + vector3(0, 0, 1.0), "[E] Hack Terminal")
+                print(("Near terminal %s: dist=%.2f, radius=%.2f"):format(id, dist, Config.HackRadius))
+                if IsControlJustReleased(0, 38) then
+                    print("E key pressed, triggering hack:checkCooldown for " .. id)
+                    TriggerServerEvent("hack:checkCooldown", id)
+                end
+            end
+        end
+
+        Wait(sleep)
+    end
+end)
+
+-- Request blip sync on start
 CreateThread(function()
     TriggerServerEvent("hack:requestBlipSync")
 end)

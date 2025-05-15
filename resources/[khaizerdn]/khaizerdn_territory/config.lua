@@ -7,13 +7,20 @@ Config.DiscordWebhook = 'https://discord.com/api/webhooks/1372378941649588304/ss
 Config.HackCooldown = 600
 
 -- Initial/default blip state
-Config.Blip = {
-    coords = vec3(1382.03, 1147.64, 114.33),
-    default = {
-        name = "Capture Territory",
-        sprite = 176,
-        color = 1
-    }
+Config.Territories = {
+    paleto_radio = {
+        id = "paleto_radio",
+        cooldownSeconds = 10,
+        hackLocation = vec3(1393.25, 1160.15, 114.33),
+        blip = {
+            coords = vec3(1382.03, 1147.64, 114.33),
+            default = {
+                name = "Paleto Radio Tower",
+                sprite = 176,
+                color = 1
+            }
+        }
+    },
 }
 
 return Config
