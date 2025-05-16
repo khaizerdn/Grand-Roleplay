@@ -70,6 +70,70 @@ return {
         },
     },
 
+    ['burgershot_burger'] = {
+        label = "Burger",
+        description = "Burger Shot's Burger",
+        weight = 220,
+        client = {
+            status = { hunger = 200000 },
+            anim = 'eating',
+            prop = 'burger',
+            usetime = 2500,
+            notification = 'You ate a delicious burger'
+        },
+    },
+
+    ['aldentes_pizzaslice'] = {
+        label = 'Pizza Slice',
+        description = "Al Dente's Pizza Slice",
+        weight = 250,
+        client = {
+            status = { hunger = 250000 },
+            anim = { dict = 'mp_player_inteat@burger', clip = 'mp_player_int_eat_burger' },
+            prop = { model = 'prop_cs_hotdog_01', pos = vec3(1000.0, 0.0, -0.01), rot = vec3(0.0, 0.0, 0.0) },
+            usetime = 4500,
+            notification = 'You ate a pizza slice'
+        }
+    },
+
+    ['cluckinbell_burger'] = {
+        label = "Burger",
+        description = "Clucki'n Bell Burger",
+        weight = 220,
+        client = {
+            status = { hunger = 200000 },
+            anim = 'eating',
+            prop = 'burger',
+            usetime = 2500,
+            notification = 'You ate a delicious burger'
+        },
+    },
+
+    ['cluckinbell_hotdog'] = {
+        label = "Hotdog Sandwich",
+        description = "Clucki'n Bell Hotdog Sandwich",
+        weight = 300,
+        client = {
+            status = { hunger = 200000 },
+            anim = { dict = 'mp_player_inteat@burger', clip = 'mp_player_int_eat_burger' },
+            prop = { model = 'prop_cs_hotdog_01', pos = vec3(0.0, 0.0, -0.01), rot = vec3(.0, 0.0, 90.0) },
+            usetime = 5000,
+            notification = 'You ate a hotdog sandwich'
+        }
+    },
+
+    ['cola'] = {
+        label = 'Cola',
+        weight = 350,
+        client = {
+            status = { thirst = 200000 },
+            anim = { dict = 'mp_player_intdrink', clip = 'loop_bottle' },
+            prop = { model = `prop_ld_can_01`, pos = vec3(0.01, 0.01, 0.06), rot = vec3(5.0, 5.0, -180.5) },
+            usetime = 2500,
+            notification = 'You quenched your thirst with a sprunk'
+        }
+    },
+
     ['sprunk'] = {
         label = 'Sprunk',
         weight = 350,

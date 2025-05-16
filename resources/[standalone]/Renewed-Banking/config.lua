@@ -45,6 +45,10 @@ Config = {
             model = 'u_m_m_bankman',
             coords = vector4(-112.22, 6471.01, 31.63, 134.18),
             createAccounts = true
-        }
+        },
+        [9] = { -- mall
+            model = 'ig_barry',
+            coords = vec4(-560.46, -583.21, 41.43, 93.32)
+        },
     }
 }

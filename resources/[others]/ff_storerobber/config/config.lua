@@ -50,7 +50,17 @@ Config.PedPools = {
     },
     blackmarket = {
         `g_m_importexport_01`
-    }
+    },
+    food = {
+        `s_f_y_shop_low`,          -- General shopkeeper
+        `s_f_y_shop_mid`,
+        `mp_m_shopkeep_01`
+    },
+    high = {
+        `s_f_y_airhostess_01`,          -- General shopkeeper
+        `mp_g_m_pros_01`,
+        `mp_f_boatstaff_01`
+    },
 }
 
 -- All the different store location data
@@ -367,6 +377,106 @@ Config.Locations = {
         },
         robbable = false,
         pedPool = "blackmarket"
+    },
+    { -- Mall
+        ped = vec4(-552.65, -582.95, 34.69, 180.63),
+        safe = vec4(1395.28, 3613.23, 33.98, 201.5),
+        network = {
+            coords = vec3(1394.25, 3611.49, 35.01),
+            radius = 0.6
+        },
+        robbable = false,
+        pedPool = "general"
+    },
+    {
+        ped = vec4(-544.97, -584.19, 34.68, 260.55),
+        safe = vec4(1395.28, 3613.23, 33.98, 201.5),
+        network = {
+            coords = vec3(1394.25, 3611.49, 35.01),
+            radius = 0.6
+        },
+        robbable = false,
+        pedPool = "weapon"
+    },
+    {
+        ped = vec4(-586.55, -596.22, 34.68, 271.48),
+        safe = vec4(1395.28, 3613.23, 33.98, 201.5),
+        network = {
+            coords = vec3(1394.25, 3611.49, 35.01),
+            radius = 0.6
+        },
+        robbable = false,
+        pedPool = "food"
+    },
+    {
+        ped = vec4(-586.5, -603.8, 34.68, 267.55),
+        safe = vec4(1395.28, 3613.23, 33.98, 201.5),
+        network = {
+            coords = vec3(1394.25, 3611.49, 35.01),
+            radius = 0.6
+        },
+        robbable = false,
+        pedPool = "food"
+    },
+    {
+        ped = vec4(-586.48, -613.53, 34.68, 270.96),
+        safe = vec4(1395.28, 3613.23, 33.98, 201.5),
+        network = {
+            coords = vec3(1394.25, 3611.49, 35.01),
+            radius = 0.6
+        },
+        robbable = false,
+        pedPool = "food"
+    },
+    {
+        ped = vec4(-529.15, -582.74, 34.68, 180.44),
+        safe = vec4(1395.28, 3613.23, 33.98, 201.5),
+        network = {
+            coords = vec3(1394.25, 3611.49, 35.01),
+            radius = 0.6
+        },
+        robbable = false,
+        pedPool = "high"
+    },
+    {
+        ped = vec4(-555.75, -591.19, 41.43, 272.88),
+        safe = vec4(1395.28, 3613.23, 33.98, 201.5),
+        network = {
+            coords = vec3(1394.25, 3611.49, 35.01),
+            radius = 0.6
+        },
+        robbable = false,
+        pedPool = "high"
+    },
+    {
+        ped = vec4(-587.76, -604.56, 41.43, 15.75),
+        safe = vec4(1395.28, 3613.23, 33.98, 201.5),
+        network = {
+            coords = vec3(1394.25, 3611.49, 35.01),
+            radius = 0.6
+        },
+        robbable = false,
+        pedPool = "high"
+    },
+    {
+        ped = vec4(-569.11, -585.33, 34.64, 280.68),
+        safe = vec4(1395.28, 3613.23, 33.98, 201.5),
+        network = {
+            coords = vec3(1394.25, 3611.49, 35.01),
+            radius = 0.6
+        },
+        robbable = false,
+        pedPool = "high"
+    },
+    {
+        ped = vec4(-525.52, -595.0, 41.43, 181.57),
+        safe = vec4(1395.28, 3613.23, 33.98, 201.5),
+        network = {
+            coords = vec3(1394.25, 3611.49, 35.01),
+            radius = 0.6
+        },
+        robbable = false,
+        pedPool = "high"
     },
 }
 

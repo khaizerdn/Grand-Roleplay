@@ -5,7 +5,9 @@ return {
 			id = 59, colour = 69, scale = 0.8
 		}, inventory = {
 			{ name = 'burger', price = 4 },
-			{ name = 'water', price = 1 }
+			{ name = 'water', price = 1 },
+			{ name = 'sprunk', price = 2 },
+			{ name = 'cola', price = 2 },
 		}, locations = {
 			vec3(25.69, -1345.51, 29.5),
 			vec3(-3040.93, 585.16, 7.91),
@@ -16,6 +18,7 @@ return {
 			vec3(2677.14, 3281.31, 55.24),
 			vec3(2555.52, 382.06, 108.62),
 			vec3(374.12, 327.8, 103.57),
+			vec3(-552.73, -584.57, 34.68)
 		}, targets = {
 			{ loc = vec3(24.49, -1347.26, 28.5), length = 0.7, width = 0.5, heading = 269.26, minZ = 29.5, maxZ = 29.9, distance = 1.5, ped = `mp_m_shopkeep_01`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' },
 			{ loc = vec3(-3039.0, 584.55, 6.91), length = 0.6, width = 0.5, heading = 16.93, minZ = 7.91, maxZ = 8.31, distance = 1.5, ped = `mp_m_shopkeep_01`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' },
@@ -131,7 +134,8 @@ return {
 			vec3(22.31, -1106.75, 29.8),
 			vec3(2567.69, 294.38, 108.73),
 			vec3(-1117.58, 2698.61, 18.55),
-			vec3(842.44, -1033.42, 28.19)
+			vec3(842.44, -1033.42, 28.19),
+			vec3(-543.31, -584.94, 34.68) -- Mall LSGS
 		}, targets = {
 			{ loc = vec3(-661.7, -933.56, 20.83), length = 0.6, width = 0.5, heading = 166.64, minZ = 21.8, maxZ = 22.2, distance = 2.0, ped = `s_m_y_ammucity_01`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' },
 			{ loc = vec3(809.63, -2158.99, 28.62), length = 0.6, width = 0.5, heading = 349.59, minZ = 29.6, maxZ = 30.0, distance = 2.0, ped = `s_m_y_ammucity_01`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' },
@@ -142,6 +146,90 @@ return {
 			{ loc = vec3(2567.29, 292.61, 107.73), length = 0.6, width = 0.5, heading = 341.57, minZ = 108.7, maxZ = 109.1, distance = 2.0, ped = `s_m_y_ammucity_01`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' },
 			{ loc = vec3(-1118.5, 2700.13, 17.55), length = 0.6, width = 0.5, heading = 209.63, minZ = 18.5, maxZ = 18.9, distance = 2.0, ped = `s_m_y_ammucity_01`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' },
 			{ loc = vec3(841.8, -1035.26, 27.19), length = 0.6, width = 0.5, heading = 348.17, minZ = 28.2, maxZ = 28.6, distance = 2.0, ped = `s_m_y_ammucity_01`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' }
+		}
+	},
+
+	CluckinBell = {
+		name = "Cluckin' Bell",
+		blip = {
+			id = 59, colour = 69, scale = 0.8
+		}, inventory = {
+			{ name = 'cluckinbell_burger', price = 7 },
+			{ name = 'cluckinbell_hotdog', price = 7 },
+			{ name = 'sprunk', price = 2 },
+			{ name = 'cola', price = 2 },
+			{ name = 'water', price = 1 },
+		}, locations = {
+			vec3(-584.63, -596.22, 34.68)
+		}, targets = {
+			{ loc = vec3(-586.55, -596.22, 34.68), length = 0.7, width = 0.5, heading = 271.48, minZ = 29.5, maxZ = 29.9, distance = 1.5, ped = `s_f_y_shop_low`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' },
+		}
+	},
+
+	AlDentes = {
+		name = "Al Dentes",
+		blip = {
+			id = 59, colour = 69, scale = 0.8
+		}, inventory = {
+			{ name = 'aldentes_pizzaslice', price = 8 },
+			{ name = 'sprunk', price = 2 },
+			{ name = 'cola', price = 2 },
+			{ name = 'water', price = 1 },
+		}, locations = {
+			vec3(-584.67, -603.7, 34.68)
+		}, targets = {
+			{ loc = vec3(-586.5, -603.8, 34.68), length = 0.7, width = 0.5, heading = 267.55, minZ = 29.5, maxZ = 29.9, distance = 1.5, ped = `s_f_y_shop_low`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' },
+		}
+	},
+
+	BurgerShot = {
+		name = "Burger Shot",
+		blip = {
+			id = 59, colour = 69, scale = 0.8
+		}, inventory = {
+			{ name = 'burgershot_burger', price = 8 },
+			{ name = 'sprunk', price = 2 },
+			{ name = 'cola', price = 2 },
+			{ name = 'water', price = 1 },
+		}, locations = {
+			vec3(-584.72, -613.51, 34.68)
+		}, targets = {
+			{ loc = vec3(-586.48, -613.53, 34.68), length = 0.7, width = 0.5, heading = 270.96, minZ = 29.5, maxZ = 29.9, distance = 1.5, ped = `s_f_y_shop_low`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' },
+		}
+	},
+
+	DigitalDen = {
+		name = "Digital Den",
+		blip = {
+			id = 59, colour = 69, scale = 0.8
+		}, inventory = {
+			{ name = 'tool_laptop', price = 1000 },
+			{ name = 'phone', price = 700 },
+		}, locations = {
+			vec3(-528.72, -584.17, 34.68)
+		}, targets = {
+			{ loc = vec3(-586.48, -613.53, 34.68), length = 0.7, width = 0.5, heading = 270.96, minZ = 29.5, maxZ = 29.9, distance = 1.5, ped = `s_f_y_shop_low`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' },
+		}
+	},
+
+	ToolShop = {
+		name = 'Tool Shop',
+		blip = {
+			id = 402, colour = 69, scale = 0.8
+		}, inventory = {
+			{ name = 'tool_tray', price = 5 },
+			{ name = 'tool_digitalscale', price = 30 },
+			{ name = 'tool_laptop', price = 1000 },
+			{ name = 'tool_herbgrinder', price = 20 },
+			{ name = 'tool_rollingpaper', price = 1 },
+			{ name = 'container_ziplockbag1', price = 2 },
+			{ name = 'container_ziplockbag2', price = 3 },
+			{ name = 'container_ziplockbag3', price = 4 },
+			{ name = 'container_paperbag', price = 1 },
+		}, locations = {
+			vec3(-308.06, -163.97, 40.42)
+		}, targets = {
+			{ loc = vec3(-308.19, -163.87, 40.42), length = 0.6, width = 3.0, heading = 231.4, minZ = 55.0, maxZ = 56.8, distance = 3.0,  ped = `mp_m_shopkeep_01`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' }
 		}
 	},
 
