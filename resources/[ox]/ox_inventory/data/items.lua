@@ -659,28 +659,22 @@ return {
     -- END OF CRAFTING JOINT
 
     -- RINGS (3g to 9g)
-    ['silver_ring'] = { label = 'Silver Ring', weight = 5 },
-    ['gold_ring'] = { label = 'Gold Ring', weight = 7 },
-    ['diamond_ring'] = { label = 'Diamond Ring', weight = 9 },
+    ['valuable_silver_ring'] = { label = 'Silver Ring', weight = 5 },
+    ['valuable_gold_ring'] = { label = 'Gold Ring', weight = 7 },
+    ['valuable_diamond_ring'] = { label = 'Diamond Ring', weight = 9 },
 
     -- NECKLACES (15g to 45g)
-    ['silver_necklace'] = { label = 'Silver Necklace', weight = 25 },
-    ['gold_necklace'] = { label = 'Gold Necklace', weight = 35 },
-    ['diamond_necklace'] = { label = 'Diamond Necklace', weight = 45 },
+    ['valuable_silver_necklace'] = { label = 'Silver Necklace', weight = 25 },
+    ['valuable_gold_necklace'] = { label = 'Gold Necklace', weight = 35 },
+    ['valuable_diamond_necklace'] = { label = 'Diamond Necklace', weight = 45 },
 
     -- BRACELETS (10g to 30g)
-    ['silver_bracelet'] = { label = 'Silver Bracelet', weight = 18 },
-    ['gold_bracelet'] = { label = 'Gold Bracelet', weight = 24 },
-    ['diamond_bracelet'] = { label = 'Diamond Bracelet', weight = 30 },
+    ['valuable_silver_bracelet'] = { label = 'Silver Bracelet', weight = 18 },
+    ['valuable_gold_bracelet'] = { label = 'Gold Bracelet', weight = 24 },
+    ['valuable_diamond_bracelet'] = { label = 'Diamond Bracelet', weight = 30 },
 
     -- EARRINGS (2g to 6g)
-    ['silver_earrings'] = { label = 'Silver Earrings', weight = 4 },
-    ['gold_earrings'] = { label = 'Gold Earrings', weight = 5 },
-    ['diamond_earrings'] = { label = 'Diamond Earrings', weight = 6 },
-
-    -- WATCHES (80g to 180g)
-    ['silver_watch'] = { label = 'Silver Watch', weight = 120 },
-    ['gold_watch'] = { label = 'Gold Watch', weight = 150 },
-    ['diamond_watch'] = { label = 'Diamond Watch', weight = 180 },
-
+    ['valuable_silver_earrings'] = { label = 'Silver Earrings', weight = 4 },
+    ['valuable_gold_earrings'] = { label = 'Gold Earrings', weight = 5 },
+    ['valuable_diamond_earrings'] = { label = 'Diamond Earrings', weight = 6 },
 }

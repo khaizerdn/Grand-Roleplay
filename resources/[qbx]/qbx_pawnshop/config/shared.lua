@@ -9,63 +9,42 @@ return {
         }
     },
     pawnItems = {
-        {
-            item = 'goldchain',
-            price = math.random(50, 100)
-        },
-        {
-            item = 'diamond_ring',
-            price = math.random(50, 100)
-        },
-        {
-            item = 'rolex',
-            price = math.random(50, 100)
-        },
-        {
-            item = '10kgoldchain',
-            price = math.random(50, 100)
-        },
-        {
-            item = 'tablet',
-            price = math.random(50, 100)
-        },
-        {
-            item = 'iphone',
-            price = math.random(50, 100)
-        },
-        {
-            item = 'samsungphone',
-            price = math.random(50, 100)
-        },
-        {
-            item = 'laptop',
-            price = math.random(50, 100)
-        }
+        { item = 'valuable_silver_ring', price = math.random(20, 50) },
+        { item = 'valuable_gold_ring', price = math.random(120, 180) },
+        { item = 'valuable_diamond_ring', price = math.random(2500, 3500) },
+    
+        { item = 'valuable_silver_necklace', price = math.random(50, 100) },
+        { item = 'valuable_gold_necklace', price = math.random(300, 500) },
+        { item = 'valuable_diamond_necklace', price = math.random(4000, 6000) },
+    
+        { item = 'valuable_silver_bracelet', price = math.random(40, 80) },
+        { item = 'valuable_gold_bracelet', price = math.random(250, 400) },
+        { item = 'valuable_diamond_bracelet', price = math.random(3000, 4500) },
+    
+        { item = 'valuable_silver_earrings', price = math.random(30, 60) },
+        { item = 'valuable_gold_earrings', price = math.random(150, 250) },
+        { item = 'valuable_diamond_earrings', price = math.random(500, 1000) },
     },
     meltingItems = { -- meltTime is amount of time in minutes per item
         {
-            item = 'goldchain',
+            item = 'valuable_silver_ring',
             rewards = {
                 {
                     item = 'goldbar',
-                    amount = 2
+                    amount = 5
                 }
             },
-            meltTime = 0.15
+            meltTime = 0
         },
         {
-            item = 'diamond_ring',
+            item = 'gold_ring',
             rewards = {
-                {
-                    item = 'diamond',
-                    amount = 1
-                },
                 {
                     item = 'goldbar',
                     amount = 1
-                }
+                },
             },
-            meltTime = 0.15
+            meltTime = 0
         },
         {
             item = 'rolex',

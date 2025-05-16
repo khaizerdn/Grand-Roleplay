@@ -6,25 +6,21 @@ return {
         minAmount = 1,
         maxAmount = 2,
         items = {
-            [1] = { name = 'silver_ring', min = 1, max = 5 },
-            [2] = { name = 'gold_ring', min = 1, max = 3 },
-            [3] = { name = 'diamond_ring', min = 1, max = 2 },
+            [1] = { name = 'valuable_silver_ring', min = 1, max = 5 },
+            [2] = { name = 'valuable_gold_ring', min = 1, max = 3 },
+            [3] = { name = 'valuable_diamond_ring', min = 1, max = 2 },
 
-            [4] = { name = 'silver_necklace', min = 1, max = 4 }, -- no image
-            [5] = { name = 'gold_necklace', min = 1, max = 2 },
-            [6] = { name = 'diamond_necklace', min = 1, max = 1 },
+            [4] = { name = 'valuable_silver_necklace', min = 1, max = 4 }, -- no image
+            [5] = { name = 'valuable_gold_necklace', min = 1, max = 2 },
+            [6] = { name = 'valuable_diamond_necklace', min = 1, max = 1 },
 
-            [7] = { name = 'silver_bracelet', min = 1, max = 4 }, -- no image until item 15
-            [8] = { name = 'gold_bracelet', min = 1, max = 3 },
-            [9] = { name = 'diamond_bracelet', min = 1, max = 2 },
+            [7] = { name = 'valuable_silver_bracelet', min = 1, max = 4 }, -- no image until item 15
+            [8] = { name = 'valuable_gold_bracelet', min = 1, max = 3 },
+            [9] = { name = 'valuable_diamond_bracelet', min = 1, max = 2 },
 
-            [10] = { name = 'silver_earrings', min = 1, max = 6 },
-            [11] = { name = 'gold_earrings', min = 1, max = 4 },
-            [12] = { name = 'diamond_earrings', min = 1, max = 2 },
-
-            [13] = { name = 'silver_watch', min = 1, max = 2 },
-            [14] = { name = 'gold_watch', min = 1, max = 1 },
-            [15] = { name = 'diamond_watch', min = 1, max = 1 },
+            [10] = { name = 'valuable_silver_earrings', min = 1, max = 6 },
+            [11] = { name = 'valuable_gold_earrings', min = 1, max = 4 },
+            [12] = { name = 'valuable_diamond_earrings', min = 1, max = 2 },
         },
     },
 
