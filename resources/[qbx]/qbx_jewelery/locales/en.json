@@ -1,8 +1,8 @@
 {
     "text": {
-        "electrical": "[E] - Hack Doorlock",
+        "electrical": "Press [E] to hack the doorlock.",
         "electricalTarget": "Hack Doorlock",
-        "cabinet": "[E] - Smash Cabinet",
+        "cabinet": "Press [E] to get the jewelry.",
         "cabinetTarget": "Smash Cabinet"
     },
     "notify": {

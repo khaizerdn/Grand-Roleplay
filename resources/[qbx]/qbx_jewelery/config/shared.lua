@@ -6,7 +6,7 @@ return {
             min = 20,
             max = 60
         },
-        requiredItem =  'electronickit',
+        requiredItem =  'tool_circuitboard',
         loseItemOnUse = true,
     },
 

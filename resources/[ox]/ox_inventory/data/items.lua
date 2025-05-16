@@ -336,8 +336,8 @@ return {
         weight = 500,
     },
 
-    ['electronickit'] = {
-        label = 'Electronic Kit',
+    ['tool_circuitboard'] = {
+        label = 'Circuit Board',
         weight = 500,
     },
 
@@ -354,26 +354,6 @@ return {
     ['advancedrepairkit'] = {
         label = 'Advanced Repair Kit',
         weight = 4000,
-    },
-
-    ['diamond_ring'] = {
-        label = 'Diamond',
-        weight = 1500,
-    },
-
-    ['rolex'] = {
-        label = 'Golden Watch',
-        weight = 1500,
-    },
-
-    ['goldbar'] = {
-        label = 'Gold Bar',
-        weight = 1500,
-    },
-
-    ['goldchain'] = {
-        label = 'Golden Chain',
-        weight = 1500,
     },
 
     ['firstaid'] = {
@@ -677,4 +657,30 @@ return {
         weight = 1.1,
     },    
     -- END OF CRAFTING JOINT
+
+    -- RINGS (3g to 9g)
+    ['silver_ring'] = { label = 'Silver Ring', weight = 5 },
+    ['gold_ring'] = { label = 'Gold Ring', weight = 7 },
+    ['diamond_ring'] = { label = 'Diamond Ring', weight = 9 },
+
+    -- NECKLACES (15g to 45g)
+    ['silver_necklace'] = { label = 'Silver Necklace', weight = 25 },
+    ['gold_necklace'] = { label = 'Gold Necklace', weight = 35 },
+    ['diamond_necklace'] = { label = 'Diamond Necklace', weight = 45 },
+
+    -- BRACELETS (10g to 30g)
+    ['silver_bracelet'] = { label = 'Silver Bracelet', weight = 18 },
+    ['gold_bracelet'] = { label = 'Gold Bracelet', weight = 24 },
+    ['diamond_bracelet'] = { label = 'Diamond Bracelet', weight = 30 },
+
+    -- EARRINGS (2g to 6g)
+    ['silver_earrings'] = { label = 'Silver Earrings', weight = 4 },
+    ['gold_earrings'] = { label = 'Gold Earrings', weight = 5 },
+    ['diamond_earrings'] = { label = 'Diamond Earrings', weight = 6 },
+
+    -- WATCHES (80g to 180g)
+    ['silver_watch'] = { label = 'Silver Watch', weight = 120 },
+    ['gold_watch'] = { label = 'Gold Watch', weight = 150 },
+    ['diamond_watch'] = { label = 'Diamond Watch', weight = 180 },
+
 }

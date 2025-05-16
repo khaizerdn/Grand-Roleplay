@@ -6,10 +6,25 @@ return {
         minAmount = 1,
         maxAmount = 2,
         items = {
-            [1] = {name = 'rolex', min = 1, max = 4},
-            [2] = {name = 'diamond_ring', min = 1, max = 4},
-            [3] = {name = 'goldchain', min = 1, max = 4},
-            [4] = {name = '10kgoldchain', min = 1, max = 2},
+            [1] = { name = 'silver_ring', min = 1, max = 5 },
+            [2] = { name = 'gold_ring', min = 1, max = 3 },
+            [3] = { name = 'diamond_ring', min = 1, max = 2 },
+
+            [4] = { name = 'silver_necklace', min = 1, max = 4 },
+            [5] = { name = 'gold_necklace', min = 1, max = 2 },
+            [6] = { name = 'diamond_necklace', min = 1, max = 1 },
+
+            [7] = { name = 'silver_bracelet', min = 1, max = 4 },
+            [8] = { name = 'gold_bracelet', min = 1, max = 3 },
+            [9] = { name = 'diamond_bracelet', min = 1, max = 2 },
+
+            [10] = { name = 'silver_earrings', min = 1, max = 6 },
+            [11] = { name = 'gold_earrings', min = 1, max = 4 },
+            [12] = { name = 'diamond_earrings', min = 1, max = 2 },
+
+            [13] = { name = 'silver_watch', min = 1, max = 2 },
+            [14] = { name = 'gold_watch', min = 1, max = 1 },
+            [15] = { name = 'diamond_watch', min = 1, max = 1 },
         },
     },
 
