@@ -3,20 +3,21 @@ local price = require 'config.shared'.price
 
 RegisterNetEvent('qbx_carwash:client:washCar', function()
     if source == '' then return end
-    if lib.progressBar({
+    if lib.progressCircle({
         duration = 6000,
         label = locale('washing'),
         useWhileDead = false,
         canCancel = false,
+        position = 'bottom-center',
         disable = {
             move = true,
             car = true,
             mouse = false,
             combat = true
         },
-    }) then -- if completed
+    }) then
         WashDecalsFromVehicle(cache.vehicle, 1.0)
-    else -- if canceled
+    else
         exports.qbx_core:Notify(locale('canceled'), 'error')
     end
 end)
