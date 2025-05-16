@@ -1770,7 +1770,8 @@ lib.callback.register('ox_inventory:startCrafting', function(id, recipe)
 		anim = {
 			dict = 'anim@amb@clubhouse@tutorial@bkr_tut_ig3@',
 			clip = 'machinic_loop_mechandplayer',
-		}
+		},
+		position = 'bottom-center'
 	})
 end)
 
