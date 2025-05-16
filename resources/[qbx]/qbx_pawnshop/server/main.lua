@@ -1,6 +1,6 @@
 local config = require 'config.server'
 local sharedConfig = require 'config.shared'
-local playersMelting = {} ---@type table<number, {index: number, endTime: number}>
+local playersMelting = {} ---@type table<number, {index: number, endTime: number, shopId: string}>
 
 ---@param id string
 ---@param reason string
@@ -21,26 +21,26 @@ local function exploitBan(id, reason)
 end
 
 ---@param src number
----@return boolean
-local function isPlayerAtPawnShop(src)
+---@return string?
+local function getPlayerShopId(src)
     local playerCoords = GetEntityCoords(GetPlayerPed(src))
 
-    for i = 1, #sharedConfig.pawnLocation do
-        local value = sharedConfig.pawnLocation[i]
+    for id, shop in pairs(sharedConfig) do
+        local value = shop.location
 
         if #(playerCoords - value.coords) <= 5 then
-            return true
+            return id
         end
     end
-
-    return false
 end
 
 ---@param itemName string
+---@param shopId string
 ---@return PawnItem?
-local function getPawnShopItemFromName(itemName)
-    for i = 1, #sharedConfig.pawnItems do
-        local pawnItem = sharedConfig.pawnItems[i]
+local function getPawnShopItemFromName(itemName, shopId)
+    local shopItems = sharedConfig[shopId].items
+    for i = 1, #shopItems do
+        local pawnItem = shopItems[i]
         if itemName == pawnItem.item then
             return pawnItem
         end
@@ -48,9 +48,10 @@ local function getPawnShopItemFromName(itemName)
 end
 
 ---@param index number
+---@param shopId string
 ---@return MeltingItem?
-local function getMeltingItemFromIndex(index)
-    return sharedConfig.meltingItems[index]
+local function getMeltingItemFromIndex(index, shopId)
+    return sharedConfig[shopId].meltingItems[index]
 end
 
 ---@param itemName string
@@ -58,13 +59,14 @@ end
 RegisterNetEvent('qb-pawnshop:server:sellPawnItems', function(itemName, itemAmount)
     local src = source
     local Player = exports.qbx_core:GetPlayer(src)
+    local shopId = getPlayerShopId(src)
 
-    if not isPlayerAtPawnShop(src) then
+    if not shopId then
         exploitBan(src, 'sellPawnItems Exploiting')
         return
     end
 
-    local pawnItem = getPawnShopItemFromName(itemName)
+    local pawnItem = getPawnShopItemFromName(itemName, shopId)
     if not pawnItem then
         exploitBan(src, 'sellPawnItems Exploiting')
         return
@@ -87,12 +89,13 @@ end)
 RegisterNetEvent('qb-pawnshop:server:meltItemRemove', function(index, requiredItems)
     local src = source
     local Player = exports.qbx_core:GetPlayer(src)
+    local shopId = getPlayerShopId(src)
 
-    if playersMelting[src] then
+    if not shopId or playersMelting[src] then
         return
     end
 
-    local meltingItem = getMeltingItemFromIndex(index)
+    local meltingItem = getMeltingItemFromIndex(index, shopId)
     if not meltingItem then
         exploitBan(src, 'meltItemRemove Exploiting')
         return
@@ -107,7 +110,7 @@ RegisterNetEvent('qb-pawnshop:server:meltItemRemove', function(index, requiredIt
     end
 
     local meltTime = meltingItem.meltTime
-    playersMelting[src] = { index = index, endTime = os.time() + (meltTime * 60) }
+    playersMelting[src] = { index = index, endTime = os.time() + (meltTime * 60), shopId = shopId }
 
     TriggerClientEvent('qb-pawnshop:client:startMelting', src, (meltTime * 60000 / 1000))
     exports.qbx_core:Notify(src, locale('info.melt_wait', meltTime), 'primary')
@@ -116,18 +119,19 @@ end)
 RegisterNetEvent('qb-pawnshop:server:pickupMelted', function()
     local src = source
     local Player = exports.qbx_core:GetPlayer(src)
+    local shopId = getPlayerShopId(src)
 
-    if not isPlayerAtPawnShop(src) then
+    if not shopId then
         exploitBan(src, 'pickupMelted Exploiting')
         return
     end
 
-    if not playersMelting[src] or playersMelting[src].endTime > os.time() then
+    if not playersMelting[src] or playersMelting[src].endTime > os.time() or playersMelting[src].shopId ~= shopId then
         exploitBan(src, 'pickupMelted Exploiting')
         return
     end
 
-    local meltingItem = getMeltingItemFromIndex(playersMelting[src].index)
+    local meltingItem = getMeltingItemFromIndex(playersMelting[src].index, shopId)
     if not meltingItem then
         exploitBan(src, 'pickupMelted Exploiting')
         return

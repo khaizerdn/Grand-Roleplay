@@ -7,24 +7,23 @@ local sharedConfig = require 'config.shared'
 local isMelting = false ---@type boolean
 local canTake = false ---@type boolean
 local meltTimeSeconds = 0 ---@type number
-local pawnZones = {} ---@type table<number, table>
+local pawnZones = {} ---@type table<string, table>
 
----@param id number
+---@param id string
 ---@param shopConfig {coords: vector3, size: vector3, heading: number, debugPoly: boolean, distance: number}
-local function addPawnShop(id, shopConfig)
-    -- Delete old zone if it exists
+---@param shopData table
+local function addPawnShop(id, shopConfig, shopData)
     if pawnZones[id] then
         pawnZones[id]:remove()
         pawnZones[id] = nil
     end
 
-    -- Create the interaction zone
     local zone = lib.zones.sphere({
         coords = shopConfig.coords,
         radius = shopConfig.distance or 1.5,
         debug = shopConfig.debugPoly,
         inside = function()
-            if IsControlJustReleased(0, 38) then -- E key
+            if IsControlJustReleased(0, 38) then
                 lib.hideTextUI()
                 if config.useTimes then
                     local gameHour = GetClockHours()
@@ -40,17 +39,21 @@ local function addPawnShop(id, shopConfig)
                         description = locale('info.sell_pawn'),
                         event = 'qb-pawnshop:client:openPawn',
                         args = {
-                            pawnItems = sharedConfig.pawnItems
+                            pawnItems = shopData.items,
+                            shopId = id,
+                            shopName = shopData.name
                         }
                     }
                 }
-                if not isMelting then
+                if shopData.enableMelting and not isMelting then
                     pawnShop[#pawnShop + 1] = {
                         title = locale('info.melt'),
                         description = locale('info.melt_pawn'),
                         event = 'qb-pawnshop:client:openMelt',
                         args = {
-                            meltingItems = sharedConfig.meltingItems
+                            meltingItems = shopData.meltingItems,
+                            shopId = id,
+                            shopName = shopData.name
                         }
                     }
                 end
@@ -61,15 +64,15 @@ local function addPawnShop(id, shopConfig)
                     }
                 end
                 lib.registerContext({
-                    id = 'open_pawnShop',
-                    title = locale('info.title'),
+                    id = 'open_pawnShop_' .. id,
+                    title = shopData.name,
                     options = pawnShop
                 })
-                lib.showContext('open_pawnShop')
+                lib.showContext('open_pawnShop_' .. id)
             end
         end,
         onEnter = function()
-            lib.showTextUI('[E] Open Pawnshop', {
+            lib.showTextUI('Press [E] to browse ' .. shopData.name .. '.', {
                 icon = 'fas fa-ring',
                 position = 'left-center'
             })
@@ -84,8 +87,8 @@ local function addPawnShop(id, shopConfig)
 end
 
 CreateThread(function()
-    for i = 1, #sharedConfig.pawnLocation do
-        local shopConfig = sharedConfig.pawnLocation[i]
+    for id, shop in pairs(sharedConfig) do
+        local shopConfig = shop.location
         local blip = AddBlipForCoord(shopConfig.coords.x, shopConfig.coords.y, shopConfig.coords.z)
         SetBlipSprite(blip, 431)
         SetBlipDisplay(blip, 4)
@@ -93,10 +96,10 @@ CreateThread(function()
         SetBlipAsShortRange(blip, true)
         SetBlipColour(blip, 5)
         BeginTextCommandSetBlipName('STRING')
-        AddTextComponentSubstringPlayerName(locale('info.title'))
+        AddTextComponentSubstringPlayerName(shop.name)
         EndTextCommandSetBlipName(blip)
 
-        addPawnShop(i, shopConfig)
+        addPawnShop(id, shopConfig, shop)
     end
 end)
 
@@ -135,7 +138,7 @@ RegisterNetEvent('qb-pawnshop:client:resetPickup', function()
     canTake = false
 end)
 
----@param data {meltingItems: MeltingItem[]}
+---@param data {meltingItems: MeltingItem[], shopId: string, shopName: string}
 RegisterNetEvent('qb-pawnshop:client:openMelt', function(data)
     local inventory = exports.ox_inventory:GetPlayerItems()
     local meltMenu = {}
@@ -170,12 +173,12 @@ RegisterNetEvent('qb-pawnshop:client:openMelt', function(data)
         }
     end
     lib.registerContext({
-        id = 'open_meltMenu',
-        menu = 'open_pawnShop',
-        title = locale('info.title'),
+        id = 'open_meltMenu_' .. data.shopId,
+        menu = 'open_pawnShop_' .. data.shopId,
+        title = data.shopName,
         options = meltMenu
     })
-    lib.showContext('open_meltMenu')
+    lib.showContext('open_meltMenu_' .. data.shopId)
 end)
 
 ---@param item {name: string, amount: number}
@@ -201,31 +204,37 @@ RegisterNetEvent('qb-pawnshop:client:meltItems', function(data)
     TriggerServerEvent('qb-pawnshop:server:meltItemRemove', data.index, data.requiredItems)
 end)
 
----@param data {pawnItems: PawnItem[]}
+---@param data {pawnItems: PawnItem[], shopId: string, shopName: string}
 RegisterNetEvent('qb-pawnshop:client:openPawn', function(data)
     local inventory = exports.ox_inventory:GetPlayerItems()
     local pawnMenu = {}
 
-    for _, invItem in pairs(inventory) do
-        for i = 1, #data.pawnItems do
-            if invItem.name == data.pawnItems[i].item then
-                pawnMenu[#pawnMenu + 1] = {
-                    title = invItem.label,
-                    description = locale('info.sell_items', data.pawnItems[i].price),
-                    event = 'qb-pawnshop:client:pawnitems',
-                    args = {
-                        name = invItem.name,
-                        amount = invItem.amount
-                    }
-                }
+    for i = 1, #data.pawnItems do
+        local pawnItem = data.pawnItems[i]
+        local itemLabel = exports.ox_inventory:Items()[pawnItem.item].label
+        local itemAmount = 0
+        for _, invItem in pairs(inventory) do
+            if invItem.name == pawnItem.item then
+                itemAmount = invItem.count
+                break
             end
         end
+        pawnMenu[#pawnMenu + 1] = {
+            title = itemLabel,
+            description = locale('info.sell_items', pawnItem.price) .. ' (' .. itemAmount .. ' in inventory)',
+            event = itemAmount > 0 and 'qb-pawnshop:client:pawnitems' or nil,
+            args = itemAmount > 0 and {
+                name = pawnItem.item,
+                amount = itemAmount
+            } or nil,
+            disabled = itemAmount == 0
+        }
     end
     lib.registerContext({
-        id = 'open_pawnMenu',
-        menu = 'open_pawnShop',
-        title = locale('info.title'),
+        id = 'open_pawnMenu_' .. data.shopId,
+        menu = 'open_pawnShop_' .. data.shopId,
+        title = data.shopName,
         options = pawnMenu
     })
-    lib.showContext('open_pawnMenu')
+    lib.showContext('open_pawnMenu_' .. data.shopId)
 end)
