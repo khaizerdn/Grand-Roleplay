@@ -61,6 +61,9 @@ Config.PedPools = {
         `mp_g_m_pros_01`,
         `mp_f_boatstaff_01`
     },
+    weed = {
+        `a_m_m_og_boss_01`
+    },
 }
 
 -- All the different store location data
@@ -477,6 +480,16 @@ Config.Locations = {
         },
         robbable = false,
         pedPool = "high"
+    },
+    {
+        ped = vec4(-1171.22, -1571.0, 4.66, 123.54),
+        safe = vec4(1395.28, 3613.23, 33.98, 201.5),
+        network = {
+            coords = vec3(1394.25, 3611.49, 35.01),
+            radius = 0.6
+        },
+        robbable = false,
+        pedPool = "weed"
     },
 }
 

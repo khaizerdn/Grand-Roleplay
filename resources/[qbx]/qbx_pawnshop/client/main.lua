@@ -72,7 +72,7 @@ local function addPawnShop(id, shopConfig, shopData)
             end
         end,
         onEnter = function()
-            lib.showTextUI('Press [E] to browse ' .. shopData.name .. '.', {
+            lib.showTextUI('Press [E] to sell items on ' .. shopData.name .. '.', {
                 icon = 'fas fa-ring',
                 position = 'left-center'
             })

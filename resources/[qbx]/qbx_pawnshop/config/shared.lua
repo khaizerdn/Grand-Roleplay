@@ -1,5 +1,5 @@
 return {
-    downtownPawn = {
+    DowntownPawn = {
         name = "Downtown Pawn",
         location = {
             coords = vector3(412.34, 314.81, 103.13),
@@ -57,7 +57,7 @@ return {
             },
         }
     },
-    smokeOnTheWater = {
+    SmokeOnTheWater = {
         name = "Smoke On The Water",
         location = {
             coords = vec3(-1169.34, -1572.74, 4.66),
@@ -67,8 +67,8 @@ return {
             distance = 1.0
         },
         blip = {
-            sprite = 140,
-            color = 2,
+            sprite = 431,
+            color = 5,
             scale = 0.8
         },
         items = {

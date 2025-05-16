@@ -233,6 +233,20 @@ return {
 		}
 	},
 
+	SmokeOnTheWater = {
+		name = 'Smoke On The Water',
+		blip = {
+			id = 140, colour = 2, scale = 0.8
+		}, inventory = {
+			{ name = 'joint', price = 15 },
+		}, locations = {
+			vec3(-1172.08, -1571.77, 4.66)
+		}, targets = {
+			{ loc = vec3(-308.19, -163.87, 40.42), length = 0.6, width = 3.0, heading = 231.4, minZ = 55.0, maxZ = 56.8, distance = 3.0,  ped = `mp_m_shopkeep_01`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' }
+		}
+	},
+
+
 	PoliceArmoury = {
 		name = 'Armoury',
 		groups = shared.police,
