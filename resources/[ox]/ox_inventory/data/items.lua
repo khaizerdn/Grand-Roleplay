@@ -677,4 +677,7 @@ return {
     ['valuable_silver_earrings'] = { label = 'Silver Earrings', weight = 4 },
     ['valuable_gold_earrings'] = { label = 'Gold Earrings', weight = 5 },
     ['valuable_diamond_earrings'] = { label = 'Diamond Earrings', weight = 6 },
+
+    ['valuable_gold_bar'] = { label = 'Gold Bar', weight = 12000 },
+    ['valuable_silver_bar'] = { label = 'Silver Bar', weight = 3000 },
 }
