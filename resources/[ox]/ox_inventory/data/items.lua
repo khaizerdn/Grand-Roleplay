@@ -336,11 +336,6 @@ return {
         weight = 500,
     },
 
-    ['tool_circuitboard'] = {
-        label = 'Circuit Board',
-        weight = 500,
-    },
-
     ['cleaningkit'] = {
         label = 'Cleaning Kit',
         weight = 500,
@@ -622,6 +617,17 @@ return {
         label = 'Tray',
         weight = 700, -- 700g (0.7kg)
         stack = false,
+    },
+
+    ['tool_circuitboard'] = {
+        label = 'Circuit Board',
+        weight = 500,
+    },
+
+    ['tool_circuitboard_hacking_bank'] = {
+        label = 'Circuit Board',
+        description = '01000010 01100001 01101110 01101011',
+        weight = 500,
     },
     
     -- CRAFTING JOINT    

@@ -28,7 +28,7 @@ POL_ALERT_SPRITE = 161      -- radar_financier_strand...
 POL_ALERT_COLOR = 1         -- Red
 POL_ALERT_WAVE = true       -- Enables the blip wave.
 
-HACK_ITEM = "tool_laptop"        -- Required item to hack, Remove to allow anyone to hack.
+HACK_ITEMS = {"tool_laptop", "tool_circuitboard_hacking_bank"}        -- Required item to hack, Remove to allow anyone to hack.
 
 BANKS = {
     pillbox = {

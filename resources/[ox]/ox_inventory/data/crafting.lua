@@ -57,5 +57,31 @@ return {
 			}
 		},
 		-- blip = { id = 566, colour = 31, scale = 0.8 },
+	},
+	{
+		name = 'crafting_tool_circuitboard_hacking_bank',
+		items = {
+			{
+				name = 'tool_circuitboard_hacking_bank',
+				ingredients = {
+					tool_circuitboard = 1,
+					tool_laptop = 0.001,
+				},
+				duration = 120000,
+				count = 1,
+			},
+		},
+		points = {
+			vec3(1401.27, 1139.19, 109.75)
+		},
+		zones = {
+			{
+				coords = vec3(1401.27, 1139.19, 109.75),
+				size = vec3(3.8, 1.05, 0.15),
+				distance = 1.5,
+				rotation = 315.0,
+			}
+		},
+		-- blip = { id = 566, colour = 31, scale = 0.8 },
 	}
 }

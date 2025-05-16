@@ -78,8 +78,13 @@ SD.Callback.Register("exp_bank_robbery:GetBankRobbed", function(source)
     return(bank_robbed)
 end)
 
-SD.Callback.Register("exp_bank_robbery:HasItem", function(source, item)
-    return(SD.Inventory.HasItem(source, item) == 1)
+SD.Callback.Register("exp_bank_robbery:HasItems", function(source, items)
+    for _, item in ipairs(items) do
+        if SD.Inventory.HasItem(source, item) ~= 1 then
+            return false
+        end
+    end
+    return true
 end)
 
 function ShowNotification(player_src, event)

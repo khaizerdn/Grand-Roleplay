@@ -59,19 +59,19 @@ end
 RegisterNetEvent("exp_bank_robbery:StartVaultHack", function(data)
     local entity = data.entity
 
-    if HACK_ITEM then
-        SD.Callback("exp_bank_robbery:HasItem", false, function(has_item)
-            if not has_item then
+    if HACK_ITEMS then
+        SD.Callback("exp_bank_robbery:HasItems", false, function(has_items)
+            if not has_items then
                 ShowNotification({
                     title = SD.Locale.T("hack_vault"),
-                    message = SD.Locale.T("no_laptop"),
+                    message = SD.Locale.T("no_required_items"),
                     type = "error"
                 })
                 return
             end
             
             StartVaultHack(entity)
-        end, HACK_ITEM)
+        end, HACK_ITEMS)
     else
         StartVaultHack(entity)
     end
