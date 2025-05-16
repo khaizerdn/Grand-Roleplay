@@ -8,6 +8,11 @@ return {
             debugPoly = false,
             distance = 3.0
         },
+        blip = {
+            sprite = 431,
+            color = 5,
+            scale = 0.7
+        },
         items = {
             { item = 'valuable_silver_ring', price = math.random(10, 25) },
             { item = 'valuable_gold_ring', price = math.random(80, 120) },
@@ -61,8 +66,13 @@ return {
             debugPoly = false,
             distance = 1.0
         },
+        blip = {
+            sprite = 140,
+            color = 2,
+            scale = 0.8
+        },
         items = {
-            { item = 'joint', price = math.random(10, 20) },
+            { item = 'joint', price = math.random(8, 10) },
         },
         enableMelting = false,
         meltingItems = {}

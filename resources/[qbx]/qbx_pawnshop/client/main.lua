@@ -89,12 +89,13 @@ end
 CreateThread(function()
     for id, shop in pairs(sharedConfig) do
         local shopConfig = shop.location
+        local blipConfig = shop.blip
         local blip = AddBlipForCoord(shopConfig.coords.x, shopConfig.coords.y, shopConfig.coords.z)
-        SetBlipSprite(blip, 431)
+        SetBlipSprite(blip, blipConfig.sprite)
         SetBlipDisplay(blip, 4)
-        SetBlipScale(blip, 0.7)
+        SetBlipScale(blip, blipConfig.scale)
         SetBlipAsShortRange(blip, true)
-        SetBlipColour(blip, 5)
+        SetBlipColour(blip, blipConfig.color)
         BeginTextCommandSetBlipName('STRING')
         AddTextComponentSubstringPlayerName(shop.name)
         EndTextCommandSetBlipName(blip)
