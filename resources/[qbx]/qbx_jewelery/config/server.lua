@@ -10,11 +10,11 @@ return {
             [2] = { name = 'gold_ring', min = 1, max = 3 },
             [3] = { name = 'diamond_ring', min = 1, max = 2 },
 
-            [4] = { name = 'silver_necklace', min = 1, max = 4 },
+            [4] = { name = 'silver_necklace', min = 1, max = 4 }, -- no image
             [5] = { name = 'gold_necklace', min = 1, max = 2 },
             [6] = { name = 'diamond_necklace', min = 1, max = 1 },
 
-            [7] = { name = 'silver_bracelet', min = 1, max = 4 },
+            [7] = { name = 'silver_bracelet', min = 1, max = 4 }, -- no image until item 15
             [8] = { name = 'gold_bracelet', min = 1, max = 3 },
             [9] = { name = 'diamond_bracelet', min = 1, max = 2 },
 
