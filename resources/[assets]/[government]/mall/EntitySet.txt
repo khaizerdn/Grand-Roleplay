@@ -1,0 +1,24 @@
+Available EntitySets:
+- xmas
+
+
+How To Set An EntitySet:
+1) Open the MLO-Ymap with OpenIV or Codewalker.
+
+2) Insert an Item inside "defaultEntitySets"
+
+For Example:
+<defaultEntitySets>
+     <Item>xmas</Item>
+</defaultEntitySets>
+
+
+
+If You Want To Activate It Serverside:
+FiveM:
+https://docs.fivem.net/natives/?_0x55E86AF2712B36A1
+RageMP (_ENABLE_INTERIOR_PROP):
+https://cdn.rage.mp/public/natives/#native_0x55E86AF2712B36A1
+AltV: 
+https://natives.altv.mp/#/0x55E86AF2712B36A1
+
