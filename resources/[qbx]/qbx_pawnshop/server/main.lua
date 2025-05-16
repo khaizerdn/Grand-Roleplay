@@ -1,6 +1,6 @@
 local config = require 'config.server'
 local sharedConfig = require 'config.shared'
-local playersMelting = {} ---@type table<number, {itemName: string, amount: number, endTime: number}>
+local playersMelting = {} ---@type table<number, {index: number, endTime: number}>
 
 ---@param id string
 ---@param reason string
@@ -47,15 +47,10 @@ local function getPawnShopItemFromName(itemName)
     end
 end
 
----@param itemName string
+---@param index number
 ---@return MeltingItem?
-local function getMeltingItemFromName(itemName)
-    for i = 1, #sharedConfig.meltingItems do
-        local meltingItem = sharedConfig.meltingItems[i]
-        if itemName == meltingItem.item then
-            return meltingItem
-        end
-    end
+local function getMeltingItemFromIndex(index)
+    return sharedConfig.meltingItems[index]
 end
 
 ---@param itemName string
@@ -87,9 +82,9 @@ RegisterNetEvent('qb-pawnshop:server:sellPawnItems', function(itemName, itemAmou
     TriggerClientEvent('qb-pawnshop:client:openMenu', src)
 end)
 
----@param itemName string
----@param itemAmount number
-RegisterNetEvent('qb-pawnshop:server:meltItemRemove', function(itemName, itemAmount)
+---@param index number
+---@param requiredItems {item: string, amount: number}[]
+RegisterNetEvent('qb-pawnshop:server:meltItemRemove', function(index, requiredItems)
     local src = source
     local Player = exports.qbx_core:GetPlayer(src)
 
@@ -97,20 +92,22 @@ RegisterNetEvent('qb-pawnshop:server:meltItemRemove', function(itemName, itemAmo
         return
     end
 
-    local meltingItem = getMeltingItemFromName(itemName)
+    local meltingItem = getMeltingItemFromIndex(index)
     if not meltingItem then
         exploitBan(src, 'meltItemRemove Exploiting')
         return
     end
 
-    if not Player.Functions.RemoveItem(itemName, itemAmount) then
-        exports.qbx_core:Notify(src, locale('error.no_items'), 'error')
-        return
+    for _, reqItem in pairs(requiredItems) do
+        if not Player.Functions.RemoveItem(reqItem.item, reqItem.amount) then
+            exports.qbx_core:Notify(src, locale('error.no_items'), 'error')
+            return
+        end
+        TriggerClientEvent('inventory:client:ItemBox', src, exports.ox_inventory:Items()[reqItem.item], 'remove')
     end
 
-    TriggerClientEvent('inventory:client:ItemBox', src, exports.ox_inventory:Items()[itemName], 'remove')
-    local meltTime = (itemAmount * meltingItem.meltTime)
-    playersMelting[src] = { itemName = itemName, amount = itemAmount, endTime = os.time() + (meltTime * 60) }
+    local meltTime = meltingItem.meltTime
+    playersMelting[src] = { index = index, endTime = os.time() + (meltTime * 60) }
 
     TriggerClientEvent('qb-pawnshop:client:startMelting', src, (meltTime * 60000 / 1000))
     exports.qbx_core:Notify(src, locale('info.melt_wait', meltTime), 'primary')
@@ -125,32 +122,29 @@ RegisterNetEvent('qb-pawnshop:server:pickupMelted', function()
         return
     end
 
-    local meltingItem = getMeltingItemFromName(playersMelting[src].itemName)
-    if not meltingItem then
-        exploitBan(src, 'pickupMelted Exploiting')
-        return
-    end
-
-
     if not playersMelting[src] or playersMelting[src].endTime > os.time() then
         exploitBan(src, 'pickupMelted Exploiting')
         return
     end
 
-    local meltedAmount = playersMelting[src].amount
+    local meltingItem = getMeltingItemFromIndex(playersMelting[src].index)
+    if not meltingItem then
+        exploitBan(src, 'pickupMelted Exploiting')
+        return
+    end
+
     playersMelting[src] = nil
 
     for i = 1, #meltingItem.rewards do
         local reward = meltingItem.rewards[i]
 
-        local rewardAmount = reward.amount
-        if not Player.Functions.AddItem(reward.item, (meltedAmount * rewardAmount)) then
+        if not Player.Functions.AddItem(reward.item, reward.amount) then
             TriggerClientEvent('qb-pawnshop:client:openMenu', src)
             return
         end
 
         TriggerClientEvent('inventory:client:ItemBox', src, exports.ox_inventory:Items()[reward.item], 'add')
-        exports.qbx_core:Notify(src, locale('success.items_received', (meltedAmount * rewardAmount), exports.ox_inventory:Items()[reward.item].label), 'success')
+        exports.qbx_core:Notify(src, locale('success.items_received', reward.amount, exports.ox_inventory:Items()[reward.item].label), 'success')
     end
     TriggerClientEvent('qb-pawnshop:client:resetPickup', src)
     TriggerClientEvent('qb-pawnshop:client:openMenu', src)
