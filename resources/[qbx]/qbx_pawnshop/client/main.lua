@@ -24,7 +24,6 @@ local function addPawnShop(id, shopConfig, shopData)
         debug = shopConfig.debugPoly,
         inside = function()
             if IsControlJustReleased(0, 38) then
-                lib.hideTextUI()
                 if config.useTimes then
                     local gameHour = GetClockHours()
                     if gameHour < config.timeOpen or gameHour > config.timeClosed then
