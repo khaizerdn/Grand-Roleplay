@@ -16,10 +16,6 @@ RegisterNetEvent('hack:requestBlipSync', function()
     TriggerClientEvent('hack:syncBlips', source, blipStates)
 end)
 
-AddEventHandler('QBCore:Server:PlayerLoaded', function(player)
-    TriggerClientEvent('hack:syncBlips', player.source, blipStates)
-end)
-
 lib.callback.register('hack:checkCooldown', function(source, group_name)
     local territory = Config.Territories[group_name]
     if not territory then return { passed = false, remaining = 0 } end

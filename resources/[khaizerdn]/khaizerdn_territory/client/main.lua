@@ -22,6 +22,10 @@ local function updateBlip(group_name, name)
     blips[group_name] = blip
 end
 
+AddEventHandler('QBCore:Client:OnPlayerLoaded', function()
+    TriggerServerEvent('hack:requestBlipSync')
+end)
+
 RegisterNetEvent('hack:syncBlips', function(data)
     for group_name, name in pairs(data) do
         updateBlip(group_name, name)
