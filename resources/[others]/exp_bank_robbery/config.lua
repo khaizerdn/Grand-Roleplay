@@ -12,7 +12,7 @@
                                                          
 LANGUAGE = 'en'
 
-MONEY_PER_STACK = 150
+MONEY_PER_STACK = 760
 MONEY_TYPE = "black_money"
 
 BANK_TIMER = 60 * 60000     -- 60 minutes
