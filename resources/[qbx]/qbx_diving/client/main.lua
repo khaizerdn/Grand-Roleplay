@@ -13,10 +13,11 @@ local blips = {}
 
 local function takeCoral(coralIndex)
     local times = math.random(2, 5)
-    if lib.progressBar({
+    if lib.progressCircle({
         duration = times * 1000,
         label = locale('info.collecting_coral'),
         canCancel = true,
+        position = 'bottom-center',
         useWhileDead = false,
         allowSwimming = true,
         disable = {
@@ -134,10 +135,11 @@ local function setDivingLocation(areaIndex, pickedUpCoralIndexes)
 end
 
 local function sellCoral()
-    if lib.progressBar({
+    if lib.progressCircle({
         duration = math.random(2000, 4000),
         label = locale('info.checking_pockets'),
         useWhileDead = false,
+        position = 'bottom-center',
         canCancel = true,
         anim = {
             scenario = 'WORLD_HUMAN_STAND_IMPATIENT'
@@ -150,6 +152,19 @@ local function sellCoral()
     ClearPedTasksImmediately(cache.ped)
 end
 
+local function createSellerBlip(seller)
+    local blip = AddBlipForCoord(seller.coords.x, seller.coords.y, seller.coords.z)
+    SetBlipSprite(blip, seller.blip.sprite)
+    SetBlipDisplay(blip, 4)
+    SetBlipScale(blip, seller.blip.scale)
+    SetBlipColour(blip, seller.blip.color)
+    SetBlipAsShortRange(blip, true)
+    BeginTextCommandSetBlipName('STRING')
+    AddTextComponentSubstringPlayerName(seller.blip.name)
+    EndTextCommandSetBlipName(blip)
+    return blip
+end
+
 local function createSeller()
     for _, current in pairs(config.sellLocations) do
         current.model = type(current.model) == 'string' and joaat(current.model) or current.model
@@ -159,6 +174,10 @@ local function createSeller()
         FreezeEntityPosition(ped, true)
         SetEntityInvincible(ped, true)
         SetBlockingOfNonTemporaryEvents(ped, true)
+        
+        -- Create blip for seller
+        blips[#blips + 1] = createSellerBlip(current)
+
         if config.useTarget then
             exports.ox_target:addLocalEntity(ped, {
                 {
