@@ -478,22 +478,22 @@ return {
 
     ['diving_gear'] = {
         label = 'Diving Gear',
-        weight = 30000,
+        weight = 20000,
     },
 
-    ['diving_fill'] = {
-        label = 'Diving Tube',
-        weight = 3000,
+    ['diving_scubacylinder'] = {
+        label = 'Scuba Cylinder',
+        weight = 10000,
     },
 
     ['antipatharia_coral'] = {
         label = 'Antipatharia',
-        weight = 1000,
+        weight = 10000,
     },
 
     ['dendrogyra_coral'] = {
         label = 'Dendrogyra',
-        weight = 1000,
+        weight = 10000,
     },
 
     ['jerry_can'] = {
