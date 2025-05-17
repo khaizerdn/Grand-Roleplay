@@ -244,6 +244,29 @@ RegisterNetEvent('qb-spawn:client:setupSpawns', function()
     spawns = {}
 
     local lastCoords, lastPropertyId = lib.callback.await('qbx_spawn:server:getLastLocation')
+    
+    if config.useLastLocation then
+        DoScreenFadeOut(1000)
+        while not IsScreenFadedOut() do
+            Wait(0)
+        end
+
+        TriggerServerEvent('QBCore:Server:OnPlayerLoaded')
+        TriggerEvent('QBCore:Client:OnPlayerLoaded')
+        FreezeEntityPosition(cache.ped, false)
+        DisplayRadar(true)
+
+        if lastPropertyId then
+            TriggerServerEvent('qbx_properties:server:enterProperty', { id = lastPropertyId, isSpawn = true })
+        else
+            SetEntityCoords(cache.ped, lastCoords.x, lastCoords.y, lastCoords.z, false, false, false, false)
+            SetEntityHeading(cache.ped, lastCoords.w or 0.0)
+        end
+
+        DoScreenFadeIn(1000)
+        return
+    end
+
     spawns[#spawns + 1] = {
         label = locale('last_location'),
         coords = lastCoords,

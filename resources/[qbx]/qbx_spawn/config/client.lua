@@ -1,4 +1,5 @@
 return {
+    useLastLocation = true, -- Set to true to use last position directly, false for multiple spawn selection
     spawns = {
         {
             label = 'Rockford Hills Police Department',
