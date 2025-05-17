@@ -1,7 +1,7 @@
 return {
     cityhalls = {
         {
-            coords = vec3(-554.68, -185.1, 38.22),
+            coords = vec3(-527.26, -234.95, 37.93),
             showBlip = true,
             blip = {
                 label = 'City Services',
