@@ -16,13 +16,13 @@ end
 lib.callback.register('qbx_garages:server:spawnVehicle', function (source, vehicleId, garageName, accessPointIndex)
     local garage = Garages[garageName]
     local accessPoint = garage.accessPoints[accessPointIndex]
-    if #(GetEntityCoords(GetPlayerPed(source)) - accessPoint.coords.xyz) > 3 then
-        lib.print.error(string.format("player %s attempted to spawn a vehicle but was too far from the access point", source))
-        return
-    end
+    -- if #(GetEntityCoords(GetPlayerPed(source)) - accessPoint.spawn.xyz) > 3 then
+    --     lib.print.error(string.format("player %s attempted to spawn a vehicle but was too far from the access point", source))
+    --     return
+    -- end
     local garageType = GetGarageType(garageName)
 
-    local spawnCoords = accessPoint.spawn or accessPoint.coords
+    local spawnCoords = accessPoint.spawn or accessPoint.spawn
     if Config.distanceCheck then
         local vec3Coords = vec3(spawnCoords.x, spawnCoords.y, spawnCoords.z)
         local nearbyVehicle = lib.getClosestVehicle(vec3Coords, Config.distanceCheck, false)
