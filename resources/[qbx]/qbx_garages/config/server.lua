@@ -39,6 +39,44 @@ return {
     ---@type table<string, GarageConfig>
     garages = {
 
+        marlowe_vineyard_garage_1 = {
+            label = 'Marlowe Vineyard Garage',
+            vehicleType = VehicleType.CAR,
+            shared = true,
+            allowUnowned = true,
+            maxVehicles = 1, -- Added vehicle limit
+            accessPoints = {
+                {
+                    -- blip = {
+                    --     name = 'La Fuente Blanca Garage',
+                    --     sprite = 357,
+                    --     color = 3,
+                    -- },
+                    coords = vec4(-1914.77, 2055.78, 140.74, 75.07),
+                    spawn = vec4(-1918.89, 2056.81, 140.96, 257.32),
+                }
+            },
+        },
+
+        marlowe_vineyard_garage_2 = {
+            label = 'Marlowe Vineyard Garage',
+            vehicleType = VehicleType.CAR,
+            shared = true,
+            allowUnowned = true,
+            maxVehicles = 1, -- Added vehicle limit
+            accessPoints = {
+                {
+                    -- blip = {
+                    --     name = 'La Fuente Blanca Garage',
+                    --     sprite = 357,
+                    --     color = 3,
+                    -- },
+                    coords = vec4(-1915.1, 2051.75, 140.74, 75.31),
+                    spawn = vec4(-1919.87, 2052.85, 140.96, 257.94),
+                }
+            },
+        },
+
         la_fuente_blanca_garage_1 = {
             label = 'La Fuente Blanca Garage',
             vehicleType = VehicleType.CAR,
