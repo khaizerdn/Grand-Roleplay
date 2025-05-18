@@ -19,6 +19,18 @@ Config.Territories = {
             }
         }
     },
+    marlowevineyard = {
+        cooldownSeconds = 14400,
+        hackLocation = vec3(-1876.82, 2059.16, 145.57),
+        blip = {
+            coords = vec3(-1888.26, 2049.94, 140.98),
+            default = {
+                name = "Marlowe Vineyard",
+                sprite = 176,
+                color = 1
+            }
+        }
+    },
 }
 
 return Config
