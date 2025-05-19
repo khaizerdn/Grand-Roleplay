@@ -400,14 +400,7 @@ end)
 RegisterNetEvent('qbx_garages:server:toggleVehicleLock', function(netId, lock)
     local vehicle = NetworkGetEntityFromNetworkId(netId)
     if not vehicle or GetEntityType(vehicle) ~= 2 then return end
-    local rawPlate = GetVehicleNumberPlateText(vehicle)
-    local plate = string.upper(string.gsub(rawPlate, "%s+", "")) -- Normalize plate
-    local count = exports.ox_inventory:Search(source, 'count', 'vehicle_key', {plate = plate})
-    if count > 0 then
-        local newState = lock and 2 or 1 -- 2 = locked, 1 = unlocked
-        Entity(vehicle).state:set('doorslockstate', newState, true)
-        lib.print.debug('Toggled lock state for vehicle, Net ID:', netId, 'State:', newState)
-    else
-        lib.print.debug('No key for vehicle, Plate:', plate, 'Net ID:', netId)
-    end
+    local newState = lock and 2 or 1 -- 2 = locked, 1 = unlocked
+    Entity(vehicle).state:set('doorslockstate', newState, true)
+    lib.print.debug('Toggled lock state for vehicle, Net ID:', netId, 'State:', newState)
 end)

@@ -44,7 +44,7 @@ return {
             vehicleType = VehicleType.CAR,
             shared = true,
             allowUnowned = true,
-            maxVehicles = 2,
+            maxVehicles = 7,
             accessPoints = {
                 {
                     points = {
@@ -63,7 +63,7 @@ return {
             vehicleType = VehicleType.CAR,
             shared = true,
             allowUnowned = true,
-            maxVehicles = 2,
+            maxVehicles = 5,
             accessPoints = {
                 {
                     points = {
@@ -71,6 +71,26 @@ return {
                         vec3(-1902.84, 2033.72, 140.74),
                         vec3(-1881.9, 2026.18, 140.41),
                         vec3(-1880.17, 2032.61, 140.39),
+                        
+                    },
+                    blipCoords = vec3(-1904.63, 2050.48, 140.73),
+                }
+            },
+        },
+
+        marlowe_vineyard_garage_3 = {
+            label = 'Marlowe Vineyard Garage',
+            vehicleType = VehicleType.CAR,
+            shared = true,
+            allowUnowned = true,
+            maxVehicles = 5,
+            accessPoints = {
+                {
+                    points = {
+                        vec3(-1902.82, 2023.29, 140.76),
+                        vec3(-1909.49, 2023.44, 140.75),
+                        vec3(-1909.59, 1998.2, 142.13),
+                        vec3(-1902.93, 1998.14, 141.95)
                         
                     },
                     blipCoords = vec3(-1904.63, 2050.48, 140.73),
