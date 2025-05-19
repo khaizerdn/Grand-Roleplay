@@ -14,6 +14,7 @@ lib.versionCheck('Qbox-project/qbx_garages')
 ---@field state VehicleState
 ---@field depotPrice integer
 ---@field props table ox_lib properties table
+---@field parked_position? table JSON-encoded vec4 (x, y, z, w)
 
 Config = require 'config.server'
 VEHICLES = exports.qbx_core:GetVehiclesByName()
@@ -284,12 +285,13 @@ end)
 ---@param netId number
 ---@param props table ox_lib vehicle props https://github.com/overextended/ox_lib/blob/master/resource/vehicleProperties/client.lua#L3
 ---@param garage string
-lib.callback.register('qbx_garages:server:parkVehicle', function(source, netId, props, garage)
+---@param parkedPosition table JSON-encoded vec4
+lib.callback.register('qbx_garages:server:parkVehicle', function(source, netId, props, garage, parkedPosition)
     assert(Garages[garage] ~= nil, string.format('Garage %s not found. Did you register this garage?', garage))
     local vehicle = NetworkGetEntityFromNetworkId(netId)
     local vehicleId = Entity(vehicle).state.vehicleid or exports.qbx_vehicles:GetVehicleIdByPlate(GetVehicleNumberPlateText(vehicle))
     local garageConfig = Garages[garage]
-    
+
     local isParkableResult = isParkable(source, vehicleId, garage, netId)
     if not isParkableResult then
         exports.qbx_core:Notify(source, locale('error.not_correct_type'), 'error')
@@ -316,7 +318,8 @@ lib.callback.register('qbx_garages:server:parkVehicle', function(source, netId, 
             model = modelName,
             citizenid = nil,
             garage = garage,
-            props = props
+            props = props,
+            parked_position = parkedPosition
         })
 
         if not newVehicleId then
@@ -337,7 +340,8 @@ lib.callback.register('qbx_garages:server:parkVehicle', function(source, netId, 
         exports.qbx_vehicles:SaveVehicle(vehicle, {
             garage = garage,
             state = VehicleState.GARAGED,
-            props = props
+            props = props,
+            parked_position = parkedPosition
         })
     end
 

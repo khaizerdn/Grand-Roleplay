@@ -32,6 +32,7 @@ exports('DoesPlayerVehiclePlateExist', doesEntityPlateExist)
 ---@field state State
 ---@field depotPrice integer
 ---@field props table ox_lib properties table
+---@field parked_position? table JSON-encoded vec4 (x, y, z, w)
 
 ---@class PlayerVehiclesFilters
 ---@field citizenid? string
@@ -82,7 +83,7 @@ end
 ---@param filters? PlayerVehiclesInternalFilters
 ---@return PlayerVehicle[]
 local function getPlayerVehiclesInternal(filters)
-    local query = 'SELECT id, citizenid, vehicle, mods, garage, state, depotprice FROM player_vehicles'
+    local query = 'SELECT id, citizenid, vehicle, mods, garage, state, depotprice, parked_position FROM player_vehicles'
     local whereClause, placeholders = buildWhereClause(filters)
     lib.print.debug(query .. whereClause)
     local results = MySQL.query.await(query .. whereClause, placeholders)
@@ -95,7 +96,8 @@ local function getPlayerVehiclesInternal(filters)
             garage = data.garage,
             state = data.state,
             depotPrice = data.depotprice,
-            props = json.decode(data.mods)
+            props = json.decode(data.mods),
+            parked_position = data.parked_position and json.decode(data.parked_position) or nil
         }
     end
     return ownedVehicles
@@ -129,6 +131,7 @@ exports('GetPlayerVehicle', getPlayerVehicle)
 ---@field citizenid? string owner of the vehicle
 ---@field garage? string
 ---@field props? table ox_lib properties to set. See https://github.com/overextended/ox_lib/blob/master/resource/vehicleProperties/client.lua#L3
+---@field parked_position? table JSON-encoded vec4 (x, y, z, w)
 
 ---@param request CreatePlayerVehicleRequest
 ---@return integer? vehicleId, ErrorResult? errorResult
@@ -146,21 +149,22 @@ local function createPlayerVehicle(request)
     props.fuelLevel = props.fuelLevel or 100
     props.model = joaat(request.model)
 
-    if not triggerEventHooks('createPlayerVehicle', { citizenid = request.citizenid, garage = request.garage, props = props }) then
+    if not triggerEventHooks('createPlayerVehicle', { citizenid = request.citizenid, garage = request.garage, props = props, parked_position = request.parked_position }) then
         return nil, {
             code = 'hook_cancelled',
             message = 'a createPlayerVehicle event hook cancelled this operation'
         }
     end
 
-    return MySQL.insert.await('INSERT INTO player_vehicles (license, citizenid, vehicle, hash, mods, plate, state, garage) VALUES ((SELECT license FROM players WHERE citizenid = @citizenid), @citizenid, @vehicle, @hash, @mods, @plate, @state, @garage)', {
+    return MySQL.insert.await('INSERT INTO player_vehicles (license, citizenid, vehicle, hash, mods, plate, state, garage, parked_position) VALUES ((SELECT license FROM players WHERE citizenid = @citizenid), @citizenid, @vehicle, @hash, @mods, @plate, @state, @garage, @parked_position)', {
         citizenid = request.citizenid,
         vehicle = request.model,
         hash = props.model,
         mods = json.encode(props),
         plate = props.plate,
         state = request.garage and State.GARAGED or State.OUT,
-        garage = request.garage
+        garage = request.garage,
+        parked_position = request.parked_position and json.encode(request.parked_position) or nil
     })
 end
 
@@ -217,6 +221,7 @@ exports('GetVehicleIdByPlate', getVehicleIdByPlate)
 ---@field state? State
 ---@field depotPrice? integer
 ---@field props? table ox_lib properties table
+---@field parked_position? table JSON-encoded vec4
 
 ---@param vehicleId integer
 ---@param options SaveVehicleOptions
@@ -263,6 +268,11 @@ local function buildSaveVehicleQuery(vehicleId, options)
             crumbs[#crumbs+1] = 'body = ?'
             placeholders[#placeholders+1] = options.props.bodyHealth
         end
+    end
+
+    if options.parked_position then
+        crumbs[#crumbs+1] = 'parked_position = ?'
+        placeholders[#placeholders+1] = json.encode(options.parked_position)
     end
 
     placeholders[#placeholders+1] = vehicleId

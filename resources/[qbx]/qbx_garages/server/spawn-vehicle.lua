@@ -15,22 +15,7 @@ end
 ---@return number? netId
 lib.callback.register('qbx_garages:server:spawnVehicle', function (source, vehicleId, garageName, accessPointIndex)
     local garage = Garages[garageName]
-    local accessPoint = garage.accessPoints[accessPointIndex]
-    -- if #(GetEntityCoords(GetPlayerPed(source)) - accessPoint.spawn.xyz) > 3 then
-    --     lib.print.error(string.format("player %s attempted to spawn a vehicle but was too far from the access point", source))
-    --     return
-    -- end
     local garageType = GetGarageType(garageName)
-
-    local spawnCoords = accessPoint.spawn or accessPoint.spawn
-    if Config.distanceCheck then
-        local vec3Coords = vec3(spawnCoords.x, spawnCoords.y, spawnCoords.z)
-        local nearbyVehicle = lib.getClosestVehicle(vec3Coords, Config.distanceCheck, false)
-        if nearbyVehicle then
-            exports.qbx_core:Notify(source, locale('error.no_space'), 'error')
-            return
-        end
-    end
 
     local filter = GetPlayerVehicleFilter(source, garageName)
     local playerVehicle = exports.qbx_vehicles:GetPlayerVehicle(vehicleId, filter)
@@ -38,8 +23,25 @@ lib.callback.register('qbx_garages:server:spawnVehicle', function (source, vehic
         exports.qbx_core:Notify(source, locale('error.not_owned'), 'error')
         return
     end
-    if garageType == GarageType.DEPOT and FindPlateOnServer(playerVehicle.props.plate) then -- If depot, check if vehicle is not already spawned on the map
+    if garageType == GarageType.DEPOT and FindPlateOnServer(playerVehicle.props.plate) then
         return exports.qbx_core:Notify(source, locale('error.not_impound'), 'error', 5000)
+    end
+
+    -- Use parked_position from the database
+    local spawnCoords = playerVehicle.parked_position
+    if not spawnCoords then
+        exports.qbx_core:Notify(source, locale('error.no_spawn_position'), 'error')
+        return
+    end
+    spawnCoords = vec4(spawnCoords.x, spawnCoords.y, spawnCoords.z, spawnCoords.w)
+
+    if Config.distanceCheck then
+        local vec3Coords = vec3(spawnCoords.x, spawnCoords.y, spawnCoords.z)
+        local nearbyVehicle = lib.getClosestVehicle(vec3Coords, Config.distanceCheck, false)
+        if nearbyVehicle then
+            exports.qbx_core:Notify(source, locale('error.no_space'), 'error')
+            return
+        end
     end
 
     local warpPed = Config.warpInVehicle and GetPlayerPed(source)

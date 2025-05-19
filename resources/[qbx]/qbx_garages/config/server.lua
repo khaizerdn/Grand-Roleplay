@@ -2,7 +2,7 @@ return {
     autoRespawn = false, -- True == auto respawn cars that are outside into your garage on script restart, false == does not put them into your garage and players have to go to the impound
     warpInVehicle = false, -- If false, player will no longer warp into vehicle upon taking the vehicle out.
     doorsLocked = true, -- If true, the doors will be locked upon taking the vehicle out.
-    distanceCheck = 5.0, -- The distance that needs to bee clear to let the vehicle spawn, this prevents vehicles stacking on top of each other
+    distanceCheck = 5.0, -- The distance that needs to be clear to let the vehicle spawn, this prevents vehicles stacking on top of each other
     ---calculates the automatic impound fee.
     ---@param vehicleId integer
     ---@param modelName string
@@ -19,10 +19,10 @@ return {
 
     ---The place where the player can access the garage and spawn a car
     ---@class AccessPoint
-    ---@field coords vector4 where the garage menu can be accessed from
+    ---@field points vector3[] polyzone points for the garage access area
     ---@field blip? GarageBlip
-    ---@field spawn? vector4 where the vehicle will spawn. Defaults to coords
-    ---@field dropPoint? vector3 where a vehicle can be stored, Defaults to spawn or coords
+    ---@field blipCoords vector3 coordinates for the blip
+    ---@field dropPoint? vector3 where a vehicle can be stored
 
     --- @class GarageConfig
     --- @field label string
@@ -44,7 +44,7 @@ return {
             vehicleType = VehicleType.CAR,
             shared = true,
             allowUnowned = true,
-            maxVehicles = 1, -- Added vehicle limit
+            maxVehicles = 1,
             accessPoints = {
                 {
                     points = {
@@ -54,7 +54,6 @@ return {
                         vec3(-1909.13, 2053.31, 140.74)
                     },
                     blipCoords = vec3(-1904.63, 2050.48, 140.73),
-                    spawn = vec4(-1904.31, 2042.33, 140.74, 185.72),
                 }
             },
         },
