@@ -44,7 +44,7 @@ return {
             vehicleType = VehicleType.CAR,
             shared = true,
             allowUnowned = true,
-            maxVehicles = 7,
+            maxVehicles = 15,
             accessPoints = {
                 {
                     points = {
@@ -67,7 +67,7 @@ return {
             vehicleType = VehicleType.CAR,
             shared = true,
             allowUnowned = true,
-            maxVehicles = 7,
+            maxVehicles = 6,
             accessPoints = {
                 {
                     points = {
@@ -91,7 +91,7 @@ return {
             vehicleType = VehicleType.CAR,
             shared = true,
             allowUnowned = true,
-            maxVehicles = 7,
+            maxVehicles = 6,
             accessPoints = {
                 {
                     points = {
@@ -139,7 +139,7 @@ return {
             vehicleType = VehicleType.CAR,
             shared = true,
             allowUnowned = true,
-            maxVehicles = 7,
+            maxVehicles = 10,
             accessPoints = {
                 {
                     points = {
@@ -163,7 +163,7 @@ return {
             vehicleType = VehicleType.CAR,
             shared = true,
             allowUnowned = true,
-            maxVehicles = 7,
+            maxVehicles = 3,
             accessPoints = {
                 {
                     points = {
@@ -187,7 +187,7 @@ return {
             vehicleType = VehicleType.CAR,
             shared = true,
             allowUnowned = true,
-            maxVehicles = 7,
+            maxVehicles = 3,
             accessPoints = {
                 {
                     points = {
@@ -210,7 +210,7 @@ return {
             vehicleType = VehicleType.CAR,
             shared = true,
             allowUnowned = true,
-            maxVehicles = 7,
+            maxVehicles = 4,
             accessPoints = {
                 {
                     points = {
@@ -256,7 +256,7 @@ return {
             vehicleType = VehicleType.CAR,
             shared = true,
             allowUnowned = true,
-            maxVehicles = 7,
+            maxVehicles = 10,
             accessPoints = {
                 {
                     points = {
@@ -279,7 +279,7 @@ return {
             vehicleType = VehicleType.CAR,
             shared = true,
             allowUnowned = true,
-            maxVehicles = 7,
+            maxVehicles = 3,
             accessPoints = {
                 {
                     points = {
@@ -302,7 +302,7 @@ return {
             vehicleType = VehicleType.CAR,
             shared = true,
             allowUnowned = true,
-            maxVehicles = 7,
+            maxVehicles = 4,
             accessPoints = {
                 {
                     points = {
@@ -349,7 +349,7 @@ return {
             vehicleType = VehicleType.CAR,
             shared = true,
             allowUnowned = true,
-            maxVehicles = 10,
+            maxVehicles = 15,
             accessPoints = {
                 {
                     points = {
@@ -422,7 +422,25 @@ return {
                         vec3(-1902.93, 1998.14, 141.95)
                         
                     },
-                    blipCoords = vec3(-1904.63, 2050.48, 140.73),
+                }
+            },
+        },
+
+        lafuenteblanca_garage_1 = {
+            label = 'La Fuente Blanca Garage',
+            vehicleType = VehicleType.CAR,
+            shared = true,
+            allowUnowned = true,
+            maxVehicles = 3,
+            accessPoints = {
+                {
+                    points = {
+                        vec3(1398.33, 1114.38, 114.84),
+                        vec3(1398.54, 1122.2, 114.84),
+                        vec3(1417.07, 1122.37, 114.84),
+                        vec3(1417.04, 1114.47, 114.83)
+                        
+                    },
                 }
             },
         },
