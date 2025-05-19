@@ -77,11 +77,6 @@ return {
                         vec3(-380.71, -89.03, 54.75)
 
                     },
-                    -- blip = {
-                    --     coords = vec3(-300.34, -59.16, 49.11),
-                    --     sprite = 357, -- Garage blip sprite
-                    --     color = 3,    -- Blue color
-                    -- }
                 }
             },
         },
@@ -101,11 +96,6 @@ return {
                         vec3(-396.55, -64.64, 54.67)
 
                     },
-                    -- blip = {
-                    --     coords = vec3(-300.34, -59.16, 49.11),
-                    --     sprite = 357, -- Garage blip sprite
-                    --     color = 3,    -- Blue color
-                    -- }
                 }
             },
         },
@@ -125,11 +115,6 @@ return {
                         vec3(-382.84, -30.55, 54.75)
 
                     },
-                    -- blip = {
-                    --     coords = vec3(-300.34, -59.16, 49.11),
-                    --     sprite = 357, -- Garage blip sprite
-                    --     color = 3,    -- Blue color
-                    -- }
                 }
             },
         },
@@ -149,11 +134,6 @@ return {
                         vec3(-357.69, -39.18, 54.75)
 
                     },
-                    -- blip = {
-                    --     coords = vec3(-300.34, -59.16, 49.11),
-                    --     sprite = 357, -- Garage blip sprite
-                    --     color = 3,    -- Blue color
-                    -- }
                 }
             },
         },
@@ -173,11 +153,6 @@ return {
                         vec3(-345.22, -48.35, 54.42)
 
                     },
-                    -- blip = {
-                    --     coords = vec3(-300.34, -59.16, 49.11),
-                    --     sprite = 357, -- Garage blip sprite
-                    --     color = 3,    -- Blue color
-                    -- }
                 }
             },
         },
@@ -196,11 +171,6 @@ return {
                         vec3(-316.93, -59.5, 54.42),
                         vec3(-315.08, -53.82, 54.75)
                     },
-                    -- blip = {
-                    --     coords = vec3(-300.34, -59.16, 49.11),
-                    --     sprite = 357, -- Garage blip sprite
-                    --     color = 3,    -- Blue color
-                    -- }
                 }
             },
         },
@@ -219,11 +189,6 @@ return {
                         vec3(-313.37, -76.16, 54.75),
                         vec3(-318.54, -74.09, 54.42)
                     },
-                    -- blip = {
-                    --     coords = vec3(-300.34, -59.16, 49.11),
-                    --     sprite = 357, -- Garage blip sprite
-                    --     color = 3,    -- Blue color
-                    -- }
                 }
             },
         },
@@ -242,11 +207,6 @@ return {
                         vec3(-372.21, -91.18, 45.66),
                         vec3(-373.88, -95.77, 45.66)
                     },
-                    -- blip = {
-                    --     coords = vec3(-360.56, -94.97, 45.67),
-                    --     sprite = 357, -- Garage blip sprite
-                    --     color = 3,    -- Blue color
-                    -- }
                 }
             },
         },
@@ -265,11 +225,6 @@ return {
                         vec3(-374.91, -147.21, 38.69),
                         vec3(-378.96, -149.44, 38.69)
                     },
-                    -- blip = {
-                    --     coords = vec3(-360.56, -94.97, 45.67),
-                    --     sprite = 357, -- Garage blip sprite
-                    --     color = 3,    -- Blue color
-                    -- }
                 }
             },
         },
@@ -288,11 +243,6 @@ return {
                         vec3(-359.13, -118.28, 38.7),
                         vec3(-354.39, -119.88, 38.75)
                     },
-                    -- blip = {
-                    --     coords = vec3(-360.56, -94.97, 45.67),
-                    --     sprite = 357, -- Garage blip sprite
-                    --     color = 3,    -- Blue color
-                    -- }
                 }
             },
         },
@@ -311,11 +261,6 @@ return {
                         vec3(-336.54, -162.38, 39.01),
                         vec3(-342.45, -164.51, 39.02)
                     },
-                    -- blip = {
-                    --     coords = vec3(-360.56, -94.97, 45.67),
-                    --     sprite = 357, -- Garage blip sprite
-                    --     color = 3,    -- Blue color
-                    -- }
                 }
             },
         },
@@ -382,7 +327,6 @@ return {
                         vec3(-1928.18, 2030.87, 140.84),
                         vec3(-1921.91, 2028.51, 140.75)
                     },
-                    blipCoords = vec3(-1904.63, 2050.48, 140.73),
                 }
             },
         },
@@ -402,7 +346,6 @@ return {
                         vec3(-1880.17, 2032.61, 140.39),
                         
                     },
-                    blipCoords = vec3(-1904.63, 2050.48, 140.73),
                 }
             },
         },
@@ -445,109 +388,94 @@ return {
             },
         },
 
-        -- marlowe_vineyard_garage_2 = {
-        --     label = 'Marlowe Vineyard Garage',
-        --     vehicleType = VehicleType.CAR,
-        --     shared = true,
-        --     allowUnowned = true,
-        --     maxVehicles = 1, -- Added vehicle limit
-        --     accessPoints = {
-        --         {
-        --             -- blip = {
-        --             --     name = 'La Fuente Blanca Garage',
-        --             --     sprite = 357,
-        --             --     color = 3,
-        --             -- },
-        --             coords = vec4(-1915.1, 2051.75, 140.74, 75.31),
-        --             spawn = vec4(-1919.87, 2052.85, 140.96, 257.94),
-        --         }
-        --     },
-        -- },
+        intairport_garage_1 = {
+            label = 'Airport Hangar',
+            vehicleType = VehicleType.AIR,
+            shared = true,
+            allowUnowned = true,
+            maxVehicles = 5,
+            accessPoints = {
+                {
+                    points = {
+                        vec3(-1033.81, -3019.47, 13.95),
+                        vec3(-969.82, -2907.01, 13.96),
+                        vec3(-961.47, -2911.6, 13.96),
+                        vec3(-953.74, -2899.09, 13.96),
+                        vec3(-886.7, -2957.71, 13.94),
+                        vec3(-897.06, -2976.06, 13.94),
+                        vec3(-884.31, -2983.67, 13.95),
+                        vec3(-935.36, -3072.58, 13.94)
+                        
+                    },
+                    blip = {
+                        coords = vec3(-1009.39, -2979.26, 13.95),
+                        sprite = 360,
+                        color = 3,
+                    },
+                }
+            },
+        },
 
-        -- la_fuente_blanca_garage_1 = {
-        --     label = 'La Fuente Blanca Garage',
-        --     vehicleType = VehicleType.CAR,
-        --     shared = true,
-        --     allowUnowned = true,
-        --     maxVehicles = 1, -- Added vehicle limit
-        --     accessPoints = {
-        --         {
-        --             -- blip = {
-        --             --     name = 'La Fuente Blanca Garage',
-        --             --     sprite = 357,
-        --             --     color = 3,
-        --             -- },
-        --             coords = vec4(1398.47, 1114.67, 113.84, -135.94),
-        --             spawn = vec4(1400.69, 1117.27, 113.86, 47.23),
-        --         }
-        --     },
-        -- },
+        higginshelitours_garage_1 = {
+            label = 'Higgins Helitours',
+            vehicleType = VehicleType.AIR,
+            shared = true,
+            allowUnowned = true,
+            maxVehicles = 6,
+            accessPoints = {
+                {
+                    points = {
+                        vec3(-689.93, -1450.89, 5.0),
+                        vec3(-738.91, -1408.74, 5.0),
+                        vec3(-776.58, -1454.68, 5.0),
+                        vec3(-727.81, -1494.51, 5.0)
 
-        -- la_fuente_blanca_garage_2 = {
-        --     label = 'La Fuente Blanca Garage',
-        --     vehicleType = VehicleType.CAR,
-        --     shared = true,
-        --     allowUnowned = true,
-        --     maxVehicles = 1, -- Added vehicle limit
-        --     accessPoints = {
-        --         {
-        --             -- blip = {
-        --             --     name = 'La Fuente Blanca Garage',
-        --             --     sprite = 357,
-        --             --     color = 3,
-        --             -- },
-        --             coords = vec4(1404.68, 1114.63, 113.84, -143.71),
-        --             spawn = vec4(1406.82, 1117.07, 113.86, 50.59),
-        --         }
-        --     },
-        -- },
+                        
+                    },
+                    blip = {
+                        coords = vec3(-732.05, -1452.23, 5.0),
+                        sprite = 360,
+                        color = 3,
+                    },
+                }
+            },
+        },
 
-        -- burtongarage = {
-        --     label = 'Burton Public Garage',
-        --     vehicleType = VehicleType.CAR,
-        --     accessPoints = {
-        --         {
-        --             blip = {
-        --                 name = 'Burton Public Garage',
-        --                 sprite = 357,
-        --                 color = 3,
-        --             },
-        --             coords = vec4(-310.8, -58.39, 54.42, 67.74),
-        --             spawn = vec4(-317.96, -57.17, 53.82, 161.75),
-        --         }
-        --     },
-        -- },
+        lapuerta_garage_1 = {
+            label = 'La Puerta Dock',
+            vehicleType = VehicleType.SEA,
+            shared = true,
+            allowUnowned = true,
+            maxVehicles = 6,
+            accessPoints = {
+                {
+                    points = {
+                        vec3(-775.59, -1516.02, 1.2),
+                        vec3(-795.58, -1462.7, 0.61),
+                        vec3(-690.79, -1338.9, 0.8),
+                        vec3(-726.75, -1308.62, 0.8),
+                        vec3(-814.96, -1411.52, 1.92),
+                        vec3(-850.78, -1312.66, 1.56),
+                        vec3(-1006.19, -1368.39, 0.8),
+                        vec3(-1015.44, -1407.27, 1.03),
+                        vec3(-1011.36, -1418.4, 1.32),
+                        vec3(-909.06, -1381.54, 0.82),
+                        vec3(-890.52, -1430.62, 1.74),
+                        vec3(-966.34, -1458.0, 1.51),
+                        vec3(-947.69, -1502.31, 0.45),
+                        vec3(-875.32, -1473.15, 1.11),
+                        vec3(-858.67, -1518.86, 1.02)
 
-        -- intairport = {
-        --     label = 'Airport Hangar',
-        --     vehicleType = VehicleType.AIR,
-        --     accessPoints = {
-        --         {
-        --             blip = {
-        --                 name = 'Hangar',
-        --                 sprite = 360,
-        --                 color = 3,
-        --             },
-        --             coords = vec4(-1025.34, -3017.0, 13.95, 331.99),
-        --             spawn = vec4(-979.2, -2995.51, 13.95, 52.19),
-        --         }
-        --     },
-        -- },
-        -- higginsheli = {
-        --     label = 'Higgins Helitours',
-        --     vehicleType = VehicleType.AIR,
-        --     accessPoints = {
-        --         {
-        --             blip = {
-        --                 name = 'Hangar',
-        --                 sprite = 360,
-        --                 color = 3,
-        --             },
-        --             coords = vec4(-722.12, -1472.74, 5.0, 140.0),
-        --             spawn = vec4(-724.83, -1443.89, 5.0, 140.0),
-        --         }
-        --     },
-        -- },
+                    },
+                    blip = {
+                        coords = vec3(-836.88, -1443.02, 0.79),
+                        sprite = 360,
+                        color = 3,
+                    },
+                }
+            },
+        },
+
         -- airsshores = {
         --     label = 'Sandy Shores Hangar',
         --     vehicleType = VehicleType.AIR,
