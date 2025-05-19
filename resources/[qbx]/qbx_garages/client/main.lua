@@ -343,14 +343,14 @@ end
 ---@param garageInfo GarageConfig
 ---@param accessPoint AccessPoint
 local function createBlips(garageInfo, accessPoint)
-    local blip = AddBlipForCoord(accessPoint.blipCoords.x, accessPoint.blipCoords.y, accessPoint.blipCoords.z)
+    local blip = AddBlipForCoord(accessPoint.blip.coords.x, accessPoint.blip.coords.y, accessPoint.blip.coords.z)
     SetBlipSprite(blip, accessPoint.blip.sprite or 357)
     SetBlipDisplay(blip, 4)
     SetBlipScale(blip, 0.60)
     SetBlipAsShortRange(blip, true)
     SetBlipColour(blip, accessPoint.blip.color or 3)
     BeginTextCommandSetBlipName('STRING')
-    AddTextComponentSubstringPlayerName(accessPoint.blip.name or garageInfo.label)
+    AddTextComponentSubstringPlayerName(label or garageInfo.label)
     EndTextCommandSetBlipName(blip)
 end
 

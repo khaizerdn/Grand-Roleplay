@@ -39,6 +39,335 @@ return {
     ---@type table<string, GarageConfig>
     garages = {
 
+        burton_garage_1 = {
+            label = 'Burton Public Garage',
+            vehicleType = VehicleType.CAR,
+            shared = true,
+            allowUnowned = true,
+            maxVehicles = 7,
+            accessPoints = {
+                {
+                    points = {
+                        vec3(-323.48, -85.24, 54.75),
+                        vec3(-319.29, -81.85, 54.42),
+                        vec3(-368.46, -64.82, 54.42),
+                        vec3(-372.5, -68.24, 54.75)
+                    },
+                    blip = {
+                        coords = vec3(-300.34, -59.16, 49.11),
+                        sprite = 357, -- Garage blip sprite
+                        color = 3,    -- Blue color
+                    }
+                }
+            },
+        },
+
+        burton_garage_2 = {
+            label = 'Burton Public Garage',
+            vehicleType = VehicleType.CAR,
+            shared = true,
+            allowUnowned = true,
+            maxVehicles = 7,
+            accessPoints = {
+                {
+                    points = {
+                        vec3(-373.27, -68.76, 54.75),
+                        vec3(-377.93, -67.26, 54.42),
+                        vec3(-385.34, -87.28, 54.42),
+                        vec3(-380.71, -89.03, 54.75)
+
+                    },
+                    -- blip = {
+                    --     coords = vec3(-300.34, -59.16, 49.11),
+                    --     sprite = 357, -- Garage blip sprite
+                    --     color = 3,    -- Blue color
+                    -- }
+                }
+            },
+        },
+
+        burton_garage_3 = {
+            label = 'Burton Public Garage',
+            vehicleType = VehicleType.CAR,
+            shared = true,
+            allowUnowned = true,
+            maxVehicles = 7,
+            accessPoints = {
+                {
+                    points = {
+                        vec3(-410.3, -78.15, 54.48),
+                        vec3(-408.15, -82.03, 54.75),
+                        vec3(-393.49, -67.82, 54.42),
+                        vec3(-396.55, -64.64, 54.67)
+
+                    },
+                    -- blip = {
+                    --     coords = vec3(-300.34, -59.16, 49.11),
+                    --     sprite = 357, -- Garage blip sprite
+                    --     color = 3,    -- Blue color
+                    -- }
+                }
+            },
+        },
+
+        burton_garage_4 = {
+            label = 'Burton Public Garage',
+            vehicleType = VehicleType.CAR,
+            shared = true,
+            allowUnowned = true,
+            maxVehicles = 7,
+            accessPoints = {
+                {
+                    points = {
+                        vec3(-390.96, -53.99, 54.75),
+                        vec3(-386.36, -55.56, 54.42),
+                        vec3(-378.23, -32.14, 54.75),
+                        vec3(-382.84, -30.55, 54.75)
+
+                    },
+                    -- blip = {
+                    --     coords = vec3(-300.34, -59.16, 49.11),
+                    --     sprite = 357, -- Garage blip sprite
+                    --     color = 3,    -- Blue color
+                    -- }
+                }
+            },
+        },
+
+        burton_garage_5 = {
+            label = 'Burton Public Garage',
+            vehicleType = VehicleType.CAR,
+            shared = true,
+            allowUnowned = true,
+            maxVehicles = 7,
+            accessPoints = {
+                {
+                    points = {
+                        vec3(-366.99, -35.94, 54.75),
+                        vec3(-372.99, -52.86, 54.42),
+                        vec3(-363.35, -56.13, 54.42),
+                        vec3(-357.69, -39.18, 54.75)
+
+                    },
+                    -- blip = {
+                    --     coords = vec3(-300.34, -59.16, 49.11),
+                    --     sprite = 357, -- Garage blip sprite
+                    --     color = 3,    -- Blue color
+                    -- }
+                }
+            },
+        },
+
+        burton_garage_6 = {
+            label = 'Burton Public Garage',
+            vehicleType = VehicleType.CAR,
+            shared = true,
+            allowUnowned = true,
+            maxVehicles = 7,
+            accessPoints = {
+                {
+                    points = {
+                        vec3(-348.53, -58.24, 54.42),
+                        vec3(-343.24, -60.12, 54.42),
+                        vec3(-339.77, -50.25, 54.42),
+                        vec3(-345.22, -48.35, 54.42)
+
+                    },
+                    -- blip = {
+                    --     coords = vec3(-300.34, -59.16, 49.11),
+                    --     sprite = 357, -- Garage blip sprite
+                    --     color = 3,    -- Blue color
+                    -- }
+                }
+            },
+        },
+
+        burton_garage_7 = {
+            label = 'Burton Public Garage',
+            vehicleType = VehicleType.CAR,
+            shared = true,
+            allowUnowned = true,
+            maxVehicles = 7,
+            accessPoints = {
+                {
+                    points = {
+                        vec3(-324.61, -50.65, 54.75),
+                        vec3(-326.69, -56.11, 54.42),
+                        vec3(-316.93, -59.5, 54.42),
+                        vec3(-315.08, -53.82, 54.75)
+                    },
+                    -- blip = {
+                    --     coords = vec3(-300.34, -59.16, 49.11),
+                    --     sprite = 357, -- Garage blip sprite
+                    --     color = 3,    -- Blue color
+                    -- }
+                }
+            },
+        },
+
+        burton_garage_8 = {
+            label = 'Burton Public Garage',
+            vehicleType = VehicleType.CAR,
+            shared = true,
+            allowUnowned = true,
+            maxVehicles = 7,
+            accessPoints = {
+                {
+                    points = {
+                        vec3(-313.95, -60.9, 54.42),
+                        vec3(-308.8, -62.77, 54.63),
+                        vec3(-313.37, -76.16, 54.75),
+                        vec3(-318.54, -74.09, 54.42)
+                    },
+                    -- blip = {
+                    --     coords = vec3(-300.34, -59.16, 49.11),
+                    --     sprite = 357, -- Garage blip sprite
+                    --     color = 3,    -- Blue color
+                    -- }
+                }
+            },
+        },
+
+        lsc_burton_garage_1 = {
+            label = 'LSC Burton Garage',
+            vehicleType = VehicleType.CAR,
+            shared = true,
+            allowUnowned = true,
+            maxVehicles = 7,
+            accessPoints = {
+                {
+                    points = {
+                        vec3(-350.55, -104.4, 45.67),
+                        vec3(-348.99, -99.68, 45.67),
+                        vec3(-372.21, -91.18, 45.66),
+                        vec3(-373.88, -95.77, 45.66)
+                    },
+                    -- blip = {
+                    --     coords = vec3(-360.56, -94.97, 45.67),
+                    --     sprite = 357, -- Garage blip sprite
+                    --     color = 3,    -- Blue color
+                    -- }
+                }
+            },
+        },
+
+        lsc_burton_garage_2 = {
+            label = 'LSC Burton Garage',
+            vehicleType = VehicleType.CAR,
+            shared = true,
+            allowUnowned = true,
+            maxVehicles = 7,
+            accessPoints = {
+                {
+                    points = {
+                        vec3(-396.01, -119.09, 38.66),
+                        vec3(-391.74, -116.61, 38.64),
+                        vec3(-374.91, -147.21, 38.69),
+                        vec3(-378.96, -149.44, 38.69)
+                    },
+                    -- blip = {
+                    --     coords = vec3(-360.56, -94.97, 45.67),
+                    --     sprite = 357, -- Garage blip sprite
+                    --     color = 3,    -- Blue color
+                    -- }
+                }
+            },
+        },
+
+        lsc_burton_garage_3 = {
+            label = 'LSC Burton Garage',
+            vehicleType = VehicleType.CAR,
+            shared = true,
+            allowUnowned = true,
+            maxVehicles = 7,
+            accessPoints = {
+                {
+                    points = {
+                        vec3(-357.95, -129.68, 38.7),
+                        vec3(-362.66, -127.99, 38.7),
+                        vec3(-359.13, -118.28, 38.7),
+                        vec3(-354.39, -119.88, 38.75)
+                    },
+                    -- blip = {
+                    --     coords = vec3(-360.56, -94.97, 45.67),
+                    --     sprite = 357, -- Garage blip sprite
+                    --     color = 3,    -- Blue color
+                    -- }
+                }
+            },
+        },
+
+        lsc_burton_garage_4 = {
+            label = 'LSC Burton Garage',
+            vehicleType = VehicleType.CAR,
+            shared = true,
+            allowUnowned = true,
+            maxVehicles = 7,
+            accessPoints = {
+                {
+                    points = {
+                        vec3(-350.37, -150.47, 39.01),
+                        vec3(-344.44, -148.19, 39.01),
+                        vec3(-336.54, -162.38, 39.01),
+                        vec3(-342.45, -164.51, 39.02)
+                    },
+                    -- blip = {
+                    --     coords = vec3(-360.56, -94.97, 45.67),
+                    --     sprite = 357, -- Garage blip sprite
+                    --     color = 3,    -- Blue color
+                    -- }
+                }
+            },
+        },
+
+        rockfordhills_garage_1 = {
+            label = 'Rockford Hills Public Garage',
+            vehicleType = VehicleType.CAR,
+            shared = true,
+            allowUnowned = true,
+            maxVehicles = 10,
+            accessPoints = {
+                {
+                    points = {
+                        vec3(-723.52, -69.63, 41.75),
+                        vec3(-725.53, -65.26, 41.76),
+                        vec3(-752.94, -79.27, 41.75),
+                        vec3(-750.73, -83.5, 41.75)
+                        
+                    },
+                    blip = {
+                        coords = vec3(-716.51, -51.01, 37.83),
+                        sprite = 357, -- Garage blip sprite
+                        color = 3,    -- Blue color
+                    }
+                }
+            },
+        },
+
+        rockfordhills_garage_2 = {
+            label = 'Rockford Hills Public Garage',
+            vehicleType = VehicleType.CAR,
+            shared = true,
+            allowUnowned = true,
+            maxVehicles = 10,
+            accessPoints = {
+                {
+                    points = {
+                        vec3(-897.46, -160.62, 41.88),
+                        vec3(-899.64, -156.23, 41.88),
+                        vec3(-948.68, -181.27, 41.88),
+                        vec3(-946.58, -185.59, 41.87)
+                        
+                    },
+                    blip = {
+                        coords = vec3(-886.59, -139.97, 37.95),
+                        sprite = 357, -- Garage blip sprite
+                        color = 3,    -- Blue color
+                    }
+                }
+            },
+        },
+
         marlowe_vineyard_garage_1 = {
             label = 'Marlowe Vineyard Garage',
             vehicleType = VehicleType.CAR,
