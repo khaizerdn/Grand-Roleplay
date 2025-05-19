@@ -235,36 +235,32 @@ end
 
 ---@param vehicle number
 ---@param garageName string
-local function parkVehicle(vehicle, garageName)
+local function storeVehicle(vehicle, garageName)
     if GetVehicleNumberOfPassengers(vehicle) ~= 1 then
         local isParkable, errorCode = lib.callback.await('qbx_garages:server:isParkable', false, garageName, NetworkGetNetworkIdFromEntity(vehicle))
-
         if not isParkable then
             if errorCode == 'not_owned' then
-                exports.qbx_core:Notify(locale('error.not_owned'), 'error', 5000)
+                exports.qbx_core:Notify(locale('error.not_owned'), 'error')
             elseif errorCode == 'garage_full' then
-                exports.qbx_core:Notify(locale('error.garage_full'), 'error', 5000)
+                exports.qbx_core:Notify(locale('error.garage_full'), 'error')
             elseif errorCode == 'wrong_type' then
-                exports.qbx_core:Notify(locale('error.not_correct_type'), 'error', 5000)
+                exports.qbx_core:Notify(locale('error.not_correct_type'), 'error')
             elseif errorCode == 'no_access' then
-                exports.qbx_core:Notify(locale('error.no_access'), 'error', 5000)
+                exports.qbx_core:Notify(locale('error.no_access'), 'error')
             else
-                exports.qbx_core:Notify(locale('error.cannot_park'), 'error', 5000)
+                exports.qbx_core:Notify(locale('error.cannot_park'), 'error')
             end
             return
         end
-
         kickOutPeds(vehicle)
-        SetVehicleDoorsLocked(vehicle, 2)
         Wait(1500)
         local props = lib.getVehicleProperties(vehicle)
         local position = GetEntityCoords(vehicle)
         local heading = GetEntityHeading(vehicle)
         local parkedPosition = { x = position.x, y = position.y, z = position.z, w = heading }
         lib.callback.await('qbx_garages:server:parkVehicle', false, NetworkGetNetworkIdFromEntity(vehicle), props, garageName, parkedPosition)
-        exports.qbx_core:Notify(locale('success.vehicle_parked'), 'primary', 4500)
     else
-        exports.qbx_core:Notify(locale('error.vehicle_occupied'), 'error', 3500)
+        exports.qbx_core:Notify(locale('error.vehicle_occupied'), 'error')
     end
 end
 
@@ -288,7 +284,6 @@ end
 ---@param accessPointIndex integer
 local function createZones(garageName, garage, accessPoint, accessPointIndex)
     CreateThread(function()
-        -- Calculate the center of the polyzone for text UI positioning
         local function calculatePolyzoneCenter(points)
             local xSum, ySum, zSum = 0, 0, 0
             for i = 1, #points do
@@ -318,14 +313,25 @@ local function createZones(garageName, garage, accessPoint, accessPointIndex)
             end,
             onExit = function()
                 lib.hideTextUI()
+                if cache.vehicle then
+                    local vehicle = cache.vehicle
+                    local netId = NetworkGetNetworkIdFromEntity(vehicle)
+                    local vehicleState = Entity(vehicle).state
+                    if vehicleState and vehicleState.vehicleid and vehicleState.garage == garageName then
+                        lib.print.debug('Vehicle exited garage zone:', garageName, 'Vehicle ID:', vehicleState.vehicleid, 'Net ID:', netId)
+                        TriggerServerEvent('qbx_garages:server:setVehicleOut', netId)
+                    else
+                        lib.print.debug('No vehicle state or mismatch:', vehicleState and vehicleState.garage, garageName)
+                    end
+                end
             end,
             inside = function()
                 if IsControlJustReleased(0, 38) then
                     if not checkCanAccess(garage) then return end
                     if cache.vehicle and garage.type ~= GarageType.DEPOT then
-                        parkVehicle(cache.vehicle, garageName)
+                        storeVehicle(cache.vehicle, garageName)
                     elseif not cache.vehicle then
-                        openGarageMenu(garageName, garage, accessPointIndex)
+                        exports.qbx_core:Notify('You are not in a vehicle', 'error')
                     end
                 end
             end,
@@ -374,4 +380,26 @@ end)
 
 CreateThread(function()
     createGarages()
+end)
+
+AddEventHandler('onClientResourceStart', function(resource)
+    if resource ~= GetCurrentResourceName() then return end
+    Wait(100)
+    local vehicles = lib.callback.await('qbx_garages:server:getGaragedVehicles', false)
+    if not vehicles then return end
+    for _, vehicleData in ipairs(vehicles) do
+        local parkedPosition = vehicleData.parked_position
+        if parkedPosition then
+            local spawnCoords = vec4(parkedPosition.x, parkedPosition.y, parkedPosition.z, parkedPosition.w)
+            local model = vehicleData.modelName
+            lib.requestModel(model, 10000)
+            local veh = CreateVehicle(joaat(model), spawnCoords.x, spawnCoords.y, spawnCoords.z, spawnCoords.w, true, false)
+            SetModelAsNoLongerNeeded(joaat(model))
+            SetVehicleOnGroundProperly(veh)
+            SetEntityAsMissionEntity(veh, true, true) -- Prevent despawning
+            Entity(veh).state:set('vehicleid', vehicleData.id, true)
+            Entity(veh).state:set('garage', vehicleData.garage, true)
+            lib.setVehicleProperties(veh, vehicleData.props)
+        end
+    end
 end)

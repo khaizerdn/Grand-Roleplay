@@ -287,10 +287,13 @@ end)
 ---@param garage string
 ---@param parkedPosition table JSON-encoded vec4
 lib.callback.register('qbx_garages:server:parkVehicle', function(source, netId, props, garage, parkedPosition)
-    assert(Garages[garage] ~= nil, string.format('Garage %s not found. Did you register this garage?', garage))
     local vehicle = NetworkGetEntityFromNetworkId(netId)
     local vehicleId = Entity(vehicle).state.vehicleid or exports.qbx_vehicles:GetVehicleIdByPlate(GetVehicleNumberPlateText(vehicle))
     local garageConfig = Garages[garage]
+    if not garageConfig then
+        exports.qbx_core:Notify(source, 'Garage not found', 'error')
+        return
+    end
 
     local isParkableResult = isParkable(source, vehicleId, garage, netId)
     if not isParkableResult then
@@ -299,7 +302,7 @@ lib.callback.register('qbx_garages:server:parkVehicle', function(source, netId, 
     end
 
     if garageConfig.allowUnowned and not vehicleId then
-        -- For unowned vehicles, create a new vehicle entry
+        -- Create a new vehicle entry for unowned vehicles
         local modelHash = GetEntityModel(vehicle)
         local modelName
         for name, vehicleData in pairs(VEHICLES) do
@@ -313,46 +316,58 @@ lib.callback.register('qbx_garages:server:parkVehicle', function(source, netId, 
             return
         end
 
-        -- Create vehicle in player_vehicles with nil citizenid
-        local newVehicleId, errorResult = exports.qbx_vehicles:CreatePlayerVehicle({
+        local newVehicleId = exports.qbx_vehicles:CreatePlayerVehicle({
             model = modelName,
             citizenid = nil,
             garage = garage,
             props = props,
             parked_position = parkedPosition
         })
-
         if not newVehicleId then
-            exports.qbx_core:Notify(source, 'Failed to save vehicle: ' .. (errorResult and errorResult.message or 'Unknown error'), 'error')
+            exports.qbx_core:Notify(source, 'Failed to save vehicle', 'error')
             return
         end
-
-        -- Set vehicleId on entity for consistency
-        Entity(vehicle).state:set('vehicleid', newVehicleId, false)
+        Entity(vehicle).state:set('vehicleid', newVehicleId, true)
+        Entity(vehicle).state:set('garage', garage, true)
     else
-        -- For owned vehicles, check ownership and save
-        local owned = isParkable(source, vehicleId, garage, netId)
-        if not owned then
+        -- Update existing vehicle
+        if not isParkable(source, vehicleId, garage, netId) then
             exports.qbx_core:Notify(source, locale('error.not_owned'), 'error')
             return
         end
-
         exports.qbx_vehicles:SaveVehicle(vehicle, {
             garage = garage,
             state = VehicleState.GARAGED,
             props = props,
             parked_position = parkedPosition
         })
+        Entity(vehicle).state:set('garage', garage, true)
     end
-
-    exports.qbx_core:DeleteVehicle(vehicle)
+    exports.qbx_core:Notify(source, locale('success.vehicle_parked'), 'primary')
 end)
 
 AddEventHandler('onResourceStart', function(resource)
     if resource ~= cache.resource then return end
     Wait(100)
-    if Config.autoRespawn then
-        Storage.moveOutVehiclesIntoGarages()
+end)
+
+RegisterNetEvent('qbx_garages:server:setVehicleOut', function(netId)
+    local vehicle = NetworkGetEntityFromNetworkId(netId)
+    local vehicleId = Entity(vehicle).state.vehicleid
+    if vehicleId then
+        local playerVehicle = exports.qbx_vehicles:GetPlayerVehicle(vehicleId)
+        if playerVehicle and playerVehicle.state == VehicleState.GARAGED then
+            lib.print.debug('Setting vehicle to OUT:', vehicleId, 'Net ID:', netId)
+            exports.qbx_vehicles:SaveVehicle(vehicle, {
+                garage = nil,
+                state = VehicleState.OUT
+            })
+            Entity(vehicle).state:set('garage', nil, true)
+        else
+            lib.print.debug('Vehicle not GARAGED or not found:', vehicleId, 'State:', playerVehicle and playerVehicle.state)
+        end
+    else
+        lib.print.debug('No vehicleId for netId:', netId)
     end
 end)
 
@@ -373,4 +388,10 @@ lib.callback.register('qbx_garages:server:payDepotPrice', function(source, vehic
         player.Functions.RemoveMoney('bank', depotPrice, 'paid-depot')
         return true
     end
+end)
+
+lib.callback.register('qbx_garages:server:getGaragedVehicles', function(source)
+    local filter = { states = VehicleState.GARAGED }
+    local playerVehicles = exports.qbx_vehicles:GetPlayerVehicles(filter)
+    return playerVehicles
 end)
