@@ -396,10 +396,15 @@ AddEventHandler('onClientResourceStart', function(resource)
             local veh = CreateVehicle(joaat(model), spawnCoords.x, spawnCoords.y, spawnCoords.z, spawnCoords.w, true, false)
             SetModelAsNoLongerNeeded(joaat(model))
             SetVehicleOnGroundProperly(veh)
-            SetEntityAsMissionEntity(veh, true, true) -- Prevent despawning
+            SetEntityAsMissionEntity(veh, true, true)
             Entity(veh).state:set('vehicleid', vehicleData.id, true)
             Entity(veh).state:set('garage', vehicleData.garage, true)
             lib.setVehicleProperties(veh, vehicleData.props)
+            local netId = NetworkGetNetworkIdFromEntity(veh)
+            TriggerServerEvent('qbx_garages:server:toggleVehicleLock', netId, true) -- Lock the vehicle
+            if vehicleData.citizenid then
+                TriggerServerEvent('qbx_garages:server:requestOwnership', vehicleData.props.plate)
+            end
         end
     end
 end)
