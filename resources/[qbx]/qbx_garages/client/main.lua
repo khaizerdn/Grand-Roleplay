@@ -108,39 +108,65 @@ end
 ---@param garageInfo GarageConfig
 ---@param accessPoint integer
 local function displayVehicleInfo(vehicle, garageName, garageInfo, accessPoint)
-    local options = {}
-    local vehicleLabel = ('%s %s'):format(vehicle.make or 'Unknown', vehicle.modelName)
-    local plate = vehicle.props.plate
+    local engine = qbx.math.round(vehicle.props.engineHealth / 10)
+    local body = qbx.math.round(vehicle.props.bodyHealth / 10)
+    local engineColor = getProgressColor(engine)
+    local bodyColor = getProgressColor(body)
+    local fuelColor = getProgressColor(vehicle.props.fuelLevel)
+    local vehicleLabel = ('%s %s'):format(VEHICLES[vehicle.modelName].brand, VEHICLES[vehicle.modelName].name)
 
-    if garageInfo.type == GarageType.DEPOT and vehicle.state == VehicleState.IMPOUNDED then
-        options[#options + 1] = {
-            title = 'Take out',
-            icon = 'fa-truck-ramp-box',
-            description = ('$%s'):format(lib.math.groupdigits(vehicle.depotPrice)),
-            arrow = true,
-            onSelect = function()
-                takeOutDepot({
-                    vehicle = vehicle,
-                    garageName = garageName,
-                    accessPoint = accessPoint,
-                })
-            end,
-        }
-    elseif vehicle.state == VehicleState.GARAGED then
-        options[#options + 1] = {
-            title = locale('menu.take_out'),
-            icon = 'car-rear',
-            arrow = true,
-            onSelect = function()
-                takeOutOfGarage(vehicle.id, garageName, accessPoint)
-            end,
-        }
-    elseif vehicle.state == VehicleState.OUT then
-        options[#options + 1] = {
-            title = 'Your vehicle is already out...',
-            icon = VehicleType.CAR,
+    local options = {
+        {
+            title = locale('menu.information'),
+            icon = 'circle-info',
+            description = locale('menu.description', vehicleLabel, vehicle.props.plate, lib.math.groupdigits(vehicle.depotPrice)),
             readOnly = true,
+        },
+        {
+            title = locale('menu.body'),
+            icon = 'car-side',
+            readOnly = true,
+            progress = body,
+            colorScheme = bodyColor,
+        },
+        {
+            title = locale('menu.engine'),
+            icon = 'oil-can',
+            readOnly = true,
+            progress = engine,
+            colorScheme = engineColor,
+        },
+        {
+            title = locale('menu.fuel'),
+            icon = 'gas-pump',
+            readOnly = true,
+            progress = vehicle.props.fuelLevel,
+            colorScheme = fuelColor,
         }
+    }
+
+    if vehicle.state == VehicleState.OUT then
+        if garageInfo.type == GarageType.DEPOT then
+            options[#options + 1] = {
+                title = 'Take out',
+                icon = 'fa-truck-ramp-box',
+                description = ('$%s'):format(lib.math.groupdigits(vehicle.depotPrice)),
+                arrow = true,
+                onSelect = function()
+                    takeOutDepot({
+                        vehicle = vehicle,
+                        garageName = garageName,
+                        accessPoint = accessPoint,
+                    })
+                end,
+            }
+        else
+            options[#options + 1] = {
+                title = 'Your vehicle is already out...',
+                icon = VehicleType.CAR,
+                readOnly = true,
+            }
+        end
     elseif vehicle.state == VehicleState.IMPOUNDED then
         options[#options + 1] = {
             title = locale('menu.veh_impounded'),
@@ -150,15 +176,13 @@ local function displayVehicleInfo(vehicle, garageName, garageInfo, accessPoint)
     end
 
     lib.registerContext({
-        id = 'vehicle_menu',
-        title = vehicleLabel,
+        id = 'vehicleList',
+        title = garageInfo.label,
+        menu = 'garageMenu',
         options = options,
-        menu = 'garage_menu',
-        onExit = function()
-            lib.hideContext()
-        end,
     })
-    lib.showContext('vehicle_menu')
+
+    lib.showContext('vehicleList')
 end
 
 ---@param vehicle number
@@ -240,17 +264,10 @@ local function openGarageMenu(garageName, garageInfo, accessPoint)
     lib.registerContext({
         id = 'garageMenu',
         title = garageInfo.label,
-        id = 'vehicle_menu',
-        title = vehicleLabel,
         options = options,
-        menu = 'garage_menu',
-        onExit = function()
-            lib.hideContext()
-        end,
     })
 
     lib.showContext('garageMenu')
-    lib.showContext('vehicle_menu')
 end
 
 ---@param garageName string
