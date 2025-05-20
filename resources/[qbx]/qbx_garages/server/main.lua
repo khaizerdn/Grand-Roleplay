@@ -32,7 +32,6 @@ local function getGarages()
 end
 exports('GetGarages', getGarages)
 
-
 ---@param name string
 ---@param config GarageConfig
 local function registerGarage(name, config)
@@ -354,22 +353,37 @@ end)
 
 RegisterNetEvent('qbx_garages:server:setVehicleOut', function(netId)
     local vehicle = NetworkGetEntityFromNetworkId(netId)
-    local vehicleId = Entity(vehicle).state.vehicleid
-    if vehicleId then
-        local playerVehicle = exports.qbx_vehicles:GetPlayerVehicle(vehicleId)
-        if playerVehicle and playerVehicle.state == VehicleState.GARAGED then
-            lib.print.debug('Setting vehicle to OUT:', vehicleId, 'Net ID:', netId)
-            exports.qbx_vehicles:SaveVehicle(vehicle, {
-                garage = nil,
-                state = VehicleState.OUT
-            })
-            Entity(vehicle).state:set('garage', nil, true)
-        else
-            lib.print.debug('Vehicle not GARAGED or not found:', vehicleId, 'State:', playerVehicle and playerVehicle.state)
-        end
-    else
-        lib.print.debug('No vehicleId for netId:', netId)
+    if not vehicle or GetEntityType(vehicle) ~= 2 then
+        lib.print.debug('Invalid vehicle or not a vehicle for Net ID:', netId)
+        return
     end
+
+    local plate = GetVehicleNumberPlateText(vehicle)
+    local vehicleId = Entity(vehicle).state.vehicleid or exports.qbx_vehicles:GetVehicleIdByPlate(plate)
+    if not vehicleId then
+        lib.print.debug('No vehicleId found for Net ID:', netId, 'Plate:', plate)
+        return
+    end
+
+    local playerVehicle = exports.qbx_vehicles:GetPlayerVehicle(vehicleId)
+    if not playerVehicle then
+        lib.print.debug('No player vehicle found for vehicleId:', vehicleId, 'Net ID:', netId, 'Plate:', plate)
+        return
+    end
+
+    -- Update vehicle state to OUT and clear garage
+    lib.print.debug('Setting vehicle to OUT:', vehicleId, 'Net ID:', netId, 'Plate:', plate, 'Current State:', playerVehicle.state)
+    local success, errorResult = exports.qbx_vehicles:SaveVehicle(vehicle, {
+        garage = nil,
+        state = VehicleState.OUT
+    })
+    if not success then
+        lib.print.debug('Failed to update vehicle state to OUT:', vehicleId, 'Error:', errorResult)
+        return
+    end
+    Entity(vehicle).state:set('garage', nil, true)
+    Entity(vehicle).state:set('vehicleid', vehicleId, true) -- Ensure vehicleid is persisted
+    lib.print.debug('Vehicle state updated to OUT for vehicleId:', vehicleId, 'Net ID:', netId, 'Plate:', plate)
 end)
 
 ---@param vehicleId string

@@ -23,6 +23,8 @@ return {
     ---@field blip? GarageBlip
     ---@field blipCoords vector3 coordinates for the blip
     ---@field dropPoint? vector3 where a vehicle can be stored
+    ---@field interact? vector3 interaction point for impound lot
+    ---@field spawn? vector4 spawn point for impound lot vehicles
 
     --- @class GarageConfig
     --- @field label string
@@ -550,25 +552,25 @@ return {
         --     },
         -- },
 
-        -- -- Impound Lots
-        -- impoundlot = {
-        --     label = 'Impound Lot',
-        --     type = GarageType.DEPOT,
-        --     states = {VehicleState.OUT, VehicleState.IMPOUNDED},
-        --     skipGarageCheck = true,
-        --     vehicleType = VehicleType.CAR,
-        --     accessPoints = {
-        --         {
-        --             blip = {
-        --                 name = 'Impound Lot',
-        --                 sprite = 68,
-        --                 color = 3,
-        --             },
-        --             coords = vec4(-354.94, -75.68, 45.66, 168.55),
-        --             spawn = vec4(-360.63, -75.85, 45.06, 71.6),
-        --         }
-        --     },
-        -- },
+        impoundlot = {
+            label = 'Impound Lot',
+            type = GarageType.DEPOT,
+            states = {VehicleState.OUT, VehicleState.IMPOUNDED},
+            skipGarageCheck = true,
+            vehicleType = VehicleType.CAR,
+            accessPoints = {
+                {
+                    interact = vec3(-354.76, -75.63, 45.67),
+                    spawn = vec4(-361.29, -75.63, 45.06, 71.34),
+                    blip = {
+                        coords = vec3(-354.76, -75.63, 45.67),
+                        sprite = 360,
+                        color = 3,
+                    },
+                }
+            },
+        },
+
         -- airdepot = {
         --     label = 'Air Depot',
         --     type = GarageType.DEPOT,

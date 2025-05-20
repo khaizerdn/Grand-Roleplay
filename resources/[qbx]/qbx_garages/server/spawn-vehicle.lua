@@ -6,6 +6,9 @@ local function setVehicleStateToOut(vehicleId, vehicle, modelName)
         state = VehicleState.OUT,
         depotPrice = depotPrice
     })
+    Entity(vehicle).state:set('vehicleid', vehicleId, true) -- Ensure vehicleid is set
+    Entity(vehicle).state:set('garage', nil, true) -- Clear garage state
+    lib.print.debug('Set vehicle state to OUT:', vehicleId, 'Model:', modelName, 'Depot Price:', depotPrice)
 end
 
 ---@param source number
@@ -27,13 +30,22 @@ lib.callback.register('qbx_garages:server:spawnVehicle', function (source, vehic
         return exports.qbx_core:Notify(source, locale('error.not_impound'), 'error', 5000)
     end
 
-    -- Use parked_position from the database
-    local spawnCoords = playerVehicle.parked_position
-    if not spawnCoords then
-        exports.qbx_core:Notify(source, locale('error.no_spawn_position'), 'error')
-        return
+    -- Use specific spawn point for impound lot, otherwise use parked_position
+    local spawnCoords
+    if garageType == GarageType.DEPOT then
+        local accessPoint = garage.accessPoints[accessPointIndex]
+        if not accessPoint.spawn then
+            exports.qbx_core:Notify(source, locale('error.no_spawn_position'), 'error')
+            return
+        end
+        spawnCoords = accessPoint.spawn
+    else
+        if not playerVehicle.parked_position then
+            exports.qbx_core:Notify(source, locale('error.no_spawn_position'), 'error')
+            return
+        end
+        spawnCoords = vec4(playerVehicle.parked_position.x, playerVehicle.parked_position.y, playerVehicle.parked_position.z, playerVehicle.parked_position.w)
     end
-    spawnCoords = vec4(spawnCoords.x, spawnCoords.y, spawnCoords.z, spawnCoords.w)
 
     if Config.distanceCheck then
         local vec3Coords = vec3(spawnCoords.x, spawnCoords.y, spawnCoords.z)
@@ -57,8 +69,9 @@ lib.callback.register('qbx_garages:server:spawnVehicle', function (source, vehic
 
     TriggerClientEvent('vehiclekeys:client:SetOwner', source, playerVehicle.props.plate)
 
-    Entity(veh).state:set('vehicleid', vehicleId, false)
+    Entity(veh).state:set('vehicleid', vehicleId, true)
     setVehicleStateToOut(vehicleId, veh, playerVehicle.modelName)
     TriggerEvent('qbx_garages:server:vehicleSpawned', veh)
+    lib.print.debug('Vehicle spawned:', vehicleId, 'Net ID:', netId, 'Plate:', playerVehicle.props.plate)
     return netId
 end)
