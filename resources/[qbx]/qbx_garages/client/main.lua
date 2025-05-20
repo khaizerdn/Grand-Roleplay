@@ -431,7 +431,6 @@ AddEventHandler('onClientResourceStart', function(resource)
             Entity(veh).state:set('garage', vehicleData.garage, true)
             lib.setVehicleProperties(veh, vehicleData.props)
             local netId = NetworkGetNetworkIdFromEntity(veh)
-            TriggerServerEvent('qbx_garages:server:toggleVehicleLock', netId, true)
             TriggerServerEvent('qbx_garages:server:toggleVehicleLock', netId, true) -- Lock the vehicle
         end
     end
