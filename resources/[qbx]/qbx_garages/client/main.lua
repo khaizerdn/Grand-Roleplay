@@ -287,24 +287,21 @@ local function createGarageZone(garageName, garage, accessPoint, accessPointInde
         end
 
         local center = calculatePolyzoneCenter(accessPoint.points)
+        local textUIShown = false
 
         lib.zones.poly({
             points = accessPoint.points,
             onEnter = function()
-                if cache.vehicle then
-                    if garage.type ~= GarageType.DEPOT then
-                        lib.showTextUI(locale('info.park_e'), {
-                            position = 'top-center',
-                        })
-                    end
-                else
-                    lib.showTextUI((garage.type == GarageType.DEPOT and locale('info.impound_e')) or locale('info.car_e'), {
+                if cache.vehicle and garage.type ~= GarageType.DEPOT then
+                    lib.showTextUI(locale('info.park_e'), {
                         position = 'top-center',
                     })
+                    textUIShown = true
                 end
             end,
             onExit = function()
                 lib.hideTextUI()
+                textUIShown = false
                 if cache.vehicle then
                     local vehicle = cache.vehicle
                     local netId = NetworkGetNetworkIdFromEntity(vehicle)
@@ -320,6 +317,20 @@ local function createGarageZone(garageName, garage, accessPoint, accessPointInde
                 end
             end,
             inside = function()
+                -- Check if player is in a vehicle or on foot and update text UI
+                if cache.vehicle and garage.type ~= GarageType.DEPOT then
+                    if not textUIShown then
+                        lib.showTextUI(locale('info.park_e'), {
+                            position = 'top-center',
+                        })
+                        textUIShown = true
+                    end
+                elseif not cache.vehicle and textUIShown then
+                    lib.hideTextUI()
+                    textUIShown = false
+                end
+
+                -- Handle [E] key press
                 if IsControlJustReleased(0, 38) then
                     if not checkCanAccess(garage) then return end
                     if cache.vehicle and garage.type ~= GarageType.DEPOT then
@@ -334,7 +345,6 @@ local function createGarageZone(garageName, garage, accessPoint, accessPointInde
         })
     end)
 end
-
 ---@param garageName string
 ---@param garage GarageConfig
 ---@param accessPoint AccessPoint
