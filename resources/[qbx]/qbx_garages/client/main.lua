@@ -414,14 +414,11 @@ AddEventHandler('onClientResourceStart', function(resource)
             Entity(veh).state:set('garage', vehicleData.garage, true)
             lib.setVehicleProperties(veh, vehicleData.props)
             local netId = NetworkGetNetworkIdFromEntity(veh)
-<<<<<<< HEAD
             TriggerServerEvent('qbx_garages:server:toggleVehicleLock', netId, true)
-=======
             TriggerServerEvent('qbx_garages:server:toggleVehicleLock', netId, true) -- Lock the vehicle
             if vehicleData.citizenid then
                 TriggerServerEvent('qbx_garages:server:requestOwnership', vehicleData.props.plate)
             end
->>>>>>> parent of 7d1e0e4 (Update: Delete any vehicle inside the zone on resource start then spawn the vehicle)
         end
     end
 end)
