@@ -416,9 +416,6 @@ AddEventHandler('onClientResourceStart', function(resource)
             local netId = NetworkGetNetworkIdFromEntity(veh)
             TriggerServerEvent('qbx_garages:server:toggleVehicleLock', netId, true)
             TriggerServerEvent('qbx_garages:server:toggleVehicleLock', netId, true) -- Lock the vehicle
-            if vehicleData.citizenid then
-                TriggerServerEvent('qbx_garages:server:requestOwnership', vehicleData.props.plate)
-            end
         end
     end
 end)
