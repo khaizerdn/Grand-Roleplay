@@ -100,11 +100,6 @@ function GetGarageType(garage)
     return Garages[garage]?.type
 end
 
----@class PlayerVehiclesFilters
----@field citizenid? string
----@field states? VehicleState|VehicleState[]
----@field garage? string
-
 ---@param source number
 ---@param garageName string
 ---@return PlayerVehiclesFilters
@@ -186,8 +181,10 @@ local function isParkable(source, vehicleId, garageName, netId)
         -- Allow any vehicle (owned or unowned) of the correct type
         local vehicle = NetworkGetEntityFromNetworkId(netId)
         local modelHash = GetEntityModel(vehicle)
-        local modelName = playerVehicle and playerVehicle.modelName
-        if not modelName then
+        local modelName
+        if playerVehicle then
+            modelName = playerVehicle.modelName
+        else
             -- Find model name by hash in VEHICLES table
             for name, vehicleData in pairs(VEHICLES) do
                 if vehicleData.hash == modelHash then
@@ -371,11 +368,12 @@ RegisterNetEvent('qbx_garages:server:setVehicleOut', function(netId)
         return
     end
 
-    -- Update vehicle state to OUT and clear garage
+    -- Update vehicle state to OUT, clear garage and parked_position
     lib.print.debug('Setting vehicle to OUT:', vehicleId, 'Net ID:', netId, 'Plate:', plate, 'Current State:', playerVehicle.state)
     local success, errorResult = exports.qbx_vehicles:SaveVehicle(vehicle, {
         garage = nil,
-        state = VehicleState.OUT
+        state = VehicleState.OUT,
+        parked_position = nil -- Clear parked_position
     })
     if not success then
         lib.print.debug('Failed to update vehicle state to OUT:', vehicleId, 'Error:', errorResult)

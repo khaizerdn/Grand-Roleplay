@@ -1,14 +1,14 @@
 ---@param vehicleId integer
+---@param vehicle number
 ---@param modelName string
 local function setVehicleStateToOut(vehicleId, vehicle, modelName)
     local depotPrice = Config.calculateImpoundFee(vehicleId, modelName) or 0
     exports.qbx_vehicles:SaveVehicle(vehicle, {
-        state = VehicleState.OUT,
         depotPrice = depotPrice
     })
-    Entity(vehicle).state:set('vehicleid', vehicleId, true) -- Ensure vehicleid is set
+    Entity(vehicle).state:set('vehicleid', vehicleId, true) -- Sync vehicleid to clients
     Entity(vehicle).state:set('garage', nil, true) -- Clear garage state
-    lib.print.debug('Set vehicle state to OUT:', vehicleId, 'Model:', modelName, 'Depot Price:', depotPrice)
+    lib.print.debug('Prepared vehicle for OUT state:', vehicleId, 'Model:', modelName, 'Depot Price:', depotPrice)
 end
 
 ---@param source number

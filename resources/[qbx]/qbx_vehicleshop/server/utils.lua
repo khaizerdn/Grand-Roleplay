@@ -11,7 +11,6 @@ function CheckVehicleList(vehicle, shop)
             return true
         end
     end
-
     return false
 end
 
@@ -41,7 +40,6 @@ CreateThread(function()
 
         for i = 1, #shop.showroomVehicles do
             local vehicle = shop.showroomVehicles[i]
-
             if not CheckVehicleList(vehicle.vehicle, shopName) then
                 lib.print.warn(('Vehicle "%s" is a showroom vehicle for shop "%s" but is not allowed to be bought there'):format(vehicle.vehicle, shopName))
             end
@@ -86,7 +84,6 @@ end
 function GetClearSpawnArea(spawns)
     for i = 1, #spawns do
         local spawn = spawns[i]
-
         if #lib.getNearbyVehicles(spawn.xyz) == 0 then
             return spawn
         end
@@ -107,18 +104,15 @@ function SpawnVehicle(src, data)
         model = newVehicle.modelName,
         spawnSource = coords,
         warp = GetPlayerPed(src),
-        props = {
-            plate = plate
-        }
+        props = { plate = plate }
     })
 
     if not netId or netId == 0 or not vehicle or vehicle == 0 then return end
 
     if vehicleId then
-        Entity(vehicle).state:set('vehicleid', vehicleId, false)
+        Entity(vehicle).state:set('vehicleid', vehicleId, true) -- Sync vehicleid to clients
     end
 
     config.giveKeys(src, plate, vehicle)
-
     return netId
 end
