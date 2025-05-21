@@ -90,6 +90,15 @@ function GetClearSpawnArea(spawns)
     end
 end
 
+function config.giveKeys(src, plate, vehicle)
+    local canCarry = exports.ox_inventory:CanCarryItem(src, 'vehicle_key', 1)
+    if not canCarry then
+        exports.qbx_core:Notify(src, 'Your inventory is full!', 'error')
+        return
+    end
+    exports['khaizerdn-vehiclekeys']:GiveKey(src, vehicle)
+end
+
 ---@param src number
 ---@param data {coords: vector4, vehicleId?: number, modelName: string, plate?: string, props?: {plate: string}}
 ---@return number|nil

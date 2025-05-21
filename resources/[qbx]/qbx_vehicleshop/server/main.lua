@@ -9,6 +9,10 @@ COREVEHICLES = exports.qbx_core:GetVehiclesByName()
 local saleTimeout = {}
 local testDrives = {}
 
+lib.callback.register('qbx_vehicleshop:server:canCarryKey', function(source)
+    return exports.ox_inventory:CanCarryItem(source, 'vehicle_key', 1)
+end)
+
 ---@param data {toVehicle: string}
 RegisterNetEvent('qbx_vehicleshop:server:swapVehicle', function(data)
     if not CheckVehicleList(data.toVehicle) then return end
@@ -310,9 +314,9 @@ lib.addCommand('transfervehicle', {
         return exports.qbx_core:Notify(source, locale('error.playertoofar'), 'error')
     end
 
-    local targetcid = target.PlayerData.citizenid
-    if not target then
-        return exports.qbx_core:Notify(source, locale('error.buyerinfo'), 'error')
+    local canCarry = exports.ox_inventory:CanCarryItem(buyerId, 'vehicle_key', 1)
+    if not canCarry then
+        return exports.qbx_core:Notify(source, 'Buyer\'s inventory is full!', 'error')
     end
 
     saleTimeout[source] = true

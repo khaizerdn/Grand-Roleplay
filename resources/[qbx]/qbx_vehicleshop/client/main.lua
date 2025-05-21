@@ -77,7 +77,6 @@ local function showVehicleFinanceMenu(data)
 end
 
 local function showReplaceKeyMenu()
-    
     local vehicles = lib.callback.await('qbx_vehicleshop:server:getOwnedVehicles', false)
     local options = {}
 
@@ -95,12 +94,19 @@ local function showReplaceKeyMenu()
             icon = 'fa-solid fa-key',
             arrow = true,
             onSelect = function()
-                local confirmed = confirmationCheck()
-                if confirmed == 'confirm' then
-                    TriggerServerEvent('qbx_vehicleshop:server:replaceKey', v.props, sharedConfig.finance.keyReplacementPrice)
-                else
-                    lib.showContext('ownedVehicles')
-                end
+                lib.callback('qbx_vehicleshop:server:canCarryKey', false, function(canCarry)
+                    if not canCarry then
+                        exports.qbx_core:Notify('Your inventory is full!', 'error')
+                        return
+                    end
+
+                    local confirmed = confirmationCheck()
+                    if confirmed == 'confirm' then
+                        TriggerServerEvent('qbx_vehicleshop:server:replaceKey', v.props, sharedConfig.finance.keyReplacementPrice)
+                    else
+                        lib.showContext('ownedVehicles')
+                    end
+                end)
             end
         }
     end
@@ -211,7 +217,14 @@ local function openFinance(targetShowroomVehicle, buyVehicle)
 
     if not downPayment or not paymentAmount then return end
 
-    TriggerServerEvent('qbx_vehicleshop:server:financeVehicle', downPayment, paymentAmount, buyVehicle)
+    lib.callback('qbx_vehicleshop:server:canCarryKey', false, function(canCarry)
+        if not canCarry then
+            exports.qbx_core:Notify('Your inventory is full!', 'error')
+            return
+        end
+
+        TriggerServerEvent('qbx_vehicleshop:server:financeVehicle', downPayment, paymentAmount, buyVehicle)
+    end)
 end
 
 --- Opens a menu with list of vehicles based on given category
@@ -304,7 +317,14 @@ local function openCustomFinance(targetVehicle)
 
     if not downPayment or not paymentAmount or not playerId then return end
 
-    TriggerServerEvent('qbx_vehicleshop:server:sellfinanceVehicle', downPayment, paymentAmount, vehicle, playerId)
+    lib.callback('qbx_vehicleshop:server:canCarryKey', false, function(canCarry)
+        if not canCarry then
+            exports.qbx_core:Notify('Your inventory is full!', 'error')
+            return
+        end
+
+        TriggerServerEvent('qbx_vehicleshop:server:sellfinanceVehicle', downPayment, paymentAmount, vehicle, playerId)
+    end)
 end
 
 ---prompt client for playerId of another player
@@ -329,7 +349,14 @@ end
 local function startTestDrive(vehModel)
     local playerId = getPlayerIdInput(vehModel)
 
-    TriggerServerEvent('qbx_vehicleshop:server:customTestDrive', vehModel, playerId)
+    lib.callback('qbx_vehicleshop:server:canCarryKey', false, function(canCarry)
+        if not canCarry then
+            exports.qbx_core:Notify('Your inventory is full!', 'error')
+            return
+        end
+
+        TriggerServerEvent('qbx_vehicleshop:server:customTestDrive', vehModel, playerId)
+    end)
 end
 
 lib.onCache('vehicle', function(value)
@@ -341,7 +368,14 @@ end)
 local function sellVehicle(vehModel)
     local playerId = getPlayerIdInput(vehModel)
 
-    TriggerServerEvent('qbx_vehicleshop:server:sellShowroomVehicle', vehModel, playerId)
+    lib.callback('qbx_vehicleshop:server:canCarryKey', false, function(canCarry)
+        if not canCarry then
+            exports.qbx_core:Notify('Your inventory is full!', 'error')
+            return
+        end
+
+        TriggerServerEvent('qbx_vehicleshop:server:sellShowroomVehicle', vehModel, playerId)
+    end)
 end
 
 --- Opens the vehicle shop menu
@@ -364,7 +398,13 @@ local function openVehicleSellMenu(targetVehicle)
                 title = locale('menus.test_header'),
                 description = locale('menus.freeuse_test_txt'),
                 onSelect = function()
-                    TriggerServerEvent('qbx_vehicleshop:server:testDrive', vehicle)
+                    lib.callback('qbx_vehicleshop:server:canCarryKey', false, function(canCarry)
+                        if not canCarry then
+                            exports.qbx_core:Notify('Your inventory is full!', 'error')
+                            return
+                        end
+                        TriggerServerEvent('qbx_vehicleshop:server:testDrive', vehicle)
+                    end)
                 end,
             }
         end
@@ -374,7 +414,13 @@ local function openVehicleSellMenu(targetVehicle)
                 title = locale('menus.freeuse_buy_header'),
                 description = locale('menus.freeuse_buy_txt'),
                 onSelect = function()
-                    TriggerServerEvent('qbx_vehicleshop:server:buyShowroomVehicle', vehicle)
+                    lib.callback('qbx_vehicleshop:server:canCarryKey', false, function(canCarry)
+                        if not canCarry then
+                            exports.qbx_core:Notify('Your inventory is full!', 'error')
+                            return
+                        end
+                        TriggerServerEvent('qbx_vehicleshop:server:buyShowroomVehicle', vehicle)
+                    end)
                 end,
             }
         end
@@ -392,11 +438,11 @@ local function openVehicleSellMenu(targetVehicle)
         options[#options + 1] = swapOption
     else
         options[1] = {
-                title = locale('menus.managed_sell_header'),
-                description = locale('menus.managed_sell_txt'),
-                onSelect = function()
-                    sellVehicle(vehicle)
-                end,
+            title = locale('menus.managed_sell_header'),
+            description = locale('menus.managed_sell_txt'),
+            onSelect = function()
+                sellVehicle(vehicle)
+            end,
         }
 
         if sharedConfig.enableTestDrive then
