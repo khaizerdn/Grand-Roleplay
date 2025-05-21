@@ -343,9 +343,56 @@ lib.callback.register('qbx_garages:server:parkVehicle', function(source, netId, 
     return true
 end)
 
+-- Function to check if a point is inside a polyzone
+local function isPointInPolyZone(point, points)
+    local x, y = point.x, point.y
+    local inside = false
+    for i = 1, #points do
+        local j = i % #points + 1
+        local xi, yi = points[i].x, points[i].y
+        local xj, yj = points[j].x, points[j].y
+        if ((yi > y) ~= (yj > y)) and (x < (xj - xi) * (y - yi) / (yj - yi) + xi) then
+            inside = not inside
+        end
+    end
+    return inside
+end
+
+-- Function to check if a point is inside a sphere zone
+local function isPointInSphereZone(point, center, radius)
+    local distance = #(point - center)
+    return distance <= radius
+end
+
 AddEventHandler('onResourceStart', function(resource)
     if resource ~= cache.resource then return end
     Wait(100)
+
+    -- Delete vehicles inside garage zones
+    for garageName, garage in pairs(Garages) do
+        for _, accessPoint in ipairs(garage.accessPoints) do
+            local allVehicles = GetAllVehicles()
+            for i = 1, #allVehicles do
+                local vehicle = allVehicles[i]
+                local coords = GetEntityCoords(vehicle)
+                local point = vec3(coords.x, coords.y, coords.z)
+
+                if garage.type == GarageType.DEPOT and accessPoint.interact then
+                    -- Check sphere zone for depot
+                    if isPointInSphereZone(point, accessPoint.interact, 3.0) then
+                        DeleteEntity(vehicle)
+                        lib.print.debug('Deleted vehicle inside depot zone:', garageName, 'Plate:', GetVehicleNumberPlateText(vehicle))
+                    end
+                elseif accessPoint.points then
+                    -- Check polyzone for non-depot garages
+                    if isPointInPolyZone(point, accessPoint.points) then
+                        DeleteEntity(vehicle)
+                        lib.print.debug('Deleted vehicle inside garage zone:', garageName, 'Plate:', GetVehicleNumberPlateText(vehicle))
+                    end
+                end
+            end
+        end
+    end
 
     -- Move OUT vehicles not in impoundlot to impoundlot garage with depot price 300
     local vehicles = exports.qbx_vehicles:GetPlayerVehicles({ states = VehicleState.OUT })
@@ -362,6 +409,28 @@ AddEventHandler('onResourceStart', function(resource)
             else
                 lib.print.debug('Failed to move vehicle to impoundlot:', vehicle.id, 'Plate:', vehicle.props.plate)
             end
+        end
+    end
+
+    -- Spawn garaged vehicles
+    local garagedVehicles = exports.qbx_vehicles:GetPlayerVehicles({ states = VehicleState.GARAGED })
+    if not garagedVehicles then return end
+    for _, vehicleData in ipairs(garagedVehicles) do
+        local parkedPosition = vehicleData.parked_position
+        if parkedPosition then
+            local spawnCoords = vec4(parkedPosition.x, parkedPosition.y, parkedPosition.z, parkedPosition.w)
+            local model = vehicleData.modelName
+            lib.requestModel(model, 10000)
+            local veh = CreateVehicle(joaat(model), spawnCoords.x, spawnCoords.y, spawnCoords.z, spawnCoords.w, true, false)
+            SetModelAsNoLongerNeeded(joaat(model))
+            SetVehicleOnGroundProperly(veh)
+            SetEntityAsMissionEntity(veh, true, true)
+            Entity(veh).state:set('vehicleid', vehicleData.id, true)
+            Entity(veh).state:set('garage', vehicleData.garage, true)
+            lib.setVehicleProperties(veh, vehicleData.props)
+            local netId = NetworkGetNetworkIdFromEntity(veh)
+            TriggerServerEvent('qbx_garages:server:toggleVehicleLock', netId, true) -- Lock the vehicle
+            lib.print.debug('Spawned garaged vehicle:', vehicleData.id, 'Plate:', vehicleData.props.plate, 'Garage:', vehicleData.garage)
         end
     end
 end)
