@@ -108,7 +108,7 @@ function SpawnVehicle(src, data)
     if not newVehicle then return end
 
     local plate = newVehicle.plate or newVehicle.props.plate
-
+    lib.requestModel(newVehicle.modelName, 10000)
     local netId, vehicle = qbx.spawnVehicle({
         model = newVehicle.modelName,
         spawnSource = coords,
@@ -118,8 +118,11 @@ function SpawnVehicle(src, data)
 
     if not netId or netId == 0 or not vehicle or vehicle == 0 then return end
 
+    SetVehicleOnGroundProperly(vehicle)
+    SetModelAsNoLongerNeeded(joaat(newVehicle.modelName))
+
     if vehicleId then
-        Entity(vehicle).state:set('vehicleid', vehicleId, true) -- Sync vehicleid to clients
+        Entity(vehicle).state:set('vehicleid', vehicleId, true)
     end
 
     config.giveKeys(src, plate, vehicle)

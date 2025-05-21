@@ -21,6 +21,8 @@ return {
         categories = {
             boats = 'boats',
             air = 'air',
+            police = 'police',
+            ambulance = 'ambulance',
             -- super = { 'pdm', 'luxury' },
         },
 
@@ -213,14 +215,19 @@ return {
             alphaz1 = 'air',
             nimbus = 'air',
             conada = 'air',
+
+            -- Police
+            police = 'police', -- Added police vehicles to models
+            police2 = 'police',
+            police3 = 'police',
+
+            -- Ambulance
+            ambulance = 'ambulance',
         },
 
         blocklist = {
             -- Emergency Vehicles
-            'police',
-            'police2',
-            'police3',
-            'police4',
+            -- 'police4',
             'fbi',
             'fbi2',
             'riot',
@@ -483,6 +490,78 @@ return {
                 { coords = vec4(-1668.53, -3152.56, 12.99, 303.22), vehicle = 'luxor2' },
                 { coords = vec4(-1632.02, -3144.48, 12.99, 31.08), vehicle = 'nimbus' },
                 { coords = vec4(-1663.74, -3126.32, 12.99, 275.03), vehicle = 'frogger' },
+            },
+        },
+
+        police = {
+            type = 'managed',
+            job = 'police', -- Restricts access to players with the 'police' job
+            zone = {
+                shape = {
+                    vec3(-565.25, -118.29, 33.65),
+                    vec3(-568.07, -119.6, 33.65),
+                    vec3(-566.12, -124.18, 33.71),
+                    vec3(-563.15, -123.05, 33.75)
+                },
+                size = vec3(3, 3, 4),
+                targetDistance = 1,
+            },
+            blip = {
+                label = 'Police Vehicle Shop',
+                coords = vec3(-565.56, -121.35, 33.65),
+                show = false,
+                sprite = 326,
+                color = 38, -- Blue color for police
+            },
+            categories = {
+                emergency = 'Emergency Vehicles',
+            },
+            testDrive = {
+                limit = 5.0,
+                endBehavior = 'return'
+            },
+            returnLocation = vec4(-569.59, -111.5, 33.26, 21.78),
+            vehicleSpawns = {
+                vec4(-569.59, -111.5, 33.26, 21.78),
+            },
+            showroomVehicles = {
+                { coords = vec4(-565.61, -121.48, 33.26, 20.78), vehicle = 'police' },
+            },
+        },
+
+        ambulance = {
+            type = 'managed',
+            job = 'ambulance', -- Restricts access to players with the 'police' job
+            zone = {
+                shape = {
+                    vec3(-429.3, -337.34, 24.23),
+                    vec3(-431.92, -330.05, 24.4),
+                    vec3(-427.61, -328.49, 24.4),
+                    vec3(-424.77, -335.81, 24.4)
+                },
+                size = vec3(4, 4, 5),
+                targetDistance = 1,
+            },
+            blip = {
+                label = 'Ambulance Vehicle Shop',
+                coords = vec3(-424.77, -335.81, 24.4),
+                show = false,
+                sprite = 326,
+                color = 38, -- Blue color for police
+            },
+            categories = {
+                emergency = 'Emergency Vehicles',
+            },
+            testDrive = {
+                limit = 5.0,
+                endBehavior = 'return'
+            },
+            returnLocation = vec4(-428.84, -339.52, 24.0, 109.91),
+            vehicleSpawns = {
+                vec4(-428.84, -339.52, 24.0, 109.91),
+            },
+            showroomVehicles = {
+                { coords = vec4(-428.58, -333.37, 23.0, 200.1), vehicle = 'ambulance' },
             },
         },
     },
