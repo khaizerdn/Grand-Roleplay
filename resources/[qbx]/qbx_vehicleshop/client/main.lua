@@ -381,8 +381,15 @@ end
 --- Opens the vehicle shop menu
 ---@param targetVehicle number
 local function openVehicleSellMenu(targetVehicle)
+    local shop = sharedConfig.shops[insideShop]
+    local vehicle = shop.showroomVehicles[targetVehicle].vehicle
+
+    -- Check if the shop is managed and the player has the required job
+    if shop.job and QBX.PlayerData.job.name ~= shop.job then
+        return exports.qbx_core:Notify('You are not authorized to access this shop.', 'error')
+    end
+
     local options = {}
-    local vehicle = sharedConfig.shops[insideShop].showroomVehicles[targetVehicle].vehicle
     local swapOption = {
         title = locale('menus.swap_header'),
         description = locale('menus.swap_txt'),
@@ -392,81 +399,49 @@ local function openVehicleSellMenu(targetVehicle)
         arrow = true
     }
 
-    if sharedConfig.shops[insideShop].type == 'free-use' then
-        if sharedConfig.enableTestDrive then
-            options[#options + 1] = {
-                title = locale('menus.test_header'),
-                description = locale('menus.freeuse_test_txt'),
-                onSelect = function()
-                    lib.callback('qbx_vehicleshop:server:canCarryKey', false, function(canCarry)
-                        if not canCarry then
-                            exports.qbx_core:Notify('Your inventory is full!', 'error')
-                            return
-                        end
-                        TriggerServerEvent('qbx_vehicleshop:server:testDrive', vehicle)
-                    end)
-                end,
-            }
-        end
-
-        if sharedConfig.enableFreeUseBuy then
-            options[#options + 1] = {
-                title = locale('menus.freeuse_buy_header'),
-                description = locale('menus.freeuse_buy_txt'),
-                onSelect = function()
-                    lib.callback('qbx_vehicleshop:server:canCarryKey', false, function(canCarry)
-                        if not canCarry then
-                            exports.qbx_core:Notify('Your inventory is full!', 'error')
-                            return
-                        end
-                        TriggerServerEvent('qbx_vehicleshop:server:buyShowroomVehicle', vehicle)
-                    end)
-                end,
-            }
-        end
-
-        if sharedConfig.finance.enable then
-            options[#options + 1] = {
-                title = locale('menus.finance_header'),
-                description = locale('menus.freeuse_finance_txt'),
-                onSelect = function()
-                    openFinance(targetVehicle, vehicle)
-                end
-            }
-        end
-
-        options[#options + 1] = swapOption
-    else
-        options[1] = {
-            title = locale('menus.managed_sell_header'),
-            description = locale('menus.managed_sell_txt'),
+    if sharedConfig.enableTestDrive then
+        options[#options + 1] = {
+            title = locale('menus.test_header'),
+            description = locale('menus.freeuse_test_txt'),
             onSelect = function()
-                sellVehicle(vehicle)
+                lib.callback('qbx_vehicleshop:server:canCarryKey', false, function(canCarry)
+                    if not canCarry then
+                        exports.qbx_core:Notify('Your inventory is full!', 'error')
+                        return
+                    end
+                    TriggerServerEvent('qbx_vehicleshop:server:testDrive', vehicle)
+                end)
             end,
         }
-
-        if sharedConfig.enableTestDrive then
-            options[#options + 1] = {
-                title = locale('menus.test_header'),
-                description = locale('menus.managed_test_txt'),
-                onSelect = function()
-                    startTestDrive(vehicle)
-                end
-            }
-        end
-
-        if sharedConfig.finance.enable then
-            options[#options + 1] = {
-                title = locale('menus.finance_header'),
-                description = locale('menus.managed_finance_txt'),
-                onSelect = function()
-                    openCustomFinance(targetVehicle)
-                end
-            }
-        end
-
-        options[#options + 1] = swapOption
     end
+
+    if sharedConfig.enableFreeUseBuy then
+        options[#options + 1] = {
+            title = locale('menus.freeuse_buy_header'),
+            description = locale('menus.freeuse_buy_txt'),
+            onSelect = function()
+                lib.callback('qbx_vehicleshop:server:canCarryKey', false, function(canCarry)
+                    if not canCarry then
+                        exports.qbx_core:Notify('Your inventory is full!', 'error')
+                        return
+                    end
+                    TriggerServerEvent('qbx_vehicleshop:server:buyShowroomVehicle', vehicle)
+                end)
+            end,
+        }
+    end
+
+    if sharedConfig.finance.enable then
+        options[#options + 1] = {
+            title = locale('menus.finance_header'),
+            description = locale('menus.freeuse_finance_txt'),
+            onSelect = function()
+                openFinance(targetVehicle, vehicle)
+            end
+        }
+    end
+
+    options[#options + 1] = swapOption
 
     lib.registerContext({
         id = 'vehicleMenu',
