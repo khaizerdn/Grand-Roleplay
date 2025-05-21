@@ -583,7 +583,7 @@ return {
             vehicleType = VehicleType.CAR,
             shared = true,
             allowUnowned = true,
-            maxVehicles = 14,
+            maxVehicles = 10,
             accessPoints = {
                 {
                     points = {
