@@ -478,6 +478,152 @@ return {
             },
         },
 
+        -- JOB GARAGES
+
+        rockfordhills_police_garage_1 = {
+            label = 'RHPD Garage',
+            vehicleType = VehicleType.CAR,
+            shared = true,
+            allowUnowned = true,
+            maxVehicles = 5,
+            accessPoints = {
+                {
+                    points = {
+                        vec3(-574.1, -127.5, 33.74),
+                        vec3(-576.15, -122.96, 33.73),
+                        vec3(-562.17, -117.19, 33.72),
+                        vec3(-560.39, -121.78, 33.71)
+
+                        
+                    },
+                    blip = {
+                        coords = vec3(-732.05, -1452.23, 5.0),
+                        sprite = 360,
+                        color = 3,
+                    },
+                }
+            },
+        },
+
+        rockfordhills_police_garage_2 = {
+            label = 'RHPD Garage',
+            vehicleType = VehicleType.CAR,
+            shared = true,
+            allowUnowned = true,
+            maxVehicles = 5,
+            accessPoints = {
+                {
+                    points = {
+                        vec3(-584.69, -102.1, 33.72),
+                        vec3(-583.01, -106.79, 33.75),
+                        vec3(-568.94, -100.75, 33.74),
+                        vec3(-571.01, -96.42, 33.65)
+
+                        
+                    },
+                    blip = {
+                        coords = vec3(-732.05, -1452.23, 5.0),
+                        sprite = 360,
+                        color = 3,
+                    },
+                }
+            },
+        },
+
+        rockfordhills_police_garage_3 = {
+            label = 'RHPD Garage',
+            vehicleType = VehicleType.AIR,
+            shared = true,
+            allowUnowned = true,
+            maxVehicles = 1,
+            accessPoints = {
+                {
+                    points = {
+                        vec3(-570.97, -172.2, 38.2),
+                        vec3(-586.51, -178.56, 38.05),
+                        vec3(-579.13, -191.05, 37.85),
+                        vec3(-566.61, -182.62, 38.02)
+                        
+                    },
+                    blip = {
+                        coords = vec3(-732.05, -1452.23, 5.0),
+                        sprite = 360,
+                        color = 3,
+                    },
+                }
+            },
+        },
+
+        mountzonah_hospital_garage_1 = {
+            label = 'Mount Zonah Garage',
+            vehicleType = VehicleType.CAR,
+            shared = true,
+            allowUnowned = true,
+            maxVehicles = 14,
+            accessPoints = {
+                {
+                    points = {
+                        vec3(-483.01, -348.59, 24.4),
+                        vec3(-480.32, -356.02, 24.23),
+                        vec3(-425.05, -335.8, 24.23),
+                        vec3(-427.99, -328.62, 24.36)
+                        
+                    },
+                    blip = {
+                        coords = vec3(-732.05, -1452.23, 5.0),
+                        sprite = 360,
+                        color = 3,
+                    },
+                }
+            },
+        },
+
+        mountzonah_hospital_garage_2 = {
+            label = 'Mount Zonah Garage',
+            vehicleType = VehicleType.CAR,
+            shared = true,
+            allowUnowned = true,
+            maxVehicles = 14,
+            accessPoints = {
+                {
+                    points = {
+                        vec3(-469.9, -360.07, 24.23),
+                        vec3(-467.75, -366.15, 24.23),
+                        vec3(-428.57, -351.86, 24.23),
+                        vec3(-430.66, -345.73, 24.23)
+                    },
+                    blip = {
+                        coords = vec3(-732.05, -1452.23, 5.0),
+                        sprite = 360,
+                        color = 3,
+                    },
+                }
+            },
+        },
+
+        mountzonah_hospital_garage_3 = {
+            label = 'Mount Zonah Garage',
+            vehicleType = VehicleType.CAR,
+            shared = true,
+            allowUnowned = true,
+            maxVehicles = 14,
+            accessPoints = {
+                {
+                    points = {
+                        vec3(-417.95, -356.03, 24.23),
+                        vec3(-415.45, -363.21, 24.23),
+                        vec3(-470.41, -383.03, 24.23),
+                        vec3(-472.99, -376.21, 24.23)
+                    },
+                    blip = {
+                        coords = vec3(-732.05, -1452.23, 5.0),
+                        sprite = 360,
+                        color = 3,
+                    },
+                }
+            },
+        },
+
         -- airsshores = {
         --     label = 'Sandy Shores Hangar',
         --     vehicleType = VehicleType.AIR,
