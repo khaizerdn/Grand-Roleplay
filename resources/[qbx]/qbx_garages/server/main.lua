@@ -346,6 +346,24 @@ end)
 AddEventHandler('onResourceStart', function(resource)
     if resource ~= cache.resource then return end
     Wait(100)
+
+    -- Move OUT vehicles not in impoundlot to impoundlot garage with depot price 300
+    local vehicles = exports.qbx_vehicles:GetPlayerVehicles({ states = VehicleState.OUT })
+    for _, vehicle in ipairs(vehicles) do
+        if vehicle.garage ~= 'impoundlot' then
+            local numRowsAffected = MySQL.update.await('UPDATE player_vehicles SET garage = ?, depotprice = ? WHERE id = ? AND state = ?', {
+                'impoundlot',
+                300,
+                vehicle.id,
+                VehicleState.OUT
+            })
+            if numRowsAffected > 0 then
+                lib.print.debug('Moved vehicle to impoundlot garage with depot price 300:', vehicle.id, 'Plate:', vehicle.props.plate)
+            else
+                lib.print.debug('Failed to move vehicle to impoundlot:', vehicle.id, 'Plate:', vehicle.props.plate)
+            end
+        end
+    end
 end)
 
 RegisterNetEvent('qbx_garages:server:setVehicleOut', function(netId)
