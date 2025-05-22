@@ -364,6 +364,44 @@ local function isPointInSphereZone(point, center, radius)
     return distance <= radius
 end
 
+-- New function to delete unowned OUT vehicles
+local function deleteUnownedOutVehicles()
+    -- Query for vehicles with citizenid IS NULL and state = 0 (OUT)
+    local vehicles = MySQL.query.await('SELECT id, plate FROM player_vehicles WHERE citizenid IS NULL AND state = ?', { VehicleState.OUT })
+    
+    if not vehicles or #vehicles == 0 then
+        lib.print.debug('No unowned OUT vehicles found to delete.')
+        return
+    end
+
+    -- Delete vehicles from the database
+    local deletedCount = 0
+    for _, vehicle in ipairs(vehicles) do
+        local result = MySQL.query.await('DELETE FROM player_vehicles WHERE id = ?', { vehicle.id })
+        if result.affectedRows > 0 then
+            deletedCount = deletedCount + 1
+            lib.print.debug('Deleted unowned OUT vehicle from database: ID:', vehicle.id, 'Plate:', vehicle.plate)
+        else
+            lib.print.debug('Failed to delete unowned OUT vehicle from database: ID:', vehicle.id, 'Plate:', vehicle.plate)
+        end
+    end
+
+    -- Delete matching vehicles in the world
+    local allVehicles = GetAllVehicles()
+    for _, vehicle in ipairs(allVehicles) do
+        local plate = GetVehicleNumberPlateText(vehicle)
+        for _, dbVehicle in ipairs(vehicles) do
+            if plate == dbVehicle.plate then
+                DeleteEntity(vehicle)
+                lib.print.debug('Deleted unowned OUT vehicle from world: Plate:', plate)
+                break
+            end
+        end
+    end
+
+    lib.print.debug('Total unowned OUT vehicles deleted from database:', deletedCount)
+end
+
 -- New function to spawn a single garaged vehicle
 local function spawnGaragedVehicle(vehicleData)
     local parkedPosition = vehicleData.parked_position
@@ -387,7 +425,7 @@ local function spawnGaragedVehicle(vehicleData)
 
     -- Spawn the vehicle
     local netId, veh = qbx.spawnVehicle({
-        spawnSource = vec4(spawnCoords.x, spawnCoords.y, spawnCoords.z, spawnCoords.w),
+        spawnSource = spawnCoords,
         model = model,
         props = vehicleData.props,
         warp = false -- No warping during server startup
@@ -420,6 +458,9 @@ end
 AddEventHandler('onResourceStart', function(resource)
     if resource ~= cache.resource then return end
     Wait(100)
+
+    -- Delete unowned OUT vehicles
+    deleteUnownedOutVehicles()
 
     -- Delete vehicles inside garage zones
     for garageName, garage in pairs(Garages) do
