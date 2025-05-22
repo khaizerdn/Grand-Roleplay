@@ -508,7 +508,7 @@ return {
             },
             blip = {
                 label = 'Police Vehicle Shop',
-                coords = vec3(-565.56, -121.35, 33.65),
+                coords = vec3(-565.56, -121.35, 32.65),
                 show = false,
                 sprite = 326,
                 color = 38, -- Blue color for police
