@@ -15,17 +15,17 @@ return {
                 ['id'] = {
                     item = 'id_card',
                     label = 'ID',
-                    cost = 50,
+                    cost = 30,
                 },
                 ['driver'] = {
                     item = 'driver_license',
                     label = 'Driver License',
-                    cost = 50,
+                    cost = 40,
                 },
                 ['weapon'] = {
                     item = 'weaponlicense',
                     label = 'Weapon License',
-                    cost = 50,
+                    cost = 300,
                 },
             },
         },
