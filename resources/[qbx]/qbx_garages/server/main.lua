@@ -364,6 +364,59 @@ local function isPointInSphereZone(point, center, radius)
     return distance <= radius
 end
 
+-- New function to spawn a single garaged vehicle
+local function spawnGaragedVehicle(vehicleData)
+    local parkedPosition = vehicleData.parked_position
+    if not parkedPosition then
+        lib.print.debug('No parked_position for vehicle:', vehicleData.id, 'Plate:', vehicleData.props.plate)
+        return
+    end
+
+    local spawnCoords = vec4(parkedPosition.x, parkedPosition.y, parkedPosition.z, parkedPosition.w)
+    local model = vehicleData.modelName
+
+    -- Check if the spawn area is clear
+    if Config.distanceCheck then
+        local vec3Coords = vec3(spawnCoords.x, spawnCoords.y, spawnCoords.z)
+        local nearbyVehicle = lib.getClosestVehicle(vec3Coords, Config.distanceCheck, false)
+        if nearbyVehicle then
+            lib.print.debug('Spawn area not clear for vehicle:', vehicleData.id, 'Plate:', vehicleData.props.plate)
+            return
+        end
+    end
+
+    -- Spawn the vehicle
+    local netId, veh = qbx.spawnVehicle({
+        spawnSource = vec4(spawnCoords.x, spawnCoords.y, spawnCoords.z, spawnCoords.w),
+        model = model,
+        props = vehicleData.props,
+        warp = false -- No warping during server startup
+    })
+
+    if not veh then
+        lib.print.debug('Failed to spawn vehicle:', vehicleData.id, 'Plate:', vehicleData.props.plate)
+        return
+    end
+
+    Entity(veh).state:set('vehicleid', vehicleData.id, true)
+    Entity(veh).state:set('garage', vehicleData.garage, true)
+    lib.setVehicleProperties(veh, vehicleData.props)
+
+    -- Trigger client-side event to set mission entity and place on ground
+    TriggerClientEvent('qbx_garages:client:setVehicleMissionEntity', -1, netId)
+
+    -- Lock the vehicle if configured
+    if Config.doorsLocked then
+        if GetResourceState('qbx_vehiclekeys') == 'started' then
+            TriggerEvent('qb-vehiclekeys:server:setVehLockState', netId, 2)
+        else
+            SetVehicleDoorsLocked(veh, 2)
+        end
+    end
+
+    lib.print.debug('Spawned garaged vehicle:', vehicleData.id, 'Plate:', vehicleData.props.plate, 'Garage:', vehicleData.garage, 'Net ID:', netId)
+end
+
 AddEventHandler('onResourceStart', function(resource)
     if resource ~= cache.resource then return end
     Wait(100)
@@ -416,22 +469,7 @@ AddEventHandler('onResourceStart', function(resource)
     local garagedVehicles = exports.qbx_vehicles:GetPlayerVehicles({ states = VehicleState.GARAGED })
     if not garagedVehicles then return end
     for _, vehicleData in ipairs(garagedVehicles) do
-        local parkedPosition = vehicleData.parked_position
-        if parkedPosition then
-            local spawnCoords = vec4(parkedPosition.x, parkedPosition.y, parkedPosition.z, parkedPosition.w)
-            local model = vehicleData.modelName
-            lib.requestModel(model, 10000)
-            local veh = CreateVehicle(joaat(model), spawnCoords.x, spawnCoords.y, spawnCoords.z, spawnCoords.w, true, false)
-            SetModelAsNoLongerNeeded(joaat(model))
-            SetVehicleOnGroundProperly(veh)
-            SetEntityAsMissionEntity(veh, true, true)
-            Entity(veh).state:set('vehicleid', vehicleData.id, true)
-            Entity(veh).state:set('garage', vehicleData.garage, true)
-            lib.setVehicleProperties(veh, vehicleData.props)
-            local netId = NetworkGetNetworkIdFromEntity(veh)
-            TriggerServerEvent('qbx_garages:server:toggleVehicleLock', netId, true) -- Lock the vehicle
-            lib.print.debug('Spawned garaged vehicle:', vehicleData.id, 'Plate:', vehicleData.props.plate, 'Garage:', vehicleData.garage)
-        end
+        spawnGaragedVehicle(vehicleData)
     end
 end)
 

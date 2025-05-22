@@ -376,6 +376,17 @@ local function createImpoundZone(garageName, garage, accessPoint)
     end)
 end
 
+RegisterNetEvent('qbx_garages:client:setVehicleMissionEntity', function(netId)
+    local veh = NetToVeh(netId)
+    if DoesEntityExist(veh) then
+        SetEntityAsMissionEntity(veh, true, true)
+        SetVehicleOnGroundProperly(veh)
+        lib.print.debug('Set vehicle as mission entity and placed on ground, Net ID:', netId)
+    else
+        lib.print.debug('Vehicle does not exist for Net ID:', netId)
+    end
+end)
+
 ---@param garageInfo GarageConfig
 ---@param accessPoint AccessPoint
 local function createBlips(garageInfo, accessPoint)
@@ -420,28 +431,4 @@ end)
 
 CreateThread(function()
     createGarages()
-end)
-
-AddEventHandler('onClientResourceStart', function(resource)
-    if resource ~= GetCurrentResourceName() then return end
-    Wait(100)
-    local vehicles = lib.callback.await('qbx_garages:server:getGaragedVehicles', false)
-    if not vehicles then return end
-    for _, vehicleData in ipairs(vehicles) do
-        local parkedPosition = vehicleData.parked_position
-        if parkedPosition then
-            local spawnCoords = vec4(parkedPosition.x, parkedPosition.y, parkedPosition.z, parkedPosition.w)
-            local model = vehicleData.modelName
-            lib.requestModel(model, 10000)
-            local veh = CreateVehicle(joaat(model), spawnCoords.x, spawnCoords.y, spawnCoords.z, spawnCoords.w, true, false)
-            SetModelAsNoLongerNeeded(joaat(model))
-            SetVehicleOnGroundProperly(veh)
-            SetEntityAsMissionEntity(veh, true, true)
-            Entity(veh).state:set('vehicleid', vehicleData.id, true)
-            Entity(veh).state:set('garage', vehicleData.garage, true)
-            lib.setVehicleProperties(veh, vehicleData.props)
-            local netId = NetworkGetNetworkIdFromEntity(veh)
-            TriggerServerEvent('qbx_garages:server:toggleVehicleLock', netId, true) -- Lock the vehicle
-        end
-    end
 end)
