@@ -539,7 +539,8 @@ RegisterNetEvent('qbx_garages:server:setVehicleOut', function(netId)
     local success, errorResult = exports.qbx_vehicles:SaveVehicle(vehicle, {
         garage = nil,
         state = VehicleState.OUT,
-        parked_position = nil -- Clear parked_position
+        parked_position = nil, -- Clear parked_position
+        depotPrice = 0
     })
     if not success then
         lib.print.debug('Failed to update vehicle state to OUT:', vehicleId, 'Error:', errorResult)
@@ -554,20 +555,42 @@ end)
 ---@return boolean? success true if successfully paid
 lib.callback.register('qbx_garages:server:payDepotPrice', function(source, vehicleId)
     local player = exports.qbx_core:GetPlayer(source)
+    if not player then return false end
+
     local cashBalance = player.PlayerData.money.cash
     local bankBalance = player.PlayerData.money.bank
 
     local vehicle = exports.qbx_vehicles:GetPlayerVehicle(vehicleId)
-    local depotPrice = vehicle.depotPrice
-    if not depotPrice or depotPrice == 0 then return true end
+    if not vehicle then return false end
+
+    local depotPrice = vehicle.depotPrice or 0
+    if depotPrice == 0 then return true end
+
+    local formattedPrice = '$' .. comma_value(depotPrice)
+
     if cashBalance >= depotPrice then
         player.Functions.RemoveMoney('cash', depotPrice, 'paid-depot')
+        exports.qbx_core:Notify(source, locale("Depot fee of %s paid in cash."):format(formattedPrice), 'primary')
         return true
     elseif bankBalance >= depotPrice then
         player.Functions.RemoveMoney('bank', depotPrice, 'paid-depot')
+        exports.qbx_core:Notify(source, locale("Depot fee of %s paid from your bank."):format(formattedPrice), 'primary')
         return true
     end
+
+    return false
 end)
+
+-- Optional helper function to format numbers with commas (e.g., 10000 → 10,000)
+function comma_value(amount)
+    local formatted = tostring(amount)
+    while true do  
+        formatted, k = formatted:gsub("^(-?%d+)(%d%d%d)", '%1,%2')
+        if k == 0 then break end
+    end
+    return formatted
+end
+
 
 lib.callback.register('qbx_garages:server:getGaragedVehicles', function(source)
     local filter = { states = VehicleState.GARAGED }

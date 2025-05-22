@@ -2,7 +2,7 @@ return {
     autoRespawn = false, -- True == auto respawn cars that are outside into your garage on script restart, false == does not put them into your garage and players have to go to the impound
     warpInVehicle = false, -- If false, player will no longer warp into vehicle upon taking the vehicle out.
     doorsLocked = true, -- If true, the doors will be locked upon taking the vehicle out.
-    distanceCheck = 0, -- The distance that needs to be clear to let the vehicle spawn, this prevents vehicles stacking on top of each other
+    distanceCheck = 0, -- The distance that needs to be clear to let the vehicle spawn, this prevents vehicles stacking on top of each other. Use 0 because 
     ---calculates the automatic impound fee.
     ---@param vehicleId integer
     ---@param modelName string
@@ -710,7 +710,7 @@ return {
                     spawn = vec4(-361.29, -75.63, 45.06, 71.34),
                     blip = {
                         coords = vec3(-354.76, -75.63, 45.67),
-                        sprite = 360,
+                        sprite = 68,
                         color = 3,
                     },
                 }
