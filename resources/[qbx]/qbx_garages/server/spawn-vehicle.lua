@@ -4,7 +4,10 @@
 local function setVehicleStateToOut(vehicleId, vehicle, modelName)
     local depotPrice = Config.calculateImpoundFee(vehicleId, modelName) or 0
     exports.qbx_vehicles:SaveVehicle(vehicle, {
-        depotPrice = depotPrice
+        garage = '',
+        state = VehicleState.OUT,
+        parked_position = '', -- Clear parked_position
+        depotPrice = 0
     })
     Entity(vehicle).state:set('vehicleid', vehicleId, true) -- Sync vehicleid to clients
     Entity(vehicle).state:set('garage', nil, true) -- Clear garage state

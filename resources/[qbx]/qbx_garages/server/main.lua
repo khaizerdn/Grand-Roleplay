@@ -536,12 +536,6 @@ RegisterNetEvent('qbx_garages:server:setVehicleOut', function(netId)
 
     -- Update vehicle state to OUT, clear garage and parked_position
     lib.print.debug('Setting vehicle to OUT:', vehicleId, 'Net ID:', netId, 'Plate:', plate, 'Current State:', playerVehicle.state)
-    local success, errorResult = exports.qbx_vehicles:SaveVehicle(vehicle, {
-        garage = nil,
-        state = VehicleState.OUT,
-        parked_position = nil, -- Clear parked_position
-        depotPrice = 0
-    })
     if not success then
         lib.print.debug('Failed to update vehicle state to OUT:', vehicleId, 'Error:', errorResult)
         return
