@@ -56,8 +56,6 @@ function FindChargeableCurrencyType(price, cash, bank)
         return 'cash'
     elseif bank >= price then
         return 'bank'
-    else
-        return
     end
 end
 
@@ -108,7 +106,6 @@ function SpawnVehicle(src, data)
     if not newVehicle then return end
 
     local plate = newVehicle.plate or newVehicle.props.plate
-    lib.requestModel(newVehicle.modelName, 10000)
     local netId, vehicle = qbx.spawnVehicle({
         model = newVehicle.modelName,
         spawnSource = coords,
@@ -116,15 +113,16 @@ function SpawnVehicle(src, data)
         props = { plate = plate }
     })
 
-    if not netId or netId == 0 or not vehicle or vehicle == 0 then return end
-
-    SetVehicleOnGroundProperly(vehicle)
-    SetModelAsNoLongerNeeded(joaat(newVehicle.modelName))
+    if not netId or netId == 0 or not vehicle or vehicle == 0 then 
+        lib.print.debug('Failed to spawn vehicle, Model:', newVehicle.modelName, 'Plate:', plate)
+        return 
+    end
 
     if vehicleId then
         Entity(vehicle).state:set('vehicleid', vehicleId, true)
     end
 
     config.giveKeys(src, plate, vehicle)
+    lib.print.debug('Spawned vehicle, Net ID:', netId, 'Model:', newVehicle.modelName, 'Plate:', plate)
     return netId
 end

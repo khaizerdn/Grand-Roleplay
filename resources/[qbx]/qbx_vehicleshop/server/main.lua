@@ -155,7 +155,7 @@ RegisterNetEvent('qbx_vehicleshop:server:buyShowroomVehicle', function(vehicle)
     local player = exports.qbx_core:GetPlayer(src)
     local vehiclePrice = COREVEHICLES[vehicle].price
     if not RemoveMoney(src, vehiclePrice, 'vehicle-bought-in-showroom') then
-        return exports.qbx_core:Notify(src, locale('error.notenoughmoney'), 'error')
+        return
     end
 
     local vehicleId = exports.qbx_vehicles:CreatePlayerVehicle({
@@ -169,12 +169,6 @@ RegisterNetEvent('qbx_vehicleshop:server:buyShowroomVehicle', function(vehicle)
         coords = coords,
         vehicleId = vehicleId
     })
-    
-    -- Give key to the buyer
-    local vehicleEntity = NetworkGetEntityFromNetworkId(netId)
-    if vehicleEntity and DoesEntityExist(vehicleEntity) then
-        exports['khaizerdn-vehiclekeys']:GiveKey(src, vehicleEntity)
-    end
 end)
 
 ---@param src number

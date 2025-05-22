@@ -380,7 +380,6 @@ RegisterNetEvent('qbx_garages:client:setVehicleMissionEntity', function(netId)
     local veh = NetToVeh(netId)
     if DoesEntityExist(veh) then
         SetEntityAsMissionEntity(veh, true, true)
-        SetVehicleOnGroundProperly(veh)
         lib.print.debug('Set vehicle as mission entity and placed on ground, Net ID:', netId)
     else
         lib.print.debug('Vehicle does not exist for Net ID:', netId)
