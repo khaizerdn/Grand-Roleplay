@@ -41,7 +41,7 @@
         "checking_whitelisted": "Hello %s. We are checking your allowance.",
         "exploit_banned": "You have been banned for cheating. Check our Discord for more information: %s",
         "exploit_dropped": "You Have Been Kicked For Exploitation",
-        "multichar_title": "Expand your storyline – Buy additional character slot and bring a new persona to life! Join GRP Discord: discord.gg/nj9PsRhjyk",
+        "multichar_title": "SELECT CHARACTER",
         "multichar_new_character": "New Character #%s",
         "char_male": "Male",
         "char_female": "Female",

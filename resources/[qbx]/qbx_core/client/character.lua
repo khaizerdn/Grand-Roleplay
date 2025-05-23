@@ -393,7 +393,8 @@ local function chooseCharacter()
         local character = characters[i]
         local name = character and ('%s %s'):format(character.charinfo.firstname, character.charinfo.lastname)
         options[i] = {
-            title = character and ('%s %s - %s'):format(character.charinfo.firstname, character.charinfo.lastname, character.citizenid) or locale('info.multichar_new_character', i),
+            title = character and ('%s %s'):format(character.charinfo.firstname, character.charinfo.lastname, character.citizenid) or locale('info.multichar_new_character', i),
+            description = character and ('%s'):format(character.citizenid) or locale('info.multichar_new_character', i), -- Modified line
             metadata = character and {
                 Name = name,
                 Gender = character.charinfo.gender == 0 and locale('info.char_male') or locale('info.char_female'),
@@ -426,13 +427,13 @@ local function chooseCharacter()
         if character then
             lib.registerContext({
                 id = 'qbx_core_multichar_character_'..i,
-                title = ('%s %s - %s'):format(character.charinfo.firstname, character.charinfo.lastname, character.citizenid),
+                title = ('%s %s'):format(character.charinfo.firstname, character.charinfo.lastname),
                 canClose = false,
                 menu = 'qbx_core_multichar_characters',
                 options = {
                     {
                         title = locale('info.play'),
-                        description = locale('info.play_description', name),
+                        description = locale('info.play_description', name, character.citizenid), -- Modified line
                         icon = 'play',
                         onSelect = function()
                             DoScreenFadeOut(10)
@@ -450,7 +451,7 @@ local function chooseCharacter()
                     },
                     config.characters.enableDeleteButton and {
                         title = locale('info.delete_character'),
-                        description = locale('info.delete_character_description', name),
+                        description = locale('info.delete_character_description', name, character.citizenid), -- Modified line
                         icon = 'trash',
                         onSelect = function()
                             local alert = lib.alertDialog({
