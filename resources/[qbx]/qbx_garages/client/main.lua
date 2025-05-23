@@ -332,6 +332,7 @@ local function createGarageZone(garageName, garage, accessPoint, accessPointInde
 
                 -- Handle [E] key press
                 if IsControlJustReleased(0, 38) then
+                    lib.hideTextUI()
                     if not checkCanAccess(garage) then return end
                     if cache.vehicle and garage.type ~= GarageType.DEPOT then
                         storeVehicle(cache.vehicle, garageName)
@@ -363,6 +364,7 @@ local function createImpoundZone(garageName, garage, accessPoint)
             end,
             inside = function()
                 if IsControlJustReleased(0, 38) then
+                    lib.hideTextUI()
                     if not checkCanAccess(garage) then return end
                     if not cache.vehicle then
                         openGarageMenu(garageName, garage, 1)
