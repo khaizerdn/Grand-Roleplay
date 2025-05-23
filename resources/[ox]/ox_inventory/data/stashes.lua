@@ -1,8 +1,8 @@
 return {
 	{ -- RHPD Inventory Evidence
-		coords = vec3(-560.76, -102.11, 37.15),
+		coords = vec3(-561.7, -101.7, 37.86),
 		target = {
-			loc = vec3(-560.76, -102.11, 37.15),
+			loc = vec3(-561.7, -101.7, 37.86),
 			length = 1.2,
 			width = 5.6,
 			heading = 0,

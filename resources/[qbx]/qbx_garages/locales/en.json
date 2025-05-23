@@ -28,6 +28,6 @@
     "info": {
         "car_e": "[E] Open Garage",
         "park_e": "[E] Store Vehicle",
-        "impound_e": "[E] Open Impound Lot"
+        "impound_e": "[E] View Impound Lot"
     }
 }
