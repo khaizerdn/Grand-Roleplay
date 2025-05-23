@@ -51,9 +51,6 @@ RegisterNetEvent('qbx_vehicleshop:server:testDrive', function(vehicle)
     })
 
     local vehicle = NetworkGetEntityFromNetworkId(netId)
-    if vehicle and DoesEntityExist(vehicle) then
-        exports['khaizerdn-vehiclekeys']:GiveKey(src, vehicle, true) -- Give temporary key
-    end
 
     testDrives[src] = {
         netId = netId,
