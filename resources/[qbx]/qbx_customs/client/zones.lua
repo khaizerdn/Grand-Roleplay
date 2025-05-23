@@ -72,12 +72,12 @@ CreateThread(function()
             end,
             inside = function()
                 if cache.vehicle and allowAccess then
-                    if not lib.isTextUIOpen() then
-                        lib.showTextUI(locale('textUI.tune'), {
-                            icon = 'fa-solid fa-car',
-                            position = 'top-left',
-                        })
-                    end
+                    -- if not lib.isTextUIOpen() then
+                    --     lib.showTextUI(locale('textUI.tune'), {
+                    --         icon = 'fa-solid fa-car',
+                    --         position = 'top-left',
+                    --     })
+                    -- end
                     if IsControlJustPressed(0, 38) then
                         SetEntityVelocity(cache.vehicle, 0.0, 0.0, 0.0)
                         lib.hideTextUI()

@@ -173,10 +173,6 @@ local hasTextUi
 
 ---@param point CPoint
 function Utils.nearbyMarker(point)
-    -- DrawMarker(2, point.coords.x, point.coords.y, point.coords.z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.3, 0.2, 0.15,
-    --     ---@diagnostic disable-next-line: param-type-mismatch
-    --     point.marker[1], point.marker[2], point.marker[3], 222, false, false, 0, true, false, false, false)
-
     if point.isClosest and point.currentDistance < 1.2 then
         if not hasTextUi then
             hasTextUi = point
@@ -184,7 +180,21 @@ function Utils.nearbyMarker(point)
         end
 
         if IsControlJustReleased(0, 38) then
+            lib.hideTextUI()
             CreateThread(function()
+                -- Store point data for use in event handler
+                local currentPoint = point
+                -- Register event handler for inventory close
+                local eventName = 'ox_inventory:closeInventory'
+                AddEventHandler(eventName, function()
+                    -- Re-show text UI if still close to the point
+                    if currentPoint.isClosest and currentPoint.currentDistance < 1.2 then
+                        hasTextUi = currentPoint
+                        lib.showTextUI(currentPoint.prompt.message, currentPoint.prompt.options)
+                    end
+                end)
+
+                -- Open inventory
                 if point.inv == 'policeevidence' then
                     client.openInventory('policeevidence')
                 elseif point.inv == 'crafting' then

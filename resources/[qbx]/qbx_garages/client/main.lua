@@ -265,6 +265,21 @@ local function openGarageMenu(garageName, garageInfo, accessPoint)
         id = 'garageMenu',
         title = garageInfo.label,
         options = options,
+        onExit = function()
+            if not cache.vehicle and garageInfo.type ~= GarageType.DEPOT then
+                lib.showTextUI(locale('info.garage_e'), {
+                    position = 'top-center',
+                })
+            elseif cache.vehicle and garageInfo.type ~= GarageType.DEPOT then
+                lib.showTextUI(locale('info.park_e'), {
+                    position = 'top-center',
+                })
+            elseif garageInfo.type == GarageType.DEPOT then
+                lib.showTextUI(locale('info.impound_e'), {
+                    position = 'top-center',
+                })
+            end
+        end
     })
 
     lib.showContext('garageMenu')

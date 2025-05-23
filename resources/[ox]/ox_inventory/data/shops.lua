@@ -1,6 +1,6 @@
 return {
 	General = {
-		name = '247 Supermarket',
+		name = '24/7 Supermarket',
 		blip = {
 			id = 59, colour = 69, scale = 0.8
 		}, inventory = {

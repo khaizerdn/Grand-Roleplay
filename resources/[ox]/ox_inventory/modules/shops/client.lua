@@ -144,7 +144,7 @@ local function refreshShops()
                     marker = markerColour,
                     prompt = {
                         options = shop.icon and { icon = shop.icon } or shopPrompt,
-                        message = ('%s %s.'):format(locale('interact_prompt', GetControlInstructionalButton(0, 38, true):sub(3)), label)
+                        message = ('%s %s'):format(locale('interact_prompt', GetControlInstructionalButton(0, 38, true):sub(3)), label)
                     },
                     nearby = Utils.nearbyMarker,
                     blip = blip and createBlip(blip, coords),
