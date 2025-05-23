@@ -31,6 +31,19 @@ Config.Territories = {
             }
         }
     },
+
+    playboymansion = {
+        cooldownSeconds = 14400,
+        hackLocation = vec3(-1497.09, 127.73, 55.67),
+        blip = {
+            coords = vec3(-1492.68, 87.41, 54.99),
+            default = {
+                name = "Playboy Mansion",
+                sprite = 176,
+                color = 1
+            }
+        }
+    },
 }
 
 return Config
