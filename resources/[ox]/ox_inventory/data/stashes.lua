@@ -105,4 +105,22 @@ return {
 		slots = 70,
 		weight = 70000
 	},
+
+	{ -- Marlowe Vineyard Inventory 1
+		coords = vec3(-1867.26, 2057.54, 135.44),
+		target = {
+			loc = vec3(-1867.26, 2057.54, 135.44),
+			length = 1.2,
+			width = 5.6,
+			heading = 0,
+			minZ = 29.49,
+			maxZ = 32.09,
+			label = 'Inventory'
+		},
+		name = 'mv_inventory1',
+		label = 'Inventory',
+		owner = false,
+		slots = 70,
+		weight = 70000
+	},
 }

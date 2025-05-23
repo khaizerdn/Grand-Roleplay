@@ -491,6 +491,26 @@ Config.Locations = {
         robbable = false,
         pedPool = "weed"
     },
+    { -- Marlowe Vineyard Black Market
+        ped = vec4(-1870.17, 2057.74, 135.44, 294.57),
+        safe = vec4(1395.28, 3613.23, 33.98, 201.5),
+        network = {
+            coords = vec3(1394.25, 3611.49, 35.01),
+            radius = 0.6
+        },
+        robbable = false,
+        pedPool = "blackmarket"
+    },
+    { -- Playboy Mansion Black Market
+        ped = vec4(-1522.48, 111.91, 50.03, 311.72),
+        safe = vec4(1395.28, 3613.23, 33.98, 201.5),
+        network = {
+            coords = vec3(1394.25, 3611.49, 35.01),
+            radius = 0.6
+        },
+        robbable = false,
+        pedPool = "blackmarket"
+    },
 }
 
 -- List of peds used for the cashier

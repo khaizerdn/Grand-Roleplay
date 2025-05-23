@@ -126,10 +126,10 @@ return {
 		blip = {
 			id = 110, colour = 69, scale = 0.8
 		}, inventory = {
-			{ name = 'ammo-9', price = 3, },
-			{ name = 'WEAPON_KNIFE', price = 100 },
-			{ name = 'WEAPON_BAT', price = 80 },
-			{ name = 'WEAPON_PISTOL', price = 600, metadata = { registered = true }, license = 'weapon' }
+			{ name = 'ammo-9',        price = 1, metadata = { registered = true }, license = 'weapon' }, -- $0.50 per round (box of 50: ~$25)
+			{ name = 'WEAPON_KNIFE',  price = 50,   metadata = { registered = true }, license = 'weapon' }, -- Basic tactical knife
+			{ name = 'WEAPON_BAT',    price = 30,   metadata = { registered = true }, license = 'weapon' }, -- Aluminum bat
+			{ name = 'WEAPON_PISTOL', price = 450,  metadata = { registered = true }, license = 'weapon' }  -- Standard 9mm (e.g., Glock 17)		
 		}, locations = {
 			vec3(-662.180, -934.961, 21.829),
 			vec3(810.25, -2157.60, 29.62),
@@ -258,13 +258,13 @@ return {
 		blip = {
 			id = 110, colour = 84, scale = 0.8
 		}, inventory = {
-			{ name = 'ammo-9', price = 5, },
-			{ name = 'ammo-rifle', price = 5, },
-			{ name = 'WEAPON_FLASHLIGHT', price = 200 },
-			{ name = 'WEAPON_NIGHTSTICK', price = 100 },
-			{ name = 'WEAPON_PISTOL', price = 600, metadata = { registered = true, serial = 'POL' }, license = 'weapon' },
-			{ name = 'WEAPON_CARBINERIFLE', price = 1000, metadata = { registered = true, serial = 'POL' }, license = 'weapon', grade = 3 },
-			{ name = 'WEAPON_STUNGUN', price = 200, metadata = { registered = true, serial = 'POL'} }
+			{ name = 'ammo-9',           price = 1 }, -- Bulk 9mm ~ $15/50 rounds
+			{ name = 'ammo-rifle',       price = 1 }, -- Bulk 5.56mm ~ $22.50/50 rounds
+			{ name = 'WEAPON_FLASHLIGHT',price = 60 },   -- Duty-grade flashlight
+			{ name = 'WEAPON_NIGHTSTICK',price = 35 },   -- Monadnock/ASP baton
+			{ name = 'WEAPON_PISTOL',    price = 300, metadata = { registered = true, serial = 'POL' }, license = 'weapon' }, -- Glock 17/19 LE pricing
+			{ name = 'WEAPON_CARBINERIFLE', price = 650, metadata = { registered = true, serial = 'POL' }, license = 'weapon', grade = 3 }, -- LE M4/AR-15 agency rate
+			{ name = 'WEAPON_STUNGUN',   price = 200, metadata = { registered = true, serial = 'POL' } } -- Taser X2 agency pricing
 		}, locations = {
 			vec3(-546.60, -118.52, 36.93)
 		}, targets = {
@@ -289,23 +289,115 @@ return {
 		}
 	},
 
-	BlackMarketArms = { -- Use ff_storerobbery for ped spawning
+	BlackMarketArms_1 = { -- La Fuente Blanca
 		name = 'Black Market',
 		inventory = {
-			{ name = 'WEAPON_KNIFE', price = 50 },
-			{ name = 'WEAPON_BAT', price = 40 },
-			{ name = 'WEAPON_PISTOL', price = 300, metadata = { registered = false	}},
-			{ name = 'WEAPON_ASSAULTRIFLE', price = 500, metadata = { registered = false }},
-			{ name = 'ammo-9', price = 1},
-			{ name = 'ammo-rifle2', price = 2},
-			{ name = 'bandage', price = 4 },
-			{ name = 'tool_laptop', price = 500 }
-		}, locations = {
+			{ name = 'WEAPON_COMBATMG',     price = 15000, metadata = { registered = false } },
+			{ name = 'WEAPON_PUMPSHOTGUN',  price = 1200,  metadata = { registered = false } },
+			{ name = 'WEAPON_BATTLEAXE',    price = 300,   metadata = { registered = false } },
+			{ name = 'WEAPON_MOLOTOV',      price = 100,   metadata = { registered = false } },
+			{ name = 'WEAPON_PIPEBOMB',     price = 800,   metadata = { registered = false } },
+			{ name = 'WEAPON_CARBINERIFLE', price = 2500,  metadata = { registered = false } },
+			{ name = 'WEAPON_CROWBAR',      price = 50,    metadata = { registered = false } },
+			{ name = 'WEAPON_MACHINEPISTOL',price = 2000,  metadata = { registered = false } },
+			{ name = 'WEAPON_COMBATPISTOL', price = 1500,  metadata = { registered = false } },
+			{ name = 'WEAPON_HEAVYSNIPER',  price = 18000, metadata = { registered = false } },
+			{ name = 'ammo-9',              price = 1.00,  metadata = { registered = false } },
+			{ name = 'ammo-heavysniper',    price = 4.00,  metadata = { registered = false } },
+			{ name = 'ammo-rifle',          price = 3.00,  metadata = { registered = false } },
+			{ name = 'ammo-shotgun',        price = 2.00,  metadata = { registered = false } }	
+		},
+		locations = {
 			vec3(1402.84, 1139.97, 109.75)
-		}, targets = {
-			{ loc = vec3(1402.84, 1139.97, 109.75), length = 0.5, width = 3.0, heading = 90.23, minZ = 30.5, maxZ = 32.0, distance = 6, ped = `g_m_y_armgoon_02`, scenario = 'WORLD_HUMAN_STAND_IMPATIENT' }
+		},
+		targets = {
+			{
+				loc = vec3(1402.84, 1139.97, 109.75),
+				length = 0.5,
+				width = 3.0,
+				heading = 90.23,
+				minZ = 30.5,
+				maxZ = 32.0,
+				distance = 6,
+				ped = `g_m_y_armgoon_02`,
+				scenario = 'WORLD_HUMAN_STAND_IMPATIENT'
+			}
 		}
 	},
+	
+	
+	BlackMarketArms_2 = { -- Marlowe Vineyard
+		name = 'Black Market',
+		inventory = {
+			{ name = 'at_suppressor_light',      price = 1200, metadata = { registered = false } },
+			{ name = 'WEAPON_SWITCHBLADE',       price = 300,  metadata = { registered = false } },
+			{ name = 'WEAPON_SMG',               price = 3000, metadata = { registered = false } },
+			{ name = 'WEAPON_MARKSMANRIFLE',     price = 6000, metadata = { registered = false } },
+			{ name = 'WEAPON_STICKYBOMB',        price = 3500, metadata = { registered = false } },
+			{ name = 'WEAPON_KNIFE',             price = 150,  metadata = { registered = false } },
+			{ name = 'WEAPON_BULLPUPRIFLE',      price = 4000, metadata = { registered = false } },
+			{ name = 'WEAPON_MICROSMG',          price = 2200, metadata = { registered = false } },
+			{ name = 'WEAPON_PISTOL',            price = 1500, metadata = { registered = false } },
+			{ name = 'WEAPON_SNIPERRIFLE',       price = 10000,metadata = { registered = false } },
+			{ name = 'ammo-9',                   price = 1.00, metadata = { registered = false } },
+			{ name = 'ammo-sniper',              price = 4.00, metadata = { registered = false } },
+			{ name = 'ammo-rifle',               price = 3.00, metadata = { registered = false } },
+			{ name = 'ammo-45',                  price = 2.00, metadata = { registered = false } }
+		},
+		locations = {
+			vec3(-1869.61, 2058.08, 135.43)
+		},
+		targets = {
+			{
+				loc = vec3(-1869.61, 2058.08, 135.43),
+				length = 0.5,
+				width = 3.0,
+				heading = 90.23,
+				minZ = 30.5,
+				maxZ = 32.0,
+				distance = 6,
+				ped = `g_m_y_armgoon_02`,
+				scenario = 'WORLD_HUMAN_STAND_IMPATIENT'
+			}
+		}
+	},
+	
+
+	BlackMarketArms_3 = { -- Playboy Mansion
+		name = 'Black Market',
+		inventory = {
+			{ name = 'WEAPON_APPISTOL',      price = 1800, metadata = { registered = false } },
+			{ name = 'WEAPON_SNSPISTOL',     price = 500,  metadata = { registered = false } },
+			{ name = 'WEAPON_BAT',           price = 100,  metadata = { registered = false } },
+			{ name = 'WEAPON_REVOLVER',      price = 2500, metadata = { registered = false } },
+			{ name = 'WEAPON_MINISMG',       price = 2200, metadata = { registered = false } },
+			{ name = 'WEAPON_DOUBLEACTION',  price = 300,  metadata = { registered = false } },
+			{ name = 'WEAPON_VINTAGEPISTOL', price = 2000, metadata = { registered = false } },
+			{ name = 'WEAPON_MACHINEPISTOL', price = 2000, metadata = { registered = false } },
+			{ name = 'WEAPON_HEAVYPISTOL',   price = 1800, metadata = { registered = false } },
+			{ name = 'WEAPON_FLAREGUN',      price = 500,  metadata = { registered = false } },
+			{ name = 'ammo-9',               price = 1.00, metadata = { registered = false } },
+			{ name = 'ammo-sniper',          price = 4.00, metadata = { registered = false } },
+			{ name = 'ammo-rifle',           price = 3.00, metadata = { registered = false } },
+			{ name = 'ammo-45',              price = 2.00, metadata = { registered = false } }
+		},
+		locations = {
+			vec3(-1522.09, 112.39, 50.03)
+		},
+		targets = {
+			{
+				loc = vec3(-1522.09, 112.39, 50.03),
+				length = 0.5,
+				width = 3.0,
+				heading = 90.23,
+				minZ = 30.5,
+				maxZ = 32.0,
+				distance = 6,
+				ped = `g_m_y_armgoon_02`,
+				scenario = 'WORLD_HUMAN_STAND_IMPATIENT'
+			}
+		}
+	},	
 
 	VendingMachineDrinks = {
 		name = 'Vending Machine',
