@@ -69,7 +69,7 @@ local function refreshShops()
                 exports.ox_target:addModel(shop.model, {
                     {
                         name = shop.name,
-                        icon = shop.icon or 'fas fa-shopping-basket',
+                        icon = shop.icon or '',
                         label = label,
                         onSelect = function()
                             client.openInventory('shop', { type = shopType })
@@ -96,7 +96,7 @@ local function refreshShops()
                             scenario = target.scenario,
                             label = label,
                             groups = shop.groups,
-                            icon = shop.icon or 'fas fa-shopping-basket',
+                            icon = shop.icon or '',
                             iconColor = target.iconColor,
                             onEnter = onEnterShop,
                             onExit = onExitShop,
@@ -110,7 +110,7 @@ local function refreshShops()
                             zoneId = Utils.CreateBoxZone(target, {
                                 {
                                     name = shopid,
-                                    icon = shop.icon or 'fas fa-shopping-basket',
+                                    icon = shop.icon or '',
                                     label = label,
                                     groups = shop.groups,
                                     onSelect = function()
@@ -128,7 +128,7 @@ local function refreshShops()
             end
         elseif shop.locations then
             if not hasShopAccess(shop) then goto skipLoop end
-            local shopPrompt = { icon = 'fas fa-shopping-basket' }
+            local shopPrompt = { icon = '' }
 
             for i = 1, #shop.locations do
                 local location = shop.locations[i]
@@ -150,7 +150,7 @@ local function refreshShops()
                     blip = blip and createBlip(blip, coords),
                     label = label,
                     groups = shop.groups,
-                    icon = shop.icon or 'fas fa-shopping-basket',
+                    icon = shop.icon or '',
                 })
             end
         end

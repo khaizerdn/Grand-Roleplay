@@ -525,7 +525,7 @@ local function createVehicleZone(shopName, coords, targetVehicle)
 
             local job = sharedConfig.shops[insideShop].job
             if not IsControlJustPressed(0, 38) or job and QBX.PlayerData.job.name ~= job then return end
-
+            lib.hideTextUI()
             openVehicleSellMenu(targetVehicle)
         end,
         onExit = function()
@@ -758,6 +758,7 @@ CreateThread(function()
                 end,
                 inside = function()
                     if IsControlJustPressed(0, 38) then
+                        lib.hideTextUI()
                         showFinanceOrKeyMenu()
                     end
                 end,
