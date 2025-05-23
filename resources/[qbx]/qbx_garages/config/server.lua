@@ -390,6 +390,26 @@ return {
             },
         },
 
+        playboymansion_garage_1 = {
+            label = 'Playboy Mansion Garage',
+            vehicleType = VehicleType.CAR,
+            shared = true,
+            allowUnowned = true,
+            maxVehicles = 3,
+            accessPoints = {
+                {
+                    points = {
+                        vec3(-1509.95, 81.95, 55.71),
+                        vec3(-1532.37, 78.44, 56.77),
+                        vec3(-1541.38, 86.82, 56.78),
+                        vec3(-1541.68, 92.16, 57.99),
+                        vec3(-1534.9, 99.49, 56.78),
+                        vec3(-1517.74, 84.49, 56.29)
+                    },
+                }
+            },
+        },
+
         intairport_garage_1 = {
             label = 'Airport Hangar',
             vehicleType = VehicleType.AIR,
