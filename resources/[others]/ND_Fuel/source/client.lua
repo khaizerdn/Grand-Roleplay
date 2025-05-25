@@ -48,15 +48,15 @@ function GetFuel(vehicle)
     if not DecorExistOn(vehicle, FUEL_DECOR) then
         return GetVehicleFuelLevel(vehicle)
     end
-	return DecorGetFloat(vehicle, FUEL_DECOR)
+    return DecorGetFloat(vehicle, FUEL_DECOR)
 end
 
 -- Setting the fuel to the vehicle entity using decor.
 function SetFuel(vehicle, fuel)
-	if type(fuel) == "number" and fuel >= 0 and fuel <= 100 then
-		SetVehicleFuelLevel(vehicle, fuel)
-		DecorSetFloat(vehicle, FUEL_DECOR, GetVehicleFuelLevel(vehicle))
-	end
+    if type(fuel) == "number" and fuel >= 0 and fuel <= 100 then
+        SetVehicleFuelLevel(vehicle, fuel)
+        DecorSetFloat(vehicle, FUEL_DECOR, GetVehicleFuelLevel(vehicle))
+    end
 end
 
 -- returns pump position if a player is near it.
@@ -71,29 +71,14 @@ function nearPump(coords)
     end
 end
 
--- Draws 3D text on coords.
-function DrawText3D(x, y, z, text)
-    local onScreen, _x, _y = World3dToScreen2d(x, y, z)
-    local pX, pY, pZ = table.unpack(GetGameplayCamCoords())
-    SetTextScale(0.4, 0.4)
-    SetTextFont(4)
-    SetTextProportional(1)
-    SetTextEntry("STRING")
-    SetTextCentre(true)
-    SetTextColour(255, 255, 255, 255)
-    SetTextOutline()
-    AddTextComponentString(text)
-    DrawText(_x, _y)
-end
-
 -- used to load the filling manually animation.
 function LoadAnimDict(dict)
-	if not HasAnimDictLoaded(dict) then
-		RequestAnimDict(dict)
-		while not HasAnimDictLoaded(dict) do
-			Wait(1)
-		end
-	end
+    if not HasAnimDictLoaded(dict) then
+        RequestAnimDict(dict)
+        while not HasAnimDictLoaded(dict) do
+            Wait(1)
+        end
+    end
 end
 
 -- Used to play the effect of pouring fuel from the nozzle.
@@ -319,37 +304,62 @@ end)
 -- Grabbing and returning the nozzle from the pump.
 CreateThread(function()
     local wait = 500
+    local isShowingPumpText = false
+    local currentPumpText = nil
     while true do
         Wait(wait)
         if pump then
             wait = 0
+            local text = nil
             if not holdingNozzle and not nozzleInVehicle and not nozzleDropped then
-                DrawText3D(pump.x, pump.y, pump.z + 1.2, "Grab Nozzle [E]")
-                if IsControlJustPressed(0, 51) then
-                    grabNozzleFromPump()
-                    Wait(1000)
-                    ClearPedTasks(ped)
-                end
+                text = "[E] Grab Nozzle"
             elseif holdingNozzle and not nearTank and pumpHandle == usedPump then
-                DrawText3D(pump.x, pump.y, pump.z + 1.2, "Return Nozzle [E]")
+                text = "[E] Return Nozzle"
+            end
+            if text then
+                if not isShowingPumpText or currentPumpText ~= text then
+                    lib.showTextUI(text)
+                    isShowingPumpText = true
+                    currentPumpText = text
+                end
                 if IsControlJustPressed(0, 51) then
-                    LoadAnimDict("anim@am_hold_up@male")
-                    TaskPlayAnim(ped, "anim@am_hold_up@male", "shoplift_high", 2.0, 8.0, -1, 50, 0, 0, 0, 0)
-                    Wait(300)
-                    returnNozzleToPump()
-                    Wait(1000)
-                    ClearPedTasks(ped)
+                    lib.hideTextUI()
+                    if text == "[E] Grab Nozzle" then
+                        grabNozzleFromPump()
+                        Wait(1000)
+                        ClearPedTasks(ped)
+                    elseif text == "[E] Return Nozzle" then
+                        LoadAnimDict("anim@am_hold_up@male")
+                        TaskPlayAnim(ped, "anim@am_hold_up@male", "shoplift_high", 2.0, 8.0, -1, 50, 0, 0, 0, 0)
+                        Wait(300)
+                        returnNozzleToPump()
+                        Wait(1000)
+                        ClearPedTasks(ped)
+                    end
+                end
+            else
+                if isShowingPumpText then
+                    lib.hideTextUI()
+                    isShowingPumpText = false
+                    currentPumpText = nil
                 end
             end
         else
             wait = 500
+            if isShowingPumpText then
+                lib.hideTextUI()
+                isShowingPumpText = false
+                currentPumpText = nil
+            end
         end
     end
 end)
 
--- Attaching and taking the nozzle form the vehicle, and dropping the nozzle form the player or vehicle.
+-- Attaching and taking the nozzle from the vehicle, and dropping the nozzle from the player or vehicle.
 CreateThread(function()
     local wait = 500
+    local isShowingNozzleText = false
+    local currentNozzleText = nil
     while true do
         Wait(wait)
         if holdingNozzle or nozzleInVehicle or nozzleDropped then
@@ -377,21 +387,32 @@ CreateThread(function()
                 elseif #(pumpCoords - pedCoords) > 100.0 then
                     returnNozzleToPump()
                 end
+                local text = nil
                 if nozzleDropped and #(nozzleLocation - pedCoords) < 1.5 then
-                    DrawText3D(nozzleLocation.x, nozzleLocation.y, nozzleLocation.z, "Grab Nozzle [E]")
-                    if IsControlJustPressed(0, 51) then
+                    text = "[E] Grab Nozzle"
+                end
+
+                if text then
+                    if not isShowingNozzleText or currentNozzleText ~= text then
+                        lib.showTextUI(text)
+                        isShowingNozzleText = true
+                        currentNozzleText = text
+                    end
+                    if IsControlJustPressed(0, 51) and text == "[E] Grab Nozzle" then
                         LoadAnimDict("anim@mp_snowball")
                         TaskPlayAnim(ped, "anim@mp_snowball", "pickup_snowball", 2.0, 8.0, -1, 50, 0, 0, 0, 0)
                         Wait(700)
                         grabExistingNozzle()
                         ClearPedTasks(ped)
                     end
+                else
+                    -- Will check vehicle-related texts below if no nozzle drop text
                 end
             end
 
             local veh = vehicleInFront()
 
-            -- Animations for manually fueling and effect for sparying fuel.
+            -- Animations for manually fueling and effect for spraying fuel.
             if holdingNozzle and nozzle then
                 DisableControlAction(0, 25, true)
                 DisableControlAction(0, 24, true)
@@ -467,34 +488,56 @@ CreateThread(function()
                 end
                 tankPosition = GetWorldPositionOfEntityBone(veh, tankBone)
                 if tankPosition and #(pedCoords - tankPosition) < 1.2 then
+                    local text = nil
                     if not nozzleInVehicle and holdingNozzle then
                         nearTank = true
-                        DrawText3D(tankPosition.x + textModifiedPosition.x, tankPosition.y + textModifiedPosition.y, tankPosition.z + zPos + textModifiedPosition.z, "Attach Nozzle [E]")
-                        if IsControlJustPressed(0, 51) then
-                            LoadAnimDict("timetable@gardener@filling_can")
-                            TaskPlayAnim(ped, "timetable@gardener@filling_can", "gar_ig_5_filling_can", 2.0, 8.0, -1, 50, 0, 0, 0, 0)
-                            Wait(300)
-                            putNozzleInVehicle(veh, tankBone, isBike, true, nozzleModifiedPosition)
-                            Wait(300)
-                            ClearPedTasks(ped)
-                        end
+                        text = "[E] Attach Nozzle "
                     elseif nozzleInVehicle then
-                        DrawText3D(tankPosition.x + textModifiedPosition.x, tankPosition.y + textModifiedPosition.y, tankPosition.z + zPos + textModifiedPosition.z, "Grab Nozzle [E]")
-                        if IsControlJustPressed(0, 51) then
-                            LoadAnimDict("timetable@gardener@filling_can")
-                            TaskPlayAnim(ped, "timetable@gardener@filling_can", "gar_ig_5_filling_can", 2.0, 8.0, -1, 50, 0, 0, 0, 0)
-                            Wait(300)
-                            grabExistingNozzle()
-                            Wait(300)
-                            ClearPedTasks(ped)
+                        text = "[E] Grab Nozzle"
+                    end
+                    if text then
+                        if not isShowingNozzleText or currentNozzleText ~= text then
+                            lib.showTextUI(text)
+                            isShowingNozzleText = true
+                            currentNozzleText = text
                         end
-                    end 
+                        if IsControlJustPressed(0, 51) then
+                            lib.hideTextUI()
+                            if text == "[E] Attach Nozzle " then
+                                LoadAnimDict("timetable@gardener@filling_can")
+                                TaskPlayAnim(ped, "timetable@gardener@filling_can", "gar_ig_5_filling_can", 2.0, 8.0, -1, 50, 0, 0, 0, 0)
+                                Wait(300)
+                                putNozzleInVehicle(veh, tankBone, isBike, true, nozzleModifiedPosition)
+                                Wait(300)
+                                ClearPedTasks(ped)
+                            elseif text == "[E] Grab Nozzle" then
+                                LoadAnimDict("timetable@gardener@filling_can")
+                                TaskPlayAnim(ped, "timetable@gardener@filling_can", "gar_ig_5_filling_can", 2.0, 8.0, -1, 50, 0, 0, 0, 0)
+                                Wait(300)
+                                grabExistingNozzle()
+                                Wait(300)
+                                ClearPedTasks(ped)
+                            end
+                        end
+                    end
+                else
+                    nearTank = false
                 end
             else
                 nearTank = false
             end
+            if not currentNozzleText and isShowingNozzleText then
+                lib.hideTextUI()
+                isShowingNozzleText = false
+                currentNozzleText = nil
+            end
         else
             wait = 500
+            if isShowingNozzleText then
+                lib.hideTextUI()
+                isShowingNozzleText = false
+                currentNozzleText = nil
+            end
         end
     end
 end)
@@ -502,6 +545,8 @@ end)
 -- refueling using jerry can.
 CreateThread(function()
     local wait = 500
+    local isShowingJerryCanText = false
+    local currentJerryCanText = nil
     while true do
         Wait(wait)
         if GetSelectedPedWeapon(ped) == 883325847 and not holdingNozzle and not nozzleInVehicle then
@@ -534,7 +579,12 @@ CreateThread(function()
                 tankPosition = GetWorldPositionOfEntityBone(veh, tankBone)
                 if tankPosition and #(pedCoords - tankPosition) < distance then
                     local fuel = GetFuel(veh)
-                    DrawText3D(tankPosition.x, tankPosition.y, tankPosition.z + zPos, math.floor(fuel) .. "% refuel [E]")
+                    local text = string.format("%d%% refuel [E]", math.floor(fuel))
+                    if not isShowingJerryCanText or currentJerryCanText ~= text then
+                        lib.showTextUI(text)
+                        isShowingJerryCanText = true
+                        currentJerryCanText = text
+                    end
                     local ammo = GetAmmoInPedWeapon(ped, 883325847)
                     if IsControlPressed(0, 51) and ammo > 0 then
                         if not IsEntityPlayingAnim(ped, "timetable@gardener@filling_can", "gar_ig_5_filling_can", 3) then
@@ -552,10 +602,27 @@ CreateThread(function()
                             ClearPedTasks(ped)
                         end
                     end
+                else
+                    if isShowingJerryCanText then
+                        lib.hideTextUI()
+                        isShowingJerryCanText = false
+                        currentJerryCanText = nil
+                    end
+                end
+            else
+                if isShowingJerryCanText then
+                    lib.hideTextUI()
+                    isShowingJerryCanText = false
+                    currentJerryCanText = nil
                 end
             end
         else
             wait = 500
+            if isShowingJerryCanText then
+                lib.hideTextUI()
+                isShowingJerryCanText = false
+                currentJerryCanText = nil
+            end
         end
     end
 end)

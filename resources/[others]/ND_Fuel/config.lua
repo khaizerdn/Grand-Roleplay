@@ -1,6 +1,6 @@
 config = {
-    jerryCanPrice = 100, -- jery cans can be purchased from the gas statoin.
-    jerryCanrefillCost = 50, -- The price of the jerrycans refill, this will be calculated and adjusted to how much is left in it.
+    jerryCanPrice = 50, -- jery cans can be purchased from the gas statoin.
+    jerryCanrefillCost = 20, -- The price of the jerrycans refill, this will be calculated and adjusted to how much is left in it.
     fuelCostMultiplier = 0.1, -- 2.0 will double the price of fuel and 1.5 will increase it by half.
 
     -- Class multipliers. If you want SUVs to use less fuel, you can change it to anything under 1.0, and vise versa.
